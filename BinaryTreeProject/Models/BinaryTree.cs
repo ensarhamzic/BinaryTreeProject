@@ -11,13 +11,13 @@ namespace BinaryTreeProject.Models
 {
     internal class BinaryTree : INotifyPropertyChanged
     {
-        private Node _root;
-        private int maxDepth;
-        private int circleDiameter;
-        private double canvasWidth;
-        private double canvasHeight;
-        private double verticalNodeOffset;
-        private double horizontalNodeOffset;
+        private Node _root; // tree root
+        private int maxDepth; // max depth of the tree
+        private int circleDiameter; // diameter of the circle representing a node
+        private double canvasWidth; // width of the canvas
+        private double canvasHeight; // height of the canvas
+        private double verticalNodeOffset; // vertical offset between two nodes
+        private double horizontalNodeOffset; // horizontal offset between two nodes
 
         public double CanvasWidth
         {
@@ -81,8 +81,6 @@ namespace BinaryTreeProject.Models
                 OnPropertyChanged("MaxDepth");
             }
         }
-        public ObservableCollection<Node> Nodes { get; set; }
-        public ObservableCollection<LinePosition> LinePositions { get; set; }
 
         public Node Root
         {
@@ -93,6 +91,14 @@ namespace BinaryTreeProject.Models
                 OnPropertyChanged("Root");
             }
         }
+
+        // collection of nodes (used for binding)
+        public ObservableCollection<Node> Nodes { get; set; }
+
+        // collection of line positions (used for binding)
+        public ObservableCollection<LinePosition> LinePositions { get; set; }
+
+      
 
         public BinaryTree()
         {
@@ -107,6 +113,7 @@ namespace BinaryTreeProject.Models
             HorizontalNodeOffset = CircleDiameter * 0.7;
         }
 
+        // add node to the tree
         public void AddNode(Node node, int value)
         {
             if (node == null)
@@ -142,7 +149,8 @@ namespace BinaryTreeProject.Models
             CalculateNodePositions();
             UpdateLinePositions(Root);
         }
-        
+
+        // Calculate positions of the nodes on the canvas
         private void CalculateNodePositions()
         {
             double startX = CalculateCanvasWidth();
@@ -155,6 +163,7 @@ namespace BinaryTreeProject.Models
             CalculateCanvasHeight();
         }
 
+        // Calculate canvas width
         private double CalculateCanvasWidth()
         {
             int leftSubtreeNodes = 0;
@@ -198,6 +207,8 @@ namespace BinaryTreeProject.Models
             return startX;
         }
 
+
+        // Calculate canvas height
         private void CalculateCanvasHeight()
         {
             int depth = CalculateMaxDepth(Root);
@@ -224,6 +235,7 @@ namespace BinaryTreeProject.Models
             UpdateLinePositions(node.RightNode);
         }
 
+        // Updates nodes collection upon modifying the tree
         private void UpdateNodesCollection(Node node)
         {
             if (node == null)
@@ -240,7 +252,8 @@ namespace BinaryTreeProject.Models
             UpdateNodesCollection(node.RightNode);
         }
 
-        public void CalculateVerticalPositions(Node node)
+        // Calculating Y positions of the nodes
+        private void CalculateVerticalPositions(Node node)
         {
 
             if (node == null) return;
@@ -264,6 +277,7 @@ namespace BinaryTreeProject.Models
             CalculateVerticalPositions(node.RightNode);
         }
 
+        // Calculating max depth of the tree
         private int CalculateMaxDepth(Node node)
         {
             if (node == null)
@@ -280,6 +294,7 @@ namespace BinaryTreeProject.Models
             }
         }
 
+        // Calculating depth of specific node
         private int CalculateNodeDepth(Node node)
         {
             int depth = 0;
