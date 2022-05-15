@@ -79,8 +79,9 @@
             <Border BorderBrush="Black" BorderThickness="1"/>
         </StackPanel>
 
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True" Grid.Row="1">
-            <Canvas Width="3000" Height="2000" x:Name="MainCanvas">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True" Grid.Row="1"  HorizontalAlignment="Center">
+            <Canvas Width="500" Height="400" x:Name="MainCanvas" HorizontalAlignment="Center" >
+
                 <ItemsControl ItemsSource="{Binding BinaryTree.Nodes}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
