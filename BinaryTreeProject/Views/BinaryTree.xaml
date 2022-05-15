@@ -22,7 +22,7 @@
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/save.png" Width="30" />
-                            <TextBlock Text="Sačuvaj" Margin="0 5 0 0" FontWeight="Bold" />
+                            <TextBlock Text="Save" Margin="0 5 0 0" FontWeight="Bold" />
                         </StackPanel>
                     </Button.Content>
                 </Button>
@@ -31,7 +31,7 @@
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/load.png" Width="30" />
-                            <TextBlock Text="Učitaj" Margin="0 5 0 0" FontWeight="Bold"/>
+                            <TextBlock Text="Load" Margin="0 5 0 0" FontWeight="Bold"/>
                         </StackPanel>
                     </Button.Content>
                 </Button>
@@ -58,7 +58,7 @@
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/add.png" Width="30" />
-                            <TextBlock Text="Dodaj" Margin="0 5 0 0" FontWeight="Bold"/>
+                            <TextBlock Text="Add" Margin="0 5 0 0" FontWeight="Bold"/>
                         </StackPanel>
                     </Button.Content>
                 </Button>
@@ -67,7 +67,7 @@
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/delete.png" Width="30" />
-                            <TextBlock Text="Izbriši" Margin="0 5 0 0" FontWeight="Bold"/>
+                            <TextBlock Text="Delete" Margin="0 5 0 0" FontWeight="Bold"/>
                         </StackPanel>
                     </Button.Content>
                 </Button>
@@ -80,7 +80,8 @@
         </StackPanel>
 
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True" Grid.Row="1"  HorizontalAlignment="Center">
-            <Canvas Width="500" Height="400" x:Name="MainCanvas" HorizontalAlignment="Center" >
+            <Border BorderBrush="Red" BorderThickness="5">
+            <Canvas Width="{Binding BinaryTree.CanvasWidth}" Height="{Binding BinaryTree.CanvasHeight}" HorizontalAlignment="Center" >
 
                 <ItemsControl ItemsSource="{Binding BinaryTree.Nodes}">
                     <ItemsControl.ItemsPanel>
@@ -119,6 +120,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </Canvas>
+            </Border>
         </ScrollViewer>
     </Grid>
 </Window>

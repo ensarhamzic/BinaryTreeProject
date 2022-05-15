@@ -14,15 +14,48 @@ namespace BinaryTreeProject.Models
         private Node _root;
         private int maxDepth;
         private int circleDiameter;
-        private int canvasWidth;
+        private double canvasWidth;
+        private double canvasHeight;
+        private double verticalNodeOffset;
+        private double horizontalNodeOffset;
 
-        public int CanvasWidth
+        public double CanvasWidth
         {
-            get { return circleDiameter; }
+            get { return canvasWidth; }
             set
             {
                 canvasWidth = value;
                 OnPropertyChanged("CanvasWidth");
+            }
+        }
+
+        public double CanvasHeight
+        {
+            get { return canvasHeight; }
+            set
+            {
+                canvasHeight = value;
+                OnPropertyChanged("CanvasHeight");
+            }
+        }
+
+        public double VerticalNodeOffset
+        {
+            get { return verticalNodeOffset; }
+            set
+            {
+                verticalNodeOffset = value;
+                OnPropertyChanged("verticalNodeOffset");
+            }
+        }
+
+        public double HorizontalNodeOffset
+        {
+            get { return horizontalNodeOffset; }
+            set
+            {
+                horizontalNodeOffset = value;
+                OnPropertyChanged("horizontalNodeOffset");
             }
         }
 
@@ -68,6 +101,10 @@ namespace BinaryTreeProject.Models
             LinePositions = new ObservableCollection<LinePosition>();
             maxDepth = 0;
             CircleDiameter = 50;
+            CanvasWidth = 0;
+            CanvasHeight = 0;
+            VerticalNodeOffset = 20;
+            HorizontalNodeOffset = CircleDiameter * 0.7;
         }
 
         public void AddNode(Node node, int value)
@@ -105,16 +142,66 @@ namespace BinaryTreeProject.Models
             CalculateNodePositions();
             UpdateLinePositions(Root);
         }
-
+        
         private void CalculateNodePositions()
         {
-            int lastX = 0;
-            foreach (var node in Nodes)
+            double startX = CalculateCanvasWidth();
+            foreach(var node in Nodes)
             {
-                node.Position.X = lastX + CircleDiameter * 0.7;
-                lastX += (int)(CircleDiameter * 0.7);
+                node.Position.X = startX + HorizontalNodeOffset;
+                startX += HorizontalNodeOffset;
             }
             CalculateVerticalPositions(Root);
+            CalculateCanvasHeight();
+        }
+
+        private double CalculateCanvasWidth()
+        {
+            int leftSubtreeNodes = 0;
+            int rightSubtreeNodes = 0;
+            bool isLeftSubtree = true;
+            double startX;
+            foreach (var node in Nodes)
+            {
+                if (isLeftSubtree && node != Root)
+                {
+                    leftSubtreeNodes++;
+                }
+                else if (node == Root)
+                {
+                    isLeftSubtree = false;
+                }
+                else
+                {
+                    rightSubtreeNodes++;
+                }
+
+            }
+            if (leftSubtreeNodes > rightSubtreeNodes)
+            {
+                CanvasWidth = ((leftSubtreeNodes + 2) * HorizontalNodeOffset) * 2;
+                startX = 0;
+            }
+            else
+            {
+                startX = (rightSubtreeNodes - leftSubtreeNodes) * HorizontalNodeOffset;
+                if (rightSubtreeNodes == 0)
+                {
+                    CanvasWidth = HorizontalNodeOffset * 4;
+                }
+                else
+                {
+                    CanvasWidth = ((rightSubtreeNodes + 2) * HorizontalNodeOffset) * 2;
+                }
+            }
+
+            return startX;
+        }
+
+        private void CalculateCanvasHeight()
+        {
+            int depth = CalculateMaxDepth(Root);
+            CanvasHeight = (depth + 1) * CircleDiameter + (depth + 1) * VerticalNodeOffset;
         }
 
         private void UpdateLinePositions(Node node)
@@ -160,27 +247,21 @@ namespace BinaryTreeProject.Models
 
             if (node == Root)
             {
-                // node.Position.X = 600;
-                node.Position.Y = 50;
+                node.Position.Y = VerticalNodeOffset;
             }
 
             if (node.LeftNode != null)
             {
-                //int depth = CalculateNodeDepth(node.LeftNode);
-                // node.LeftNode.Position.X = node.Position.X - (MaxDepth + 1 - depth) * (CircleDiameter*2);
-                node.LeftNode.Position.Y = node.Position.Y + (CircleDiameter + 20);
+                node.LeftNode.Position.Y = node.Position.Y + (CircleDiameter + VerticalNodeOffset);
             }
 
             if (node.RightNode != null)
             {
-                //int depth = CalculateNodeDepth(node.RightNode);
-                //node.RightNode.Position.X = node.Position.X + (MaxDepth + 1 - depth) * (CircleDiameter * 2);
-                node.RightNode.Position.Y = node.Position.Y + (CircleDiameter + 20);
+                node.RightNode.Position.Y = node.Position.Y + (CircleDiameter + VerticalNodeOffset);
             }
 
             CalculateVerticalPositions(node.LeftNode);
             CalculateVerticalPositions(node.RightNode);
-
         }
 
         private int CalculateMaxDepth(Node node)
