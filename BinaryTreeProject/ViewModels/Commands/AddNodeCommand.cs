@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace BinaryTreeProject.Commands
+namespace BinaryTreeProject.ViewModels.Commands
 {
     internal class AddNodeCommand : ICommand
     {

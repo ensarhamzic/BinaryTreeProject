@@ -4,11 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:BinaryTreeProject.ViewModels"
-        xmlns:local="clr-namespace:BinaryTreeProject.Views"
         mc:Ignorable="d"
         Title="BinaryTree" MinHeight="450" MinWidth="800">
     <Window.Resources>
         <vm:BinaryTreeViewModel x:Key="vm" />
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        
     </Window.Resources>
     <Grid DataContext="{StaticResource vm}">
         <Grid.RowDefinitions>
@@ -22,7 +23,7 @@
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/save.png" Width="30" />
-                            <TextBlock Text="Save" Margin="0 5 0 0" FontWeight="Bold" />
+                            <TextBlock HorizontalAlignment="Center" Text="Save" Margin="0 5 0 0" FontWeight="Bold" />
                         </StackPanel>
                     </Button.Content>
                 </Button>
@@ -31,7 +32,7 @@
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/load.png" Width="30" />
-                            <TextBlock Text="Load" Margin="0 5 0 0" FontWeight="Bold"/>
+                            <TextBlock HorizontalAlignment="Center" Text="Load" Margin="0 5 0 0" FontWeight="Bold"/>
                         </StackPanel>
                     </Button.Content>
                 </Button>
@@ -40,7 +41,7 @@
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/undo.png" Width="30" />
-                            <TextBlock Text="Undo" Margin="0 5 0 0" FontWeight="Bold"/>
+                            <TextBlock HorizontalAlignment="Center" Text="Undo" Margin="0 5 0 0" FontWeight="Bold"/>
                         </StackPanel>
                     </Button.Content>
                 </Button>
@@ -49,28 +50,48 @@
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/redo.png" Width="30" />
-                            <TextBlock Text="Redo" Margin="0 5 0 0" FontWeight="Bold"/>
+                            <TextBlock HorizontalAlignment="Center" Text="Redo" Margin="0 5 0 0" FontWeight="Bold"/>
                         </StackPanel>
                     </Button.Content>
                 </Button>
 
-                <Button Width="60"  Background="Transparent" BorderThickness="0" Padding="5">
-                    <Button.Content>
-                        <StackPanel Orientation="Vertical">
-                            <Image Source="/Icons/add.png" Width="30" />
-                            <TextBlock Text="Add" Margin="0 5 0 0" FontWeight="Bold"/>
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
 
                 <Button Width="60"  Background="Transparent" BorderThickness="0" Padding="5">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/delete.png" Width="30" />
-                            <TextBlock Text="Delete" Margin="0 5 0 0" FontWeight="Bold"/>
+                            <TextBlock HorizontalAlignment="Center" Text="Delete" Margin="0 5 0 0" FontWeight="Bold"/>
                         </StackPanel>
                     </Button.Content>
                 </Button>
+
+                <Button Width="60"  Background="Transparent" BorderThickness="0" Padding="5" Command="{Binding AddButtonClickCommand}">
+                    <Button.Content>
+                        <StackPanel Orientation="Vertical">
+                            <Image Source="/Icons/add.png" Width="30" />
+                            <TextBlock HorizontalAlignment="Center" Text="Add" Margin="0 5 0 0" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Orientation="Horizontal"
+                    Visibility="{Binding InputVisible, Converter={StaticResource BoolToVis}}"
+                    Grid.Row="1"
+                    >
+                    <TextBlock Text="New Node Value:" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBox Width="100" Margin="10 0 0 0"/>
+                    <Button Margin="10 0 0 0" BorderBrush="Transparent" BorderThickness="0" Background="Transparent">
+                        <Button.Content>
+                            <Image Source="/Icons/done.png" Width="20" />
+                        </Button.Content>
+                    </Button>
+                    <Button Command="{Binding CancelAddCommand}" Margin="10 0 0 0" BorderBrush="Transparent" BorderThickness="0" Background="Transparent">
+                        <Button.Content>
+                            <Image Source="/Icons/cancel.png" Width="20" />
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
 
                 <TextBox Text="{Binding NewNodeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" />
                 <Button Command="{Binding AddNewNodeCommand}" CommandParameter="{Binding NewNodeValue}">Dodaj</Button>
@@ -79,14 +100,18 @@
             <Border BorderBrush="Black" BorderThickness="1"/>
         </StackPanel>
 
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True" Grid.Row="1"  HorizontalAlignment="Center">
-            <Border BorderBrush="Red" BorderThickness="5">
-            <Canvas Width="{Binding BinaryTree.CanvasWidth}" Height="{Binding BinaryTree.CanvasHeight}" HorizontalAlignment="Center" >
+        
 
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True" Grid.Row="1" >
+            <Canvas
+                Width="{Binding BinaryTree.CanvasWidth}"
+                Height="{Binding BinaryTree.CanvasHeight}"
+                HorizontalAlignment="Center" VerticalAlignment="Top" >
+                
                 <ItemsControl ItemsSource="{Binding BinaryTree.Nodes}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                            <Canvas/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemContainerStyle>
@@ -98,7 +123,11 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>
-                                <Ellipse DataContext="{StaticResource vm}" Width="{Binding BinaryTree.CircleDiameter}" Height="{Binding BinaryTree.CircleDiameter}" Stroke="Black" StrokeThickness="3" />
+                                <Ellipse
+                                    DataContext="{StaticResource vm}"
+                                    Width="{Binding BinaryTree.CircleDiameter}"
+                                    Height="{Binding BinaryTree.CircleDiameter}"
+                                    Stroke="Black" StrokeThickness="3" />
                                 <TextBlock FontWeight="Bold" FontSize="20" Text="{Binding Value}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Grid>
                         </DataTemplate>
@@ -108,7 +137,7 @@
                 <ItemsControl ItemsSource="{Binding BinaryTree.LinePositions}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                            <Canvas/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
@@ -119,8 +148,32 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+
+                <ItemsControl ItemsSource="{Binding NullNodesPositions}" Visibility="{Binding InputVisible, Converter={StaticResource BoolToVis}}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.Left" Value="{Binding X}" />
+                            <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Ellipse
+                                    DataContext="{StaticResource vm}"
+                                    Width="{Binding BinaryTree.AddCircleDiameter}"
+                                    Height="{Binding BinaryTree.AddCircleDiameter}"
+                                    Fill="Red"
+                            />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
             </Canvas>
-            </Border>
         </ScrollViewer>
     </Grid>
 </Window>

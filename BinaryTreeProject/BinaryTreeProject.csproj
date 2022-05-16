@@ -58,10 +58,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Commands\AddNodeCommand.cs" />
+    <Compile Include="ViewModels\Commands\AddButtonClickCommand.cs" />
+    <Compile Include="ViewModels\Commands\AddNodeCommand.cs" />
     <Compile Include="Models\LinePosition.cs" />
     <Compile Include="Models\Position.cs" />
     <Compile Include="ViewModels\BinaryTreeViewModel.cs" />
+    <Compile Include="ViewModels\Commands\CancelAddCommand.cs" />
     <Compile Include="Views\BinaryTree.xaml.cs">
       <DependentUpon>BinaryTree.xaml</DependentUpon>
     </Compile>
@@ -112,6 +114,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\cancel.png" />
+    <Resource Include="Icons\done.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

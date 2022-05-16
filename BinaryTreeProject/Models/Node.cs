@@ -9,7 +9,8 @@ namespace BinaryTreeProject.Models
 {
     internal class Node : INotifyPropertyChanged
     {
-        private int _value;
+        private int? _value;
+        private int? id;
         private Node _leftNode;
         private Node _rightNode;
         private Node _parentNode;
@@ -25,7 +26,17 @@ namespace BinaryTreeProject.Models
             }
         }
 
-        public int Value
+        public int? ID
+        {
+            get { return id; }
+            set
+            {
+                id = value;
+                OnPropertyChanged("ID");
+            }
+        }
+
+        public int? Value
         {
             get { return _value; }
             set
@@ -65,14 +76,24 @@ namespace BinaryTreeProject.Models
             }
         }
 
+        public Node()
+        {
+            Value = null;
+            LeftNode = null;
+            RightNode = null;
+            ParentNode = null;
+            Position = null;
+            ID = 0;
+        }
 
-        public Node(int value)
+        public Node(int? value, int? id)
         {
             Value = value;
             LeftNode = null;
             RightNode = null;
             ParentNode = null;
             Position = new Position();
+            ID = id;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
