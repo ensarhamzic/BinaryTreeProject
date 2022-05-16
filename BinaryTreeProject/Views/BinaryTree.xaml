@@ -4,12 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:BinaryTreeProject.ViewModels"
+        xmlns:converters="clr-namespace:BinaryTreeProject.ViewModels.ValueConverters"
         mc:Ignorable="d"
         Title="BinaryTree" MinHeight="450" MinWidth="800">
     <Window.Resources>
         <vm:BinaryTreeViewModel x:Key="vm" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
-        
+        <converters:IdToColorConverter x:Key="IdToColor" />
+
     </Window.Resources>
     <Grid DataContext="{StaticResource vm}">
         <Grid.RowDefinitions>
@@ -122,12 +124,20 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
+                            <Grid MouseLeftButtonDown="NodeClick" Tag="{Binding ID}"
+                                  >
                                 <Ellipse
                                     DataContext="{StaticResource vm}"
                                     Width="{Binding BinaryTree.CircleDiameter}"
                                     Height="{Binding BinaryTree.CircleDiameter}"
-                                    Stroke="Black" StrokeThickness="3" />
+                                    Stroke="Black" StrokeThickness="3">
+                                    <Ellipse.Fill>
+                                        <MultiBinding Converter="{StaticResource IdToColor}">
+                                            <Binding Path="SelectedNodeId" />
+                                            <Binding Path="SelectedNodeId" />
+                                        </MultiBinding>
+                                    </Ellipse.Fill>
+                                </Ellipse>
                                 <TextBlock FontWeight="Bold" FontSize="20" Text="{Binding Value}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Grid>
                         </DataTemplate>

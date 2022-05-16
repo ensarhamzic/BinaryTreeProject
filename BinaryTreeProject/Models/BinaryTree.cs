@@ -133,13 +133,13 @@ namespace BinaryTreeProject.Models
         {
             if (node == null)
             {
-                Root = new Node(value, nodeId++);
+                Root = new Node(value, ++nodeId);
             }
             else if (value < node.Value)
             {
                 if (node.LeftNode == null)
                 {
-                    node.LeftNode = new Node(value, nodeId++);
+                    node.LeftNode = new Node(value, ++nodeId);
                     node.LeftNode.ParentNode = node;
                 }
                 else
@@ -151,7 +151,7 @@ namespace BinaryTreeProject.Models
             {
                 if (node.RightNode == null)
                 {
-                    node.RightNode = new Node(value, nodeId++);
+                    node.RightNode = new Node(value, ++nodeId);
                     node.RightNode.ParentNode = node;
                 }
                 else

@@ -15,6 +15,17 @@ namespace BinaryTreeProject.ViewModels
     {
         public BinaryTree BinaryTree { get; set; }
         private bool inputVisible;
+        private int? selectedNodeId;
+
+        public int? SelectedNodeId
+        {
+            get { return selectedNodeId; }
+            set
+            {
+                selectedNodeId = value;
+                OnPropertyChanged("SelectedNodeId");
+            }
+        }
 
         public ObservableCollection<Position> NullNodesPositions { get; set; }
         public bool InputVisible
@@ -50,6 +61,7 @@ namespace BinaryTreeProject.ViewModels
             AddButtonClickCommand = new AddButtonClickCommand(this);
             CancelAddCommand = new CancelAddCommand(this);
             NullNodesPositions = new ObservableCollection<Position>();
+            SelectedNodeId = 5;
         }
 
         public void AddButtonClick()
@@ -76,7 +88,7 @@ namespace BinaryTreeProject.ViewModels
 
         public void NodeClick(int nodeId)
         {
-            
+            SelectedNodeId = nodeId;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
