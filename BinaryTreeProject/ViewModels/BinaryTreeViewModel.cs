@@ -16,6 +16,7 @@ namespace BinaryTreeProject.ViewModels
         public BinaryTree BinaryTree { get; set; }
         private bool inputVisible;
         private int? selectedNodeId;
+        private int? selectedNullNodeId;
 
         public int? SelectedNodeId
         {
@@ -27,7 +28,17 @@ namespace BinaryTreeProject.ViewModels
             }
         }
 
-        public ObservableCollection<Position> NullNodesPositions { get; set; }
+        public int? SelectedNullNodeId
+        {
+            get { return selectedNullNodeId; }
+            set
+            {
+                selectedNullNodeId = value;
+                OnPropertyChanged("SelectedNullNodeId");
+            }
+        }
+
+        public ObservableCollection<Node> NullNodes { get; set; }
         public bool InputVisible
         {
             get { return inputVisible; }
@@ -52,6 +63,8 @@ namespace BinaryTreeProject.ViewModels
         public ICommand AddNewNodeCommand { get; private set; }
         public ICommand AddButtonClickCommand { get; private set; }
 
+        
+
         public ICommand CancelAddCommand { get; private set; }
 
         public BinaryTreeViewModel()
@@ -60,8 +73,9 @@ namespace BinaryTreeProject.ViewModels
             AddNewNodeCommand = new AddNodeCommand(this);
             AddButtonClickCommand = new AddButtonClickCommand(this);
             CancelAddCommand = new CancelAddCommand(this);
-            NullNodesPositions = new ObservableCollection<Position>();
-            SelectedNodeId = 5;
+            NullNodes = new ObservableCollection<Node>();
+            SelectedNodeId = null;
+            SelectedNullNodeId = null;
         }
 
         public void AddButtonClick()
@@ -72,16 +86,28 @@ namespace BinaryTreeProject.ViewModels
 
         private void CalculateNullNodePositions()
         {
-            NullNodesPositions.Clear();
+            NullNodes.Clear();
+            int nodeId = 0;
             foreach (var node in BinaryTree.Nodes)
             {
                 if (node.LeftNode == null)
                 {
-                    NullNodesPositions.Add(new Position(node.Position.X, node.Position.Y + BinaryTree.CircleDiameter));
+                    Node nullNode = new Node();
+                    nullNode.ID = ++nodeId; // used for click on node
+                    nullNode.LeftNode = node; // used to know if node is parents left or right node
+                    nullNode.Position = new Position(node.Position.X, node.Position.Y + BinaryTree.CircleDiameter);
+                    NullNodes.Add(nullNode);
                 }
+                
                 if (node.RightNode == null)
                 {
-                    NullNodesPositions.Add(new Position(node.Position.X + BinaryTree.CircleDiameter - BinaryTree.AddCircleDiameter, node.Position.Y + BinaryTree.CircleDiameter));
+                    Node nullNode = new Node();
+                    nullNode.ID = ++nodeId;
+                    nullNode.ParentNode = node;
+                    nullNode.RightNode = node; // used to know if node is parents left or right node
+                    nullNode.Position = new Position(node.Position.X + BinaryTree.CircleDiameter - BinaryTree.AddCircleDiameter,
+                        node.Position.Y + BinaryTree.CircleDiameter);
+                    NullNodes.Add(nullNode);
                 }
             }
         }
@@ -89,6 +115,11 @@ namespace BinaryTreeProject.ViewModels
         public void NodeClick(int nodeId)
         {
             SelectedNodeId = nodeId;
+        }
+
+        internal void NullNodeClick(int nullNodeId)
+        {
+            SelectedNullNodeId = nullNodeId;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

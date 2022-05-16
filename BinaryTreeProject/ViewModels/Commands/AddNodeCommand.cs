@@ -1,4 +1,5 @@
-﻿using BinaryTreeProject.ViewModels;
+﻿using BinaryTreeProject.Models;
+using BinaryTreeProject.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,13 +32,33 @@ namespace BinaryTreeProject.ViewModels.Commands
         public bool CanExecute(object parameter)
         {
             string value = parameter as string;
-            return int.TryParse(value, out _);
+            bool isValid = int.TryParse(value, out _);
+            return (isValid && (binaryTreeViewModel.SelectedNullNodeId != null)) || (isValid && binaryTreeViewModel.NullNodes.Count == 0);
         }
 
         public void Execute(object parameter)
         {
             string value = parameter as string;
-            binaryTreeViewModel.BinaryTree.AddNode(binaryTreeViewModel.BinaryTree.Root, int.Parse(value));
+            char side;
+            Node parentNode;
+            if(binaryTreeViewModel.SelectedNullNodeId == null)
+            {
+                parentNode = null;
+                side = 'L'; // doesn't matter
+            }
+            else if (binaryTreeViewModel.NullNodes[(int)binaryTreeViewModel.SelectedNullNodeId-1].LeftNode != null)
+            {
+                parentNode = binaryTreeViewModel.NullNodes[(int)binaryTreeViewModel.SelectedNullNodeId - 1].LeftNode;
+                side = 'L';
+            }
+            else
+            {
+                parentNode = binaryTreeViewModel.NullNodes[(int)binaryTreeViewModel.SelectedNullNodeId - 1].RightNode;
+                side = 'R';
+            }
+            binaryTreeViewModel.BinaryTree.AddNode(parentNode, int.Parse(value), side);
+            binaryTreeViewModel.InputVisible = false;
+            binaryTreeViewModel.SelectedNullNodeId = null;
         }
     }
 }

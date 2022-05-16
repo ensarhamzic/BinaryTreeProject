@@ -34,6 +34,7 @@ namespace BinaryTreeProject.ViewModels.Commands
 
         public void Execute(object parameter)
         {
+            binaryTreeViewModel.SelectedNullNodeId = null;
             binaryTreeViewModel.InputVisible = false;
         }
     }

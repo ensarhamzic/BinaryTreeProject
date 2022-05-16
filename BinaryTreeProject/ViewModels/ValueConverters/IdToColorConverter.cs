@@ -18,11 +18,13 @@ namespace BinaryTreeProject.ViewModels.ValueConverters
             int? selectedId = values[1] as int?;
             if (id == selectedId)
             {
-                return Brushes.Aqua;
+                Color clr = ColorConverter.ConvertFromString(values[3] as string) as Color? ?? Colors.Red;
+                return new SolidColorBrush(clr);    
             }
             else
             {
-                return Brushes.White;
+                Color clr = ColorConverter.ConvertFromString(values[2] as string) as Color? ?? Colors.White;
+                return new SolidColorBrush(clr);
             }
         }
 

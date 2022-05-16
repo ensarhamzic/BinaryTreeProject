@@ -124,42 +124,29 @@ namespace BinaryTreeProject.Models
             CanvasHeight = 0;
             VerticalNodeOffset = CircleDiameter * 0.5;
             HorizontalNodeOffset = CircleDiameter * 0.7;
-            AddCircleDiameter = CircleDiameter * 0.3;
-            
+            AddCircleDiameter = CircleDiameter * 0.3;          
+
         }
 
         // add node to the tree
-        public void AddNode(Node node, int value)
+        public void AddNode(Node parentNode, int value, char side)
         {
-            if (node == null)
+            Node newNode = new Node(value, ++nodeId);
+            if(parentNode == null)
             {
-                Root = new Node(value, ++nodeId);
+                Root = newNode;
             }
-            else if (value < node.Value)
+            else if(side == 'L')
             {
-                if (node.LeftNode == null)
-                {
-                    node.LeftNode = new Node(value, ++nodeId);
-                    node.LeftNode.ParentNode = node;
-                }
-                else
-                {
-                    AddNode(node.LeftNode, value);
-                }
+                parentNode.LeftNode = newNode;
+                newNode.ParentNode = parentNode;
             }
             else
             {
-                if (node.RightNode == null)
-                {
-                    node.RightNode = new Node(value, ++nodeId);
-                    node.RightNode.ParentNode = node;
-                }
-                else
-                {
-                    AddNode(node.RightNode, value);
-                }
+                parentNode.RightNode = newNode;
+                newNode.ParentNode = parentNode;
             }
-            MaxDepth = CalculateMaxDepth(Root);
+            
             UpdateNodesCollection(Root);
             CalculateNodePositions();
             UpdateLinePositions(Root);

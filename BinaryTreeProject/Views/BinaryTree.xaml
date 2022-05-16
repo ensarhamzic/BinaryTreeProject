@@ -82,34 +82,34 @@
                     Grid.Row="1"
                     >
                     <TextBlock Text="New Node Value:" FontWeight="Bold" VerticalAlignment="Center"/>
-                    <TextBox Width="100" Margin="10 0 0 0"/>
-                    <Button Margin="10 0 0 0" BorderBrush="Transparent" BorderThickness="0" Background="Transparent">
+                    <TextBox Width="100" Margin="10 0 0 0"  Text="{Binding NewNodeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Margin="10 0 0 0" BorderBrush="Transparent" BorderThickness="0" Background="Transparent"
+                             Command="{Binding AddNewNodeCommand}" CommandParameter="{Binding NewNodeValue}">
                         <Button.Content>
                             <Image Source="/Icons/done.png" Width="20" />
                         </Button.Content>
                     </Button>
-                    <Button Command="{Binding CancelAddCommand}" Margin="10 0 0 0" BorderBrush="Transparent" BorderThickness="0" Background="Transparent">
+                    <Button Command="{Binding CancelAddCommand}" Margin="10 0 0 0"
+                            BorderBrush="Transparent" BorderThickness="0" Background="Transparent">
                         <Button.Content>
                             <Image Source="/Icons/cancel.png" Width="20" />
                         </Button.Content>
                     </Button>
                 </StackPanel>
 
-                <TextBox Text="{Binding NewNodeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" />
-                <Button Command="{Binding AddNewNodeCommand}" CommandParameter="{Binding NewNodeValue}">Dodaj</Button>
             </ToolBar>
 
             <Border BorderBrush="Black" BorderThickness="1"/>
         </StackPanel>
 
-        
+
 
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True" Grid.Row="1" >
             <Canvas
                 Width="{Binding BinaryTree.CanvasWidth}"
                 Height="{Binding BinaryTree.CanvasHeight}"
                 HorizontalAlignment="Center" VerticalAlignment="Top" >
-                
+
                 <ItemsControl ItemsSource="{Binding BinaryTree.Nodes}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -124,7 +124,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid MouseLeftButtonDown="NodeClick" Tag="{Binding ID}"
+                            <Grid MouseLeftButtonDown="NodeClick" Tag="{Binding ID}" x:Name="NodeGrid"
                                   >
                                 <Ellipse
                                     DataContext="{StaticResource vm}"
@@ -133,12 +133,50 @@
                                     Stroke="Black" StrokeThickness="3">
                                     <Ellipse.Fill>
                                         <MultiBinding Converter="{StaticResource IdToColor}">
+                                            <Binding Path="Tag" ElementName="NodeGrid" />
                                             <Binding Path="SelectedNodeId" />
-                                            <Binding Path="SelectedNodeId" />
+                                            <Binding Source="White" />
+                                            <Binding Source="Aqua" />
                                         </MultiBinding>
                                     </Ellipse.Fill>
                                 </Ellipse>
                                 <TextBlock FontWeight="Bold" FontSize="20" Text="{Binding Value}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                
+
+                <ItemsControl ItemsSource="{Binding NullNodes}" Visibility="{Binding InputVisible, Converter={StaticResource BoolToVis}}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.Left" Value="{Binding Position.X}" />
+                            <Setter Property="Canvas.Top" Value="{Binding Position.Y}" />
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid MouseLeftButtonDown="NullNodeClick" Tag="{Binding ID}" x:Name="NullNode">
+                                <Ellipse
+                                    DataContext="{StaticResource vm}"
+                                    Width="{Binding BinaryTree.AddCircleDiameter}"
+                                    Height="{Binding BinaryTree.AddCircleDiameter}"
+                                >
+                                    <Ellipse.Fill>
+                                        <MultiBinding Converter="{StaticResource IdToColor}">
+                                            <Binding Path="Tag" ElementName="NullNode" />
+                                            <Binding Path="SelectedNullNodeId" />
+                                            <Binding Source="Red" />
+                                            <Binding Source="Blue" />
+                                        </MultiBinding>
+                                    </Ellipse.Fill>
+                                </Ellipse>
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -155,30 +193,6 @@
                             <Line Stroke="Black" StrokeThickness="3"
                                   X1="{Binding StartPosition.X}" Y1="{Binding StartPosition.Y}"
                                   X2="{Binding EndPosition.X}" Y2="{Binding EndPosition.Y}"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-
-                <ItemsControl ItemsSource="{Binding NullNodesPositions}" Visibility="{Binding InputVisible, Converter={StaticResource BoolToVis}}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemContainerStyle>
-                        <Style TargetType="ContentPresenter">
-                            <Setter Property="Canvas.Left" Value="{Binding X}" />
-                            <Setter Property="Canvas.Top" Value="{Binding Y}" />
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Ellipse
-                                    DataContext="{StaticResource vm}"
-                                    Width="{Binding BinaryTree.AddCircleDiameter}"
-                                    Height="{Binding BinaryTree.AddCircleDiameter}"
-                                    Fill="Red"
-                            />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
