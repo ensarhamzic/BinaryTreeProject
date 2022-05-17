@@ -64,6 +64,7 @@
     <Compile Include="Models\Position.cs" />
     <Compile Include="ViewModels\BinaryTreeViewModel.cs" />
     <Compile Include="ViewModels\Commands\CancelAddCommand.cs" />
+    <Compile Include="ViewModels\Commands\DeleteButtonClickCommand.cs" />
     <Compile Include="ViewModels\ValueConverters\IdToColorConverter.cs" />
     <Compile Include="Views\BinaryTree.xaml.cs">
       <DependentUpon>BinaryTree.xaml</DependentUpon>

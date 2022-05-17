@@ -32,7 +32,9 @@ namespace BinaryTreeProject.ViewModels.Commands
         public bool CanExecute(object parameter)
         {
             string value = parameter as string;
-            bool isValid = int.TryParse(value, out _);
+            int number;
+            // TODO: number check temporary here (till I fix the issue with numbers overflow from node in the view)
+            bool isValid = int.TryParse(value, out number) && (number > -1000 && number < 10000); 
             return (isValid && (binaryTreeViewModel.SelectedNullNodeId != null)) || (isValid && binaryTreeViewModel.NullNodes.Count == 0);
         }
 
@@ -56,7 +58,7 @@ namespace BinaryTreeProject.ViewModels.Commands
                 parentNode = binaryTreeViewModel.NullNodes[(int)binaryTreeViewModel.SelectedNullNodeId - 1].RightNode;
                 side = 'R';
             }
-            binaryTreeViewModel.BinaryTree.AddNode(parentNode, int.Parse(value), side);
+            binaryTreeViewModel.AddNode(parentNode, int.Parse(value), side);
             binaryTreeViewModel.InputVisible = false;
             binaryTreeViewModel.SelectedNullNodeId = null;
         }

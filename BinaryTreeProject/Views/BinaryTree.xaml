@@ -58,7 +58,7 @@
                 </Button>
 
 
-                <Button Width="60"  Background="Transparent" BorderThickness="0" Padding="5">
+                <Button Width="60"  Background="Transparent" BorderThickness="0" Padding="5" Command="{Binding DeleteButtonClickCommand}">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/delete.png" Width="30" />
@@ -82,7 +82,8 @@
                     Grid.Row="1"
                     >
                     <TextBlock Text="New Node Value:" FontWeight="Bold" VerticalAlignment="Center"/>
-                    <TextBox Width="100" Margin="10 0 0 0"  Text="{Binding NewNodeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox Width="100" Margin="10 0 0 0"
+                             Text="{Binding NewNodeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <Button Margin="10 0 0 0" BorderBrush="Transparent" BorderThickness="0" Background="Transparent"
                              Command="{Binding AddNewNodeCommand}" CommandParameter="{Binding NewNodeValue}">
                         <Button.Content>
@@ -106,11 +107,11 @@
 
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True" Grid.Row="1" >
             <Canvas
-                Width="{Binding BinaryTree.CanvasWidth}"
-                Height="{Binding BinaryTree.CanvasHeight}"
+                Width="{Binding CanvasWidth}"
+                Height="{Binding CanvasHeight}"
                 HorizontalAlignment="Center" VerticalAlignment="Top" >
 
-                <ItemsControl ItemsSource="{Binding BinaryTree.Nodes}">
+                <ItemsControl ItemsSource="{Binding Nodes}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas/>
@@ -128,8 +129,8 @@
                                   >
                                 <Ellipse
                                     DataContext="{StaticResource vm}"
-                                    Width="{Binding BinaryTree.CircleDiameter}"
-                                    Height="{Binding BinaryTree.CircleDiameter}"
+                                    Width="{Binding CircleDiameter}"
+                                    Height="{Binding CircleDiameter}"
                                     Stroke="Black" StrokeThickness="3">
                                     <Ellipse.Fill>
                                         <MultiBinding Converter="{StaticResource IdToColor}">
@@ -140,7 +141,9 @@
                                         </MultiBinding>
                                     </Ellipse.Fill>
                                 </Ellipse>
-                                <TextBlock FontWeight="Bold" FontSize="20" Text="{Binding Value}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <TextBlock FontWeight="Bold" FontSize="20"
+                                           Text="{Binding Value}"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -148,7 +151,8 @@
 
                 
 
-                <ItemsControl ItemsSource="{Binding NullNodes}" Visibility="{Binding InputVisible, Converter={StaticResource BoolToVis}}">
+                <ItemsControl ItemsSource="{Binding NullNodes}"
+                              Visibility="{Binding InputVisible, Converter={StaticResource BoolToVis}}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas/>
@@ -165,8 +169,8 @@
                             <Grid MouseLeftButtonDown="NullNodeClick" Tag="{Binding ID}" x:Name="NullNode">
                                 <Ellipse
                                     DataContext="{StaticResource vm}"
-                                    Width="{Binding BinaryTree.AddCircleDiameter}"
-                                    Height="{Binding BinaryTree.AddCircleDiameter}"
+                                    Width="{Binding AddCircleDiameter}"
+                                    Height="{Binding AddCircleDiameter}"
                                 >
                                     <Ellipse.Fill>
                                         <MultiBinding Converter="{StaticResource IdToColor}">
@@ -182,7 +186,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <ItemsControl ItemsSource="{Binding BinaryTree.LinePositions}">
+                <ItemsControl ItemsSource="{Binding LinePositions}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas/>
