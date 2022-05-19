@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Shapes;
 
 namespace BinaryTreeProject.Models
@@ -54,15 +55,16 @@ namespace BinaryTreeProject.Models
         // TODO:  Stupid but working (must change)
         public void DeleteNode(Node nodeToDelete)
         {
-            if(nodeToDelete == Root)
+            if (nodeToDelete == Root)
             {
                 Root = null;
                 nodeId = 0;
             }
-            else if(nodeToDelete.ParentNode.LeftNode == nodeToDelete)
+            else if (nodeToDelete.ParentNode.LeftNode == nodeToDelete)
             {
                 nodeToDelete.ParentNode.LeftNode = null;
-            } else
+            }
+            else
             {
                 nodeToDelete.ParentNode.RightNode = null;
             }
@@ -73,7 +75,7 @@ namespace BinaryTreeProject.Models
         public int CalculateMaxDepth(Node node)
         {
             if (node == null)
-                return -1;
+                return 0;
             else
             {
                 int lDepth = CalculateMaxDepth(node.LeftNode);
@@ -85,6 +87,34 @@ namespace BinaryTreeProject.Models
                     return (rDepth + 1);
             }
         }
+        
+        public virtual void LevelOrder(List<int?> values)
+        {
+            int h = CalculateMaxDepth(Root);
+            int i;
+            for (i = 1; i <= h; i++)
+            {
+                CurrentLevel(Root, values, i);
+            }
+        }
+        
+        public virtual void CurrentLevel(Node node, List<int?> values,int level)
+        {
+            if (node == null)
+            {
+                values.Add(null);
+                return;
+            }
+            if (level == 1)
+            {
+                values.Add(node.Value);
+            }
+            else if (level > 1)
+            {
+                CurrentLevel(node.LeftNode, values, level - 1);
+                CurrentLevel(node.RightNode, values, level - 1);
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string name = null)
@@ -92,6 +122,6 @@ namespace BinaryTreeProject.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-       
+
     }
 }

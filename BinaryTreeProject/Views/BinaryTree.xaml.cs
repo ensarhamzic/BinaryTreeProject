@@ -46,5 +46,21 @@ namespace BinaryTreeProject.Views
             int.TryParse(tagString, out tag);
             binaryTreeViewModel.NullNodeClick(tag);
         }
+
+        private void NewNodeTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var binaryTreeViewModel = DataContext as BinaryTreeViewModel;
+                TextBox tb = sender as TextBox;
+                if (binaryTreeViewModel.AddNewNodeCommand.CanExecute(binaryTreeViewModel.NewNodeValue))
+                {
+                    binaryTreeViewModel.AddNewNodeCommand.Execute(binaryTreeViewModel.NewNodeValue);
+                    tb.Text = "";
+                    tb.Focus();
+                }
+            }
+        }
+
     }
 }

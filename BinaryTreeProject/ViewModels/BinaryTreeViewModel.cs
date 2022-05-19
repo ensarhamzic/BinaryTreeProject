@@ -8,12 +8,15 @@ using System.Windows.Input;
 using BinaryTreeProject.ViewModels.Commands;
 using BinaryTreeProject.Models;
 using System.Collections.ObjectModel;
+using Microsoft.Win32;
+using System.IO;
+using System.Windows;
 
 namespace BinaryTreeProject.ViewModels
 {
     internal class BinaryTreeViewModel : INotifyPropertyChanged
     {
-        private BinaryTree binaryTree { get; set; }
+        private BinaryTree binaryTree { get; set; } // instance of the binary tree
         private bool inputVisible; // is add input visible
         private int? selectedNodeId; // id of existing node selected
         private int? selectedNullNodeId; // id of null (non-existing) node selected
@@ -23,6 +26,10 @@ namespace BinaryTreeProject.ViewModels
         private double canvasHeight; // height of the canvas
         private double verticalNodeOffset; // vertical offset between two nodes
         private double horizontalNodeOffset; // horizontal offset between two nodes
+        private List<int?> nodesSaveList; // list of nodes to save
+
+
+
         private double addCircleDiameter; // diameter of the circle representing a node when adding a new node
 
         // collection of nodes (used for binding)
@@ -124,6 +131,16 @@ namespace BinaryTreeProject.ViewModels
             }
         }
 
+        public List<int?> NodesSaveList
+        {
+            get { return nodesSaveList; }
+            set
+            {
+                nodesSaveList = value;
+                OnPropertyChanged("NodesSaveList");
+            }
+        }
+
         public bool InputVisible
         {
             get { return inputVisible; }
@@ -148,6 +165,7 @@ namespace BinaryTreeProject.ViewModels
         public ICommand AddButtonClickCommand { get; private set; }
         public ICommand CancelAddCommand { get; private set; }
         public ICommand DeleteButtonClickCommand { get; private set; }
+        public ICommand SaveTreeCommand { get; private set; }
 
         public BinaryTreeViewModel()
         {
@@ -157,6 +175,7 @@ namespace BinaryTreeProject.ViewModels
             AddButtonClickCommand = new AddButtonClickCommand(this);
             CancelAddCommand = new CancelAddCommand(this);
             DeleteButtonClickCommand = new DeleteButtonClickCommand(this);
+            SaveTreeCommand = new SaveTreeCommand(this);
             // Other stuff
             NullNodes = new ObservableCollection<Node>();
             SelectedNodeId = null;
@@ -169,6 +188,7 @@ namespace BinaryTreeProject.ViewModels
             AddCircleDiameter = CircleDiameter * 0.3;
             Nodes = new ObservableCollection<Node>();
             LinePositions = new ObservableCollection<LinePosition>();
+            NodesSaveList = new List<int?>();
         }
 
         public void AddNode(Node parentNode, int v, char side)
@@ -177,13 +197,16 @@ namespace BinaryTreeProject.ViewModels
             UpdateNodesCollection(BinaryTree.Root);
             CalculateNodePositions();
             UpdateLinePositions(BinaryTree.Root);
+            CalculateNullNodePositions();
+            SelectedNullNodeId = null;
         }
 
         public void DeleteNode(Node nodeToDelete)
         {
             BinaryTree.DeleteNode(nodeToDelete);
             selectedNodeId = null;
-            if(BinaryTree.Root == null)
+            InputVisible = false;
+            if (BinaryTree.Root == null)
             {
                 Nodes.Clear();
                 LinePositions.Clear();
@@ -193,6 +216,48 @@ namespace BinaryTreeProject.ViewModels
                 UpdateNodesCollection(BinaryTree.Root);
                 CalculateNodePositions();
                 UpdateLinePositions(BinaryTree.Root);
+            }
+        }
+
+        // Saves Binary Tree to file in level order format
+        public void SaveTreeToFile()
+        {
+            try
+            {
+                SaveFileDialog sfd = new SaveFileDialog();
+                
+                sfd.Filter = "Text files (*.txt)|*.txt";
+                sfd.ShowDialog();
+                if (sfd.FileName != "")
+                {
+                    using (FileStream fs = new FileStream(sfd.FileName, FileMode.Create, FileAccess.Write))
+                    {
+                        using (StreamWriter sw = new StreamWriter(fs))
+                        {
+                            BinaryTree.LevelOrder(NodesSaveList);
+                            string text = "";
+                            foreach (int? nodeId in NodesSaveList)
+                            {
+                                if (nodeId != null)
+                                {
+                                    text += nodeId.ToString() + " ";
+                                } else
+                                {
+                                    text += "null ";
+                                }
+                            }
+                            MessageBox.Show(text);
+                            sw.Write(text);
+                        }
+                            
+                    }
+                   
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -258,7 +323,7 @@ namespace BinaryTreeProject.ViewModels
         private void CalculateCanvasHeight()
         {
             int depth = BinaryTree.CalculateMaxDepth(BinaryTree.Root);
-            CanvasHeight = (depth + 2) * CircleDiameter + (depth + 1) * VerticalNodeOffset;
+            CanvasHeight = (depth + 1) * CircleDiameter + (depth + 1) * VerticalNodeOffset;
         }
 
         private void UpdateLinePositions(Node node)
@@ -359,7 +424,14 @@ namespace BinaryTreeProject.ViewModels
 
         public void NodeClick(int nodeId)
         {
-            SelectedNodeId = nodeId;
+            if(selectedNodeId == nodeId)
+            {
+                selectedNodeId = null;    
+            } else
+            {
+                SelectedNodeId = nodeId;
+            }
+            UpdateNodesCollection(BinaryTree.Root);
         }
 
         internal void NullNodeClick(int nullNodeId)

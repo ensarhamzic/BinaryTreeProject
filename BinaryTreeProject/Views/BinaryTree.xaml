@@ -21,7 +21,7 @@
 
         <StackPanel Orientation="Vertical" Grid.Row="0" >
             <ToolBar ToolBarTray.IsLocked="True">
-                <Button Width="60" Background="Transparent" BorderThickness="0" Padding="5">
+                <Button Command="{Binding SaveTreeCommand}" Cursor="Hand" Width="60" Background="Transparent" BorderThickness="0" Padding="5">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/save.png" Width="30" />
@@ -30,7 +30,7 @@
                     </Button.Content>
                 </Button>
 
-                <Button Width="60"  Background="Transparent" BorderThickness="0" Padding="5">
+                <Button Cursor="Hand" Width="60"  Background="Transparent" BorderThickness="0" Padding="5">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/load.png" Width="30" />
@@ -39,7 +39,7 @@
                     </Button.Content>
                 </Button>
 
-                <Button Width="60"  Background="Transparent" BorderThickness="0" Padding="5">
+                <Button Cursor="Hand" Width="60"  Background="Transparent" BorderThickness="0" Padding="5">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/undo.png" Width="30" />
@@ -48,7 +48,7 @@
                     </Button.Content>
                 </Button>
 
-                <Button Width="60"  Background="Transparent" BorderThickness="0" Padding="5">
+                <Button Cursor="Hand" Width="60"  Background="Transparent" BorderThickness="0" Padding="5">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/redo.png" Width="30" />
@@ -58,7 +58,8 @@
                 </Button>
 
 
-                <Button Width="60"  Background="Transparent" BorderThickness="0" Padding="5" Command="{Binding DeleteButtonClickCommand}">
+                <Button Cursor="Hand" Width="60" Background="Transparent"
+                        BorderThickness="0" Padding="5" Command="{Binding DeleteButtonClickCommand}">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/delete.png" Width="30" />
@@ -67,7 +68,8 @@
                     </Button.Content>
                 </Button>
 
-                <Button Width="60"  Background="Transparent" BorderThickness="0" Padding="5" Command="{Binding AddButtonClickCommand}">
+                <Button Cursor="Hand" Width="60" Background="Transparent"
+                        BorderThickness="0" Padding="5" Command="{Binding AddButtonClickCommand}">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/add.png" Width="30" />
@@ -83,14 +85,16 @@
                     >
                     <TextBlock Text="New Node Value:" FontWeight="Bold" VerticalAlignment="Center"/>
                     <TextBox Width="100" Margin="10 0 0 0"
-                             Text="{Binding NewNodeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Margin="10 0 0 0" BorderBrush="Transparent" BorderThickness="0" Background="Transparent"
+                             Text="{Binding NewNodeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             KeyDown="NewNodeTextBox_KeyDown" x:Name="NewNodeTB" />
+                    <Button  Cursor="Hand" Margin="10 0 0 0" BorderBrush="Transparent"
+                             BorderThickness="0" Background="Transparent"
                              Command="{Binding AddNewNodeCommand}" CommandParameter="{Binding NewNodeValue}">
                         <Button.Content>
                             <Image Source="/Icons/done.png" Width="20" />
                         </Button.Content>
                     </Button>
-                    <Button Command="{Binding CancelAddCommand}" Margin="10 0 0 0"
+                    <Button Cursor="Hand" Command="{Binding CancelAddCommand}" Margin="10 0 0 0"
                             BorderBrush="Transparent" BorderThickness="0" Background="Transparent">
                         <Button.Content>
                             <Image Source="/Icons/cancel.png" Width="20" />
@@ -125,7 +129,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid MouseLeftButtonDown="NodeClick" Tag="{Binding ID}" x:Name="NodeGrid"
+                            <Grid MouseLeftButtonDown="NodeClick" Cursor="Hand" Tag="{Binding ID}" x:Name="NodeGrid"
                                   >
                                 <Ellipse
                                     DataContext="{StaticResource vm}"
@@ -149,7 +153,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                
+
 
                 <ItemsControl ItemsSource="{Binding NullNodes}"
                               Visibility="{Binding InputVisible, Converter={StaticResource BoolToVis}}">
@@ -168,6 +172,7 @@
                         <DataTemplate>
                             <Grid MouseLeftButtonDown="NullNodeClick" Tag="{Binding ID}" x:Name="NullNode">
                                 <Ellipse
+                                    Cursor="Hand"
                                     DataContext="{StaticResource vm}"
                                     Width="{Binding AddCircleDiameter}"
                                     Height="{Binding AddCircleDiameter}"

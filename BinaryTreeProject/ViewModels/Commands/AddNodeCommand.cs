@@ -59,8 +59,6 @@ namespace BinaryTreeProject.ViewModels.Commands
                 side = 'R';
             }
             binaryTreeViewModel.AddNode(parentNode, int.Parse(value), side);
-            binaryTreeViewModel.InputVisible = false;
-            binaryTreeViewModel.SelectedNullNodeId = null;
         }
     }
 }
