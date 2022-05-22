@@ -31,8 +31,8 @@ namespace BinaryTreeProject.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            if(binaryTreeViewModel.BinaryTree.Root == null)
-                return false;
+            /* if(binaryTreeViewModel.BinaryTree.Root == null)
+                return false; */
             return true;
         }
 

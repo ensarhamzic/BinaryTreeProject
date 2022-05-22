@@ -122,5 +122,11 @@
     <Resource Include="Icons\cancel.png" />
     <Resource Include="Icons\done.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\file.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\database.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

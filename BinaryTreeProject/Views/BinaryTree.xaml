@@ -21,6 +21,52 @@
 
         <StackPanel Orientation="Vertical" Grid.Row="0" >
             <ToolBar ToolBarTray.IsLocked="True">
+                <Menu VerticalAlignment="Center" Background="Transparent">
+                    <MenuItem Width="60">
+                        <MenuItem.Icon>
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60">
+                                <Image Source="/Icons/save.png" Width="30" />
+                                <TextBlock Text="Save" Margin="0 5 0 0" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </MenuItem.Icon>
+
+                        <MenuItem Header="Save to file" Command="{Binding SaveTreeCommand}">
+                            <MenuItem.Icon>
+                                <Image Source="/Icons/file.png" Width="30"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <MenuItem Header="Save to database">
+                            <MenuItem.Icon>
+                                <Image Source="/Icons/database.png" Width="30"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+                </Menu>
+
+                <Menu VerticalAlignment="Center" Background="Transparent">
+                    <MenuItem Width="60">
+                        <MenuItem.Icon>
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60">
+                                <Image Source="/Icons/load.png" Width="30" />
+                                <TextBlock Text="Load" Margin="0 5 0 0" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </MenuItem.Icon>
+
+                        <MenuItem Header="Load from file">
+                            <MenuItem.Icon>
+                                <Image Source="/Icons/file.png" Width="30"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <MenuItem Header="Load from database">
+                            <MenuItem.Icon>
+                                <Image Source="/Icons/database.png" Width="30"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+                </Menu>
+                <!-- 
                 <Button Command="{Binding SaveTreeCommand}" Cursor="Hand" Width="60" Background="Transparent" BorderThickness="0" Padding="5">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
@@ -38,6 +84,7 @@
                         </StackPanel>
                     </Button.Content>
                 </Button>
+                -->
 
                 <Button Cursor="Hand" Width="60"  Background="Transparent" BorderThickness="0" Padding="5">
                     <Button.Content>
@@ -77,6 +124,8 @@
                         </StackPanel>
                     </Button.Content>
                 </Button>
+
+                
 
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
                     Orientation="Horizontal"
