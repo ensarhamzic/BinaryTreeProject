@@ -16,7 +16,7 @@ namespace BinaryTreeProject.ViewModels
 {
     internal class BinaryTreeViewModel : INotifyPropertyChanged
     {
-        private BinaryTree binaryTree { get; set; } // instance of the binary tree
+        private BinaryTree binaryTree; // instance of the binary tree
         private bool inputVisible; // is add input visible
         private int? selectedNodeId; // id of existing node selected
         private int? selectedNullNodeId; // id of null (non-existing) node selected
@@ -26,21 +26,14 @@ namespace BinaryTreeProject.ViewModels
         private double canvasHeight; // height of the canvas
         private double verticalNodeOffset; // vertical offset between two nodes
         private double horizontalNodeOffset; // horizontal offset between two nodes
-        private List<int?> nodesSaveList; // list of nodes to save
-
-
-
         private double addCircleDiameter; // diameter of the circle representing a node when adding a new node
 
         // collection of nodes (used for binding, to draw nodes on the canvas)
         public ObservableCollection<Node> Nodes { get; set; }
-
         // collection of line positions (used for binding, to draw lines connecting nodes)
         public ObservableCollection<LinePosition> LinePositions { get; set; }
-
         // collection of non-existing nodes (used for binding, to draw places where new node can be added)
         public ObservableCollection<Node> NullNodes { get; set; }
-
         public BinaryTree BinaryTree
         {
             get { return binaryTree; }
@@ -50,7 +43,6 @@ namespace BinaryTreeProject.ViewModels
                 OnPropertyChanged("BinaryTree");
             }
         }
-
         public double CanvasWidth
         {
             get { return canvasWidth; }
@@ -60,7 +52,6 @@ namespace BinaryTreeProject.ViewModels
                 OnPropertyChanged("CanvasWidth");
             }
         }
-
         public double CanvasHeight
         {
             get { return canvasHeight; }
@@ -70,7 +61,6 @@ namespace BinaryTreeProject.ViewModels
                 OnPropertyChanged("CanvasHeight");
             }
         }
-
         public double VerticalNodeOffset
         {
             get { return verticalNodeOffset; }
@@ -80,7 +70,6 @@ namespace BinaryTreeProject.ViewModels
                 OnPropertyChanged("verticalNodeOffset");
             }
         }
-
         public double HorizontalNodeOffset
         {
             get { return horizontalNodeOffset; }
@@ -90,7 +79,6 @@ namespace BinaryTreeProject.ViewModels
                 OnPropertyChanged("horizontalNodeOffset");
             }
         }
-
         public int CircleDiameter
         {
             get { return circleDiameter; }
@@ -100,7 +88,6 @@ namespace BinaryTreeProject.ViewModels
                 OnPropertyChanged("CircleDiameter");
             }
         }
-
         public double AddCircleDiameter
         {
             get { return addCircleDiameter; }
@@ -110,7 +97,6 @@ namespace BinaryTreeProject.ViewModels
                 OnPropertyChanged("AddCircleDiameter");
             }
         }
-
         public int? SelectedNodeId
         {
             get { return selectedNodeId; }
@@ -120,7 +106,6 @@ namespace BinaryTreeProject.ViewModels
                 OnPropertyChanged("SelectedNodeId");
             }
         }
-
         public int? SelectedNullNodeId
         {
             get { return selectedNullNodeId; }
@@ -130,17 +115,6 @@ namespace BinaryTreeProject.ViewModels
                 OnPropertyChanged("SelectedNullNodeId");
             }
         }
-
-        public List<int?> NodesSaveList
-        {
-            get { return nodesSaveList; }
-            set
-            {
-                nodesSaveList = value;
-                OnPropertyChanged("NodesSaveList");
-            }
-        }
-
         public bool InputVisible
         {
             get { return inputVisible; }
@@ -150,7 +124,6 @@ namespace BinaryTreeProject.ViewModels
                 OnPropertyChanged("InputVisible");
             }
         }
-
         public string NewNodeValue
         {
             get { return newNodeValue; }
@@ -160,7 +133,6 @@ namespace BinaryTreeProject.ViewModels
                 OnPropertyChanged("NewNodeValue");
             }
         }
-
         public ICommand AddNewNodeCommand { get; private set; }
         public ICommand AddButtonClickCommand { get; private set; }
         public ICommand CancelAddCommand { get; private set; }
@@ -190,16 +162,12 @@ namespace BinaryTreeProject.ViewModels
             AddCircleDiameter = CircleDiameter * 0.3;
             Nodes = new ObservableCollection<Node>();
             LinePositions = new ObservableCollection<LinePosition>();
-            NodesSaveList = new List<int?>();
         }
 
         public void AddNode(Node parentNode, int v, char side)
         {
             BinaryTree.AddNode(parentNode, v, side);
-            UpdateNodesCollection(BinaryTree.Root);
-            CalculateNodePositions();
-            UpdateLinePositions(BinaryTree.Root);
-            CalculateNullNodePositions();
+            UpdateUI();
             SelectedNullNodeId = null;
         }
 
@@ -216,9 +184,7 @@ namespace BinaryTreeProject.ViewModels
             }
             else
             {
-                UpdateNodesCollection(BinaryTree.Root);
-                CalculateNodePositions();
-                UpdateLinePositions(BinaryTree.Root);
+                UpdateUI();
             }
         }
 
@@ -302,9 +268,7 @@ namespace BinaryTreeProject.ViewModels
                             BinaryTree.nodeId = 0; // Reset Node Id
                             BinaryTree.preIndex = 0; // Reset preIndex
                             BinaryTree.Root = BinaryTree.BuildTree(inorder, preorder, 0, len - 1);
-                            UpdateNodesCollection(BinaryTree.Root);
-                            CalculateNodePositions();
-                            UpdateLinePositions(BinaryTree.Root);
+                            UpdateUI();
                             selectedNodeId = null;
                             selectedNullNodeId = null;
                             InputVisible = false;
@@ -489,12 +453,20 @@ namespace BinaryTreeProject.ViewModels
             {
                 SelectedNodeId = nodeId;
             }
-            UpdateNodesCollection(BinaryTree.Root);
+            UpdateUI();
         }
 
         public void NullNodeClick(int nullNodeId)
         {
             SelectedNullNodeId = nullNodeId;
+        }
+
+        private void UpdateUI()
+        {
+            UpdateNodesCollection(BinaryTree.Root);
+            CalculateNodePositions();
+            UpdateLinePositions(BinaryTree.Root);
+            CalculateNullNodePositions();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
