@@ -9,10 +9,10 @@ using System.Windows.Input;
 
 namespace BinaryTreeProject.ViewModels.Commands
 {
-    internal class SaveTreeCommand : ICommand
+    internal class TreeToFileCommand : ICommand
     {
         private BinaryTreeViewModel binaryTreeViewModel;
-        public SaveTreeCommand(BinaryTreeViewModel binaryTreeViewModel)
+        public TreeToFileCommand(BinaryTreeViewModel binaryTreeViewModel)
         {
             this.binaryTreeViewModel = binaryTreeViewModel;
         }
@@ -31,8 +31,8 @@ namespace BinaryTreeProject.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            /* if(binaryTreeViewModel.BinaryTree.Root == null)
-                return false; */
+            if(binaryTreeViewModel.BinaryTree.Root == null)
+                return false;
             return true;
         }
 

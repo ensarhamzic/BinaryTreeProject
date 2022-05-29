@@ -12,7 +12,7 @@ namespace BinaryTreeProject.Models
 {
     internal class BinaryTree : INotifyPropertyChanged
     {
-        private static int nodeId;
+        public static int nodeId;
         private Node _root; // tree root
 
         public Node Root
@@ -87,7 +87,69 @@ namespace BinaryTreeProject.Models
                     return (rDepth + 1);
             }
         }
-        
+
+        public void PreOrder(Node node, List<int> values)
+        {
+            if (node == null) return;
+            values.Add((int)node.Value);
+            PreOrder(node.LeftNode, values);
+            PreOrder(node.RightNode, values);
+        }
+
+        public void InOrder(Node node, List<int> values)
+        {
+            if (node == null) return;
+            InOrder(node.LeftNode, values);
+            values.Add((int)node.Value);
+            InOrder(node.RightNode, values);
+        }
+
+        // Build tree from given preorder and inorder traversals
+        public static int preIndex = 0;
+        public virtual Node BuildTree(List<int> inorder, List<int> preoder, int inStrt, int inEnd)
+        {
+            if (inStrt > inEnd)
+            {
+                return null;
+            }
+
+            /* Pick current node from Preorder traversal using preIndex and increment preIndex */
+            Node tNode = new Node(preoder[preIndex++], ++nodeId);
+
+            /* If this node has no children then return */
+            if (inStrt == inEnd)
+            {
+                return tNode;
+            }
+
+            /* Else find the index of this node in Inorder traversal */
+            int inIndex = SearchNode(inorder, inStrt, inEnd, (int)tNode.Value);
+
+            /* Using index in Inorder traversal, construct left and right subtress */
+            tNode.LeftNode = BuildTree(inorder, preoder, inStrt, inIndex - 1);
+            if (tNode.LeftNode != null)
+                tNode.LeftNode.ParentNode = tNode;
+            tNode.RightNode = BuildTree(inorder, preoder, inIndex + 1, inEnd);
+            if (tNode.RightNode != null)
+                tNode.RightNode.ParentNode = tNode;
+
+            return tNode;
+        }
+
+        /* Function to find index of value in arr[start...end]. The function assumes that value is present in in[] */
+        public virtual int SearchNode(List<int> inorder, int strt, int end, int value)
+        {
+            int i;
+            for (i = strt; i <= end; i++)
+            {
+                if (inorder[i] == value)
+                {
+                    return i;
+                }
+            }
+            return i;
+        }
+
         public virtual void LevelOrder(List<int?> values)
         {
             int h = CalculateMaxDepth(Root);
@@ -97,8 +159,8 @@ namespace BinaryTreeProject.Models
                 CurrentLevel(Root, values, i);
             }
         }
-        
-        public virtual void CurrentLevel(Node node, List<int?> values,int level)
+
+        public virtual void CurrentLevel(Node node, List<int?> values, int level)
         {
             if (node == null)
             {

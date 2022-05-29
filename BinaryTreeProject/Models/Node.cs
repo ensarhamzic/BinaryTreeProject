@@ -83,7 +83,7 @@ namespace BinaryTreeProject.Models
             RightNode = null;
             ParentNode = null;
             Position = null;
-            ID = 0;
+            ID = null;
         }
 
         public Node(int? value, int? id)

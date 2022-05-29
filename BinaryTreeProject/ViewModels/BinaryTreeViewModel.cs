@@ -32,13 +32,13 @@ namespace BinaryTreeProject.ViewModels
 
         private double addCircleDiameter; // diameter of the circle representing a node when adding a new node
 
-        // collection of nodes (used for binding)
+        // collection of nodes (used for binding, to draw nodes on the canvas)
         public ObservableCollection<Node> Nodes { get; set; }
 
-        // collection of line positions (used for binding)
+        // collection of line positions (used for binding, to draw lines connecting nodes)
         public ObservableCollection<LinePosition> LinePositions { get; set; }
 
-        // collection of non-existing nodes (used for binding)
+        // collection of non-existing nodes (used for binding, to draw places where new node can be added)
         public ObservableCollection<Node> NullNodes { get; set; }
 
         public BinaryTree BinaryTree
@@ -109,7 +109,7 @@ namespace BinaryTreeProject.ViewModels
                 addCircleDiameter = value;
                 OnPropertyChanged("AddCircleDiameter");
             }
-        }        
+        }
 
         public int? SelectedNodeId
         {
@@ -165,7 +165,8 @@ namespace BinaryTreeProject.ViewModels
         public ICommand AddButtonClickCommand { get; private set; }
         public ICommand CancelAddCommand { get; private set; }
         public ICommand DeleteButtonClickCommand { get; private set; }
-        public ICommand SaveTreeCommand { get; private set; }
+        public ICommand SaveTreeToFileCommand { get; private set; }
+        public ICommand LoadTreeFromFileCommand { get; private set; }
 
         public BinaryTreeViewModel()
         {
@@ -175,7 +176,8 @@ namespace BinaryTreeProject.ViewModels
             AddButtonClickCommand = new AddButtonClickCommand(this);
             CancelAddCommand = new CancelAddCommand(this);
             DeleteButtonClickCommand = new DeleteButtonClickCommand(this);
-            SaveTreeCommand = new SaveTreeCommand(this);
+            SaveTreeToFileCommand = new TreeToFileCommand(this);
+            LoadTreeFromFileCommand = new TreeFromFileCommand(this);
             // Other stuff
             NullNodes = new ObservableCollection<Node>();
             SelectedNodeId = null;
@@ -211,7 +213,8 @@ namespace BinaryTreeProject.ViewModels
                 Nodes.Clear();
                 LinePositions.Clear();
                 NullNodes.Clear();
-            } else
+            }
+            else
             {
                 UpdateNodesCollection(BinaryTree.Root);
                 CalculateNodePositions();
@@ -225,7 +228,7 @@ namespace BinaryTreeProject.ViewModels
             try
             {
                 SaveFileDialog sfd = new SaveFileDialog();
-                
+
                 sfd.Filter = "Text files (*.txt)|*.txt";
                 sfd.ShowDialog();
                 if (sfd.FileName != "")
@@ -234,26 +237,80 @@ namespace BinaryTreeProject.ViewModels
                     {
                         using (StreamWriter sw = new StreamWriter(fs))
                         {
-                            BinaryTree.LevelOrder(NodesSaveList);
-                            string text = "";
-                            foreach (int? nodeId in NodesSaveList)
-                            {
-                                if (nodeId != null)
-                                {
-                                    text += nodeId.ToString() + " ";
-                                } else
-                                {
-                                    text += "null ";
-                                }
-                            }
-                            MessageBox.Show(text);
-                            sw.Write(text);
-                        }
-                            
-                    }
-                   
-                }
+                            List<int> inorder = new List<int>();
+                            List<int> preorder = new List<int>();
+                            BinaryTree.InOrder(BinaryTree.Root, inorder);
+                            BinaryTree.PreOrder(BinaryTree.Root, preorder);
 
+                            string text = "";
+                            foreach (int node in inorder)
+                            {
+                                text += node.ToString() + " ";
+                            }
+                            sw.WriteLine(text);
+
+                            text = "";
+                            foreach (int node in preorder)
+                            {
+                                text += node.ToString() + " ";
+                            }
+                            sw.WriteLine(text);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public void LoadTreeFromFile()
+        {
+            try
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+
+                ofd.Filter = "Text files (*.txt)|*.txt";
+                ofd.ShowDialog();
+                if (ofd.FileName != "")
+                {
+                    using (FileStream fs = new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read))
+                    {
+                        using (StreamReader sr = new StreamReader(fs))
+                        {
+                            string text = sr.ReadLine();
+                            string[] inorderString = text.Split(' ');
+                            text = sr.ReadLine();
+                            string[] preorderString = text.Split(' ');
+
+                            List<int> inorder = new List<int>();
+                            List<int> preorder = new List<int>();
+                            foreach (string s in inorderString)
+                            {
+                                if (s != "")
+                                    inorder.Add(int.Parse(s));
+                            }
+                            foreach (string s in preorderString)
+                            {
+                                if (s != "")
+                                    preorder.Add(int.Parse(s));
+                            }
+                            int len = inorder.Count;
+
+                            BinaryTree = new BinaryTree();
+                            BinaryTree.nodeId = 0; // Reset Node Id
+                            BinaryTree.preIndex = 0; // Reset preIndex
+                            BinaryTree.Root = BinaryTree.BuildTree(inorder, preorder, 0, len - 1);
+                            UpdateNodesCollection(BinaryTree.Root);
+                            CalculateNodePositions();
+                            UpdateLinePositions(BinaryTree.Root);
+                            selectedNodeId = null;
+                            selectedNullNodeId = null;
+                            InputVisible = false;
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -408,7 +465,7 @@ namespace BinaryTreeProject.ViewModels
                     nullNode.Position = new Position(node.Position.X, node.Position.Y + CircleDiameter);
                     NullNodes.Add(nullNode);
                 }
-                
+
                 if (node.RightNode == null)
                 {
                     Node nullNode = new Node();
@@ -424,17 +481,18 @@ namespace BinaryTreeProject.ViewModels
 
         public void NodeClick(int nodeId)
         {
-            if(selectedNodeId == nodeId)
+            if (selectedNodeId == nodeId)
             {
-                selectedNodeId = null;    
-            } else
+                selectedNodeId = null;
+            }
+            else
             {
                 SelectedNodeId = nodeId;
             }
             UpdateNodesCollection(BinaryTree.Root);
         }
 
-        internal void NullNodeClick(int nullNodeId)
+        public void NullNodeClick(int nullNodeId)
         {
             SelectedNullNodeId = nullNodeId;
         }

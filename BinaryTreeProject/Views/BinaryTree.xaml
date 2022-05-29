@@ -30,7 +30,7 @@
                             </StackPanel>
                         </MenuItem.Icon>
 
-                        <MenuItem Header="Save to file" Command="{Binding SaveTreeCommand}">
+                        <MenuItem Header="Save to file" Command="{Binding SaveTreeToFileCommand}">
                             <MenuItem.Icon>
                                 <Image Source="/Icons/file.png" Width="30"/>
                             </MenuItem.Icon>
@@ -53,7 +53,7 @@
                             </StackPanel>
                         </MenuItem.Icon>
 
-                        <MenuItem Header="Load from file">
+                        <MenuItem Header="Load from file" Command="{Binding LoadTreeFromFileCommand}">
                             <MenuItem.Icon>
                                 <Image Source="/Icons/file.png" Width="30"/>
                             </MenuItem.Icon>
