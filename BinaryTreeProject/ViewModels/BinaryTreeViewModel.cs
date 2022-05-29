@@ -203,7 +203,7 @@ namespace BinaryTreeProject.ViewModels
                     {
                         using (StreamWriter sw = new StreamWriter(fs))
                         {
-                            List<int> inorder = new List<int>();
+                            /*List<int> inorder = new List<int>();
                             List<int> preorder = new List<int>();
                             BinaryTree.InOrder(BinaryTree.Root, inorder);
                             BinaryTree.PreOrder(BinaryTree.Root, preorder);
@@ -219,6 +219,21 @@ namespace BinaryTreeProject.ViewModels
                             foreach (int node in preorder)
                             {
                                 text += node.ToString() + " ";
+                            }
+                            sw.WriteLine(text); */
+                            List<int?> preorder = new List<int?>();
+                            BinaryTree.Preorder(BinaryTree.Root, preorder);
+                            string text = "";
+                            foreach (int? node in preorder)
+                            {
+                                if (node == null)
+                                {
+                                    text += "null ";
+                                }
+                                else
+                                {
+                                    text += node.ToString() + " ";
+                                }
                             }
                             sw.WriteLine(text);
                         }
@@ -245,7 +260,7 @@ namespace BinaryTreeProject.ViewModels
                     {
                         using (StreamReader sr = new StreamReader(fs))
                         {
-                            string text = sr.ReadLine();
+                            /*string text = sr.ReadLine();
                             string[] inorderString = text.Split(' ');
                             text = sr.ReadLine();
                             string[] preorderString = text.Split(' ');
@@ -272,6 +287,28 @@ namespace BinaryTreeProject.ViewModels
                             selectedNodeId = null;
                             selectedNullNodeId = null;
                             InputVisible = false;
+                            */
+
+                            string text = sr.ReadLine();
+                            string[] preorderString = text.Split(' ');
+                            List<int?> preorder = new List<int?>();
+                            foreach (var s in preorderString)
+                            {
+                                if (s == "null" || s == "")
+                                {
+                                    preorder.Add(null);
+                                }
+                                else
+                                {
+                                    preorder.Add(int.Parse(s));
+                                }
+                            }
+                            BinaryTree = new BinaryTree();
+                            BinaryTree.Root = BinaryTree.BuildTreeFromFile(preorder, true);
+                            UpdateUI();
+                            selectedNodeId = null;
+                            selectedNullNodeId = null;
+                            InputVisible = false;
                         }
                     }
                 }
@@ -281,6 +318,28 @@ namespace BinaryTreeProject.ViewModels
                 MessageBox.Show(ex.Message);
             }
         }
+
+        /*private int textId;
+        private int? NextNode()
+        {
+            if (preorderString[textId] == "")
+            {
+                return 999;
+            }
+            else if (preorderString[textId] == "null")
+            {
+                textId++;
+                return null;
+            }
+            else
+            {
+                int node = int.Parse(preorderString[textId]);
+                textId++;
+                return node;
+            }
+        } */
+
+        
 
         // Calculate positions of the nodes on the canvas
         private void CalculateNodePositions()

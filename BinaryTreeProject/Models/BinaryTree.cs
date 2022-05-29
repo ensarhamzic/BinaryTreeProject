@@ -88,7 +88,7 @@ namespace BinaryTreeProject.Models
             }
         }
 
-        public void PreOrder(Node node, List<int> values)
+        /*public void PreOrder(Node node, List<int> values)
         {
             if (node == null) return;
             values.Add((int)node.Value);
@@ -102,10 +102,58 @@ namespace BinaryTreeProject.Models
             InOrder(node.LeftNode, values);
             values.Add((int)node.Value);
             InOrder(node.RightNode, values);
+        } */
+
+        public void Preorder(Node node, List<int?> values)
+        {
+            if(node == null)
+            {
+                values.Add(null);
+                return;
+            }
+            values.Add(node.Value);
+            Preorder(node.LeftNode, values);
+            Preorder(node.RightNode, values);
         }
 
+        
+
+        // Build tree from preorder list of tree
+        public int preId = 0;
+        public Node BuildTreeFromFile(List<int?> preorder, bool first)
+        {
+            if(first) {
+                preId = 0;
+                nodeId = 0;
+            }
+            
+            if (preId >= preorder.Count) return null;
+
+            int? nextValue = preorder[preId++];
+
+            if (nextValue != null)
+            {
+                Node node = new Node(nextValue, ++nodeId);
+                node.LeftNode = BuildTreeFromFile(preorder, false);
+
+                if (node.LeftNode != null)
+                    node.LeftNode.ParentNode = node;
+
+                node.RightNode = BuildTreeFromFile(preorder, false);
+                if (node.RightNode != null)
+                    node.RightNode.ParentNode = node;
+                return node;
+            }
+            return null;
+        }
+
+
+
+
+
+
+        /*
         // Build tree from given preorder and inorder traversals
-        public static int preIndex = 0;
         public virtual Node BuildTree(List<int> inorder, List<int> preoder, int inStrt, int inEnd)
         {
             if (inStrt > inEnd)
@@ -113,19 +161,19 @@ namespace BinaryTreeProject.Models
                 return null;
             }
 
-            /* Pick current node from Preorder traversal using preIndex and increment preIndex */
+            // Pick current node from Preorder traversal using preIndex and increment preIndex 
             Node tNode = new Node(preoder[preIndex++], ++nodeId);
 
-            /* If this node has no children then return */
+            // If this node has no children then return 
             if (inStrt == inEnd)
             {
                 return tNode;
             }
 
-            /* Else find the index of this node in Inorder traversal */
+            // Else find the index of this node in Inorder traversal 
             int inIndex = SearchNode(inorder, inStrt, inEnd, (int)tNode.Value);
 
-            /* Using index in Inorder traversal, construct left and right subtress */
+            // Using index in Inorder traversal, construct left and right subtress 
             tNode.LeftNode = BuildTree(inorder, preoder, inStrt, inIndex - 1);
             if (tNode.LeftNode != null)
                 tNode.LeftNode.ParentNode = tNode;
@@ -136,7 +184,9 @@ namespace BinaryTreeProject.Models
             return tNode;
         }
 
-        /* Function to find index of value in arr[start...end]. The function assumes that value is present in in[] */
+
+        // Function to find index of value in arr[start...end].
+        // The function assumes that value is present in in[] 
         public virtual int SearchNode(List<int> inorder, int strt, int end, int value)
         {
             int i;
@@ -177,6 +227,7 @@ namespace BinaryTreeProject.Models
                 CurrentLevel(node.RightNode, values, level - 1);
             }
         }
+        */
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string name = null)
