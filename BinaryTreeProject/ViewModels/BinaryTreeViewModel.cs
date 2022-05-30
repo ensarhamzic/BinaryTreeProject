@@ -191,18 +191,20 @@ namespace BinaryTreeProject.ViewModels
             RedoStack = new Stack<List<int?>>();
         }
 
+        // Adds new node and updates everything that need to be updated
         public void AddNode(Node parentNode, int v, char side)
         {
-            UpdateUndoStack();
+            UpdateStack(UndoStack);
             RedoStack = new Stack<List<int?>>();
             BinaryTree.AddNode(parentNode, v, side);
             UpdateUI();
             SelectedNullNodeId = null;
         }
 
+        // Deletes node and updates everything that need to be updated
         public void DeleteNode(Node nodeToDelete)
         {
-            UpdateUndoStack();
+            UpdateStack(UndoStack);
             RedoStack = new Stack<List<int?>>();
             BinaryTree.DeleteNode(nodeToDelete);
             selectedNodeId = null;
@@ -219,7 +221,7 @@ namespace BinaryTreeProject.ViewModels
             }
         }
 
-        // Saves Binary Tree to file in level order format
+        // Saves Binary Tree to file in preorder format
         public void SaveTreeToFile()
         {
             try
@@ -234,24 +236,6 @@ namespace BinaryTreeProject.ViewModels
                     {
                         using (StreamWriter sw = new StreamWriter(fs))
                         {
-                            /*List<int> inorder = new List<int>();
-                            List<int> preorder = new List<int>();
-                            BinaryTree.InOrder(BinaryTree.Root, inorder);
-                            BinaryTree.PreOrder(BinaryTree.Root, preorder);
-
-                            string text = "";
-                            foreach (int node in inorder)
-                            {
-                                text += node.ToString() + " ";
-                            }
-                            sw.WriteLine(text);
-
-                            text = "";
-                            foreach (int node in preorder)
-                            {
-                                text += node.ToString() + " ";
-                            }
-                            sw.WriteLine(text); */
                             List<int?> preorder = new List<int?>();
                             BinaryTree.Preorder(BinaryTree.Root, preorder);
                             string text = "";
@@ -277,6 +261,7 @@ namespace BinaryTreeProject.ViewModels
             }
         }
 
+        // Loads Binary Tree from file in preorder format
         public void LoadTreeFromFile()
         {
             try
@@ -291,35 +276,6 @@ namespace BinaryTreeProject.ViewModels
                     {
                         using (StreamReader sr = new StreamReader(fs))
                         {
-                            /*string text = sr.ReadLine();
-                            string[] inorderString = text.Split(' ');
-                            text = sr.ReadLine();
-                            string[] preorderString = text.Split(' ');
-
-                            List<int> inorder = new List<int>();
-                            List<int> preorder = new List<int>();
-                            foreach (string s in inorderString)
-                            {
-                                if (s != "")
-                                    inorder.Add(int.Parse(s));
-                            }
-                            foreach (string s in preorderString)
-                            {
-                                if (s != "")
-                                    preorder.Add(int.Parse(s));
-                            }
-                            int len = inorder.Count;
-
-                            BinaryTree = new BinaryTree();
-                            BinaryTree.nodeId = 0; // Reset Node Id
-                            BinaryTree.preIndex = 0; // Reset preIndex
-                            BinaryTree.Root = BinaryTree.BuildTree(inorder, preorder, 0, len - 1);
-                            UpdateUI();
-                            selectedNodeId = null;
-                            selectedNullNodeId = null;
-                            InputVisible = false;
-                            */
-
                             string text = sr.ReadLine();
                             string[] preorderString = text.Split(' ');
                             List<int?> preorder = new List<int?>();
@@ -352,9 +308,10 @@ namespace BinaryTreeProject.ViewModels
             }
         }
 
+        // Returns to previous state of binary tree
         public void Undo()
         {
-            UpdateRedoStack();
+            UpdateStack(RedoStack);
             List<int?> previousTree = UndoStack.Pop();
             BinaryTree = new BinaryTree();
             BinaryTree.Root = BinaryTree.BuildTreeFromPreorder(previousTree, true);
@@ -363,9 +320,10 @@ namespace BinaryTreeProject.ViewModels
             UpdateUI();
         }
 
+        // Returns to next state of binary tree
         public void Redo()
         {
-            UpdateUndoStack();
+            UpdateStack(UndoStack);
             List<int?> previousTree = RedoStack.Pop();
             BinaryTree = new BinaryTree();
             BinaryTree.Root = BinaryTree.BuildTreeFromPreorder(previousTree, true);
@@ -373,27 +331,6 @@ namespace BinaryTreeProject.ViewModels
             selectedNullNodeId = null;
             UpdateUI();
         }
-
-        /*private int textId;
-        private int? NextNode()
-        {
-            if (preorderString[textId] == "")
-            {
-                return 999;
-            }
-            else if (preorderString[textId] == "null")
-            {
-                textId++;
-                return null;
-            }
-            else
-            {
-                int node = int.Parse(preorderString[textId]);
-                textId++;
-                return node;
-            }
-        } */
-
 
 
         // Calculate positions of the nodes on the canvas
@@ -528,6 +465,7 @@ namespace BinaryTreeProject.ViewModels
             InputVisible = true;
         }
 
+        // Calculates positions of nodes where new nodes can be added
         private void CalculateNullNodePositions()
         {
             NullNodes.Clear();
@@ -582,18 +520,11 @@ namespace BinaryTreeProject.ViewModels
             CalculateNullNodePositions();
         }
 
-        private void UpdateUndoStack()
+        private void UpdateStack(Stack<List<int?>> s)
         {
             List<int?> savedTree = new List<int?>();
             BinaryTree.Preorder(BinaryTree.Root, savedTree);
-            UndoStack.Push(savedTree);
-        }
-
-        private void UpdateRedoStack()
-        {
-            List<int?> savedTree = new List<int?>();
-            BinaryTree.Preorder(BinaryTree.Root, savedTree);
-            RedoStack.Push(savedTree);
+            s.Push(savedTree);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
