@@ -67,6 +67,8 @@
     <Compile Include="ViewModels\Commands\DeleteButtonClickCommand.cs" />
     <Compile Include="ViewModels\Commands\TreeFromFileCommand.cs" />
     <Compile Include="ViewModels\Commands\TreeToFileCommand.cs" />
+    <Compile Include="ViewModels\Commands\RedoCommand.cs" />
+    <Compile Include="ViewModels\Commands\UndoCommand.cs" />
     <Compile Include="ViewModels\ValueConverters\IdToColorConverter.cs" />
     <Compile Include="Views\BinaryTree.xaml.cs">
       <DependentUpon>BinaryTree.xaml</DependentUpon>

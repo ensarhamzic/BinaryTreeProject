@@ -116,11 +116,9 @@ namespace BinaryTreeProject.Models
             Preorder(node.RightNode, values);
         }
 
-        
-
         // Build tree from preorder list of tree
         public int preId = 0;
-        public Node BuildTreeFromFile(List<int?> preorder, bool first)
+        public Node BuildTreeFromPreorder(List<int?> preorder, bool first)
         {
             if(first) {
                 preId = 0;
@@ -134,12 +132,12 @@ namespace BinaryTreeProject.Models
             if (nextValue != null)
             {
                 Node node = new Node(nextValue, ++nodeId);
-                node.LeftNode = BuildTreeFromFile(preorder, false);
+                node.LeftNode = BuildTreeFromPreorder(preorder, false);
 
                 if (node.LeftNode != null)
                     node.LeftNode.ParentNode = node;
 
-                node.RightNode = BuildTreeFromFile(preorder, false);
+                node.RightNode = BuildTreeFromPreorder(preorder, false);
                 if (node.RightNode != null)
                     node.RightNode.ParentNode = node;
                 return node;

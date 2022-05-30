@@ -27,6 +27,8 @@ namespace BinaryTreeProject.ViewModels
         private double verticalNodeOffset; // vertical offset between two nodes
         private double horizontalNodeOffset; // horizontal offset between two nodes
         private double addCircleDiameter; // diameter of the circle representing a node when adding a new node
+        private Stack<List<int?>> undoStack;
+        private Stack<List<int?>> redoStack;
 
         // collection of nodes (used for binding, to draw nodes on the canvas)
         public ObservableCollection<Node> Nodes { get; set; }
@@ -133,12 +135,33 @@ namespace BinaryTreeProject.ViewModels
                 OnPropertyChanged("NewNodeValue");
             }
         }
+        public Stack<List<int?>> UndoStack
+        {
+            get { return undoStack; }
+            set
+            {
+                undoStack = value;
+            }
+        } 
+
+        public Stack<List<int?>> RedoStack
+        {
+            get { return redoStack; }
+            set
+            {
+                redoStack = value;
+            }
+        }
+
+        // commands
         public ICommand AddNewNodeCommand { get; private set; }
         public ICommand AddButtonClickCommand { get; private set; }
         public ICommand CancelAddCommand { get; private set; }
         public ICommand DeleteButtonClickCommand { get; private set; }
         public ICommand SaveTreeToFileCommand { get; private set; }
         public ICommand LoadTreeFromFileCommand { get; private set; }
+        public ICommand UndoCommand { get; private set; }
+        public ICommand RedoCommand { get; private set; }
 
         public BinaryTreeViewModel()
         {
@@ -150,6 +173,8 @@ namespace BinaryTreeProject.ViewModels
             DeleteButtonClickCommand = new DeleteButtonClickCommand(this);
             SaveTreeToFileCommand = new TreeToFileCommand(this);
             LoadTreeFromFileCommand = new TreeFromFileCommand(this);
+            UndoCommand = new UndoCommand(this);
+            RedoCommand = new RedoCommand(this);
             // Other stuff
             NullNodes = new ObservableCollection<Node>();
             SelectedNodeId = null;
@@ -162,10 +187,14 @@ namespace BinaryTreeProject.ViewModels
             AddCircleDiameter = CircleDiameter * 0.3;
             Nodes = new ObservableCollection<Node>();
             LinePositions = new ObservableCollection<LinePosition>();
+            UndoStack = new Stack<List<int?>>();
+            RedoStack = new Stack<List<int?>>();
         }
 
         public void AddNode(Node parentNode, int v, char side)
         {
+            UpdateUndoStack();
+            RedoStack = new Stack<List<int?>>();
             BinaryTree.AddNode(parentNode, v, side);
             UpdateUI();
             SelectedNullNodeId = null;
@@ -173,6 +202,8 @@ namespace BinaryTreeProject.ViewModels
 
         public void DeleteNode(Node nodeToDelete)
         {
+            UpdateUndoStack();
+            RedoStack = new Stack<List<int?>>();
             BinaryTree.DeleteNode(nodeToDelete);
             selectedNodeId = null;
             InputVisible = false;
@@ -304,8 +335,10 @@ namespace BinaryTreeProject.ViewModels
                                 }
                             }
                             BinaryTree = new BinaryTree();
-                            BinaryTree.Root = BinaryTree.BuildTreeFromFile(preorder, true);
+                            BinaryTree.Root = BinaryTree.BuildTreeFromPreorder(preorder, true);
                             UpdateUI();
+                            UndoStack = new Stack<List<int?>>();
+                            RedoStack = new Stack<List<int?>>();
                             selectedNodeId = null;
                             selectedNullNodeId = null;
                             InputVisible = false;
@@ -317,6 +350,28 @@ namespace BinaryTreeProject.ViewModels
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        public void Undo()
+        {
+            UpdateRedoStack();
+            List<int?> previousTree = UndoStack.Pop();
+            BinaryTree = new BinaryTree();
+            BinaryTree.Root = BinaryTree.BuildTreeFromPreorder(previousTree, true);
+            selectedNodeId = null;
+            selectedNullNodeId = null;
+            UpdateUI();
+        }
+
+        public void Redo()
+        {
+            UpdateUndoStack();
+            List<int?> previousTree = RedoStack.Pop();
+            BinaryTree = new BinaryTree();
+            BinaryTree.Root = BinaryTree.BuildTreeFromPreorder(previousTree, true);
+            selectedNodeId = null;
+            selectedNullNodeId = null;
+            UpdateUI();
         }
 
         /*private int textId;
@@ -339,7 +394,7 @@ namespace BinaryTreeProject.ViewModels
             }
         } */
 
-        
+
 
         // Calculate positions of the nodes on the canvas
         private void CalculateNodePositions()
@@ -429,14 +484,13 @@ namespace BinaryTreeProject.ViewModels
         // Updates nodes collection upon modifying the tree
         private void UpdateNodesCollection(Node node)
         {
-            if (node == null)
-            {
-                return;
-            }
-
             if (node == BinaryTree.Root)
             {
                 Nodes.Clear();
+            }
+            if (node == null)
+            {
+                return;
             }
             UpdateNodesCollection(node.LeftNode);
             Nodes.Add(node);
@@ -526,6 +580,20 @@ namespace BinaryTreeProject.ViewModels
             CalculateNodePositions();
             UpdateLinePositions(BinaryTree.Root);
             CalculateNullNodePositions();
+        }
+
+        private void UpdateUndoStack()
+        {
+            List<int?> savedTree = new List<int?>();
+            BinaryTree.Preorder(BinaryTree.Root, savedTree);
+            UndoStack.Push(savedTree);
+        }
+
+        private void UpdateRedoStack()
+        {
+            List<int?> savedTree = new List<int?>();
+            BinaryTree.Preorder(BinaryTree.Root, savedTree);
+            RedoStack.Push(savedTree);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

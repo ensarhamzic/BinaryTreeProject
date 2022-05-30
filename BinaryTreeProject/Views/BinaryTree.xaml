@@ -86,7 +86,8 @@
                 </Button>
                 -->
 
-                <Button Cursor="Hand" Width="60"  Background="Transparent" BorderThickness="0" Padding="5">
+                <Button Cursor="Hand" Width="60"  Background="Transparent" BorderThickness="0" Padding="5"
+                        Command="{Binding UndoCommand}">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/undo.png" Width="30" />
@@ -95,7 +96,8 @@
                     </Button.Content>
                 </Button>
 
-                <Button Cursor="Hand" Width="60"  Background="Transparent" BorderThickness="0" Padding="5">
+                <Button Cursor="Hand" Width="60"  Background="Transparent" BorderThickness="0" Padding="5"
+                        Command="{Binding RedoCommand}">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/redo.png" Width="30" />
