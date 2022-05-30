@@ -31,8 +31,7 @@ namespace BinaryTreeProject.Views
             var binaryTreeViewModel = DataContext as BinaryTreeViewModel;
             Grid clickedGrid = sender as Grid;
             string tagString = clickedGrid.Tag.ToString();
-            int tag;
-            int.TryParse(tagString, out tag);
+            int.TryParse(tagString, out int tag);
             binaryTreeViewModel.NodeClick(tag);
 
         }
@@ -42,8 +41,7 @@ namespace BinaryTreeProject.Views
             var binaryTreeViewModel = DataContext as BinaryTreeViewModel;
             Grid clickedGrid = sender as Grid;
             string tagString = clickedGrid.Tag.ToString();
-            int tag;
-            int.TryParse(tagString, out tag);
+            int.TryParse(tagString, out int tag);
             binaryTreeViewModel.NullNodeClick(tag);
         }
 

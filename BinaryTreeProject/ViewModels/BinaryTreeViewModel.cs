@@ -162,6 +162,8 @@ namespace BinaryTreeProject.ViewModels
         public ICommand LoadTreeFromFileCommand { get; private set; }
         public ICommand UndoCommand { get; private set; }
         public ICommand RedoCommand { get; private set; }
+        public ICommand SaveTreeToDBCommand { get; private set; }
+        public ICommand LoadTreeFromDBCommand { get; private set; }
 
         public BinaryTreeViewModel()
         {
@@ -173,6 +175,8 @@ namespace BinaryTreeProject.ViewModels
             DeleteButtonClickCommand = new DeleteButtonClickCommand(this);
             SaveTreeToFileCommand = new TreeToFileCommand(this);
             LoadTreeFromFileCommand = new TreeFromFileCommand(this);
+            SaveTreeToDBCommand = new TreeToDBCommand(this);
+            LoadTreeFromDBCommand = new TreeFromDBCommand(this);
             UndoCommand = new UndoCommand(this);
             RedoCommand = new RedoCommand(this);
             // Other stuff
@@ -261,6 +265,12 @@ namespace BinaryTreeProject.ViewModels
             }
         }
 
+        // Saves Binary Tree to database
+        public void SaveTreeToDB()
+        {
+            
+        }
+
         // Loads Binary Tree from file in preorder format
         public void LoadTreeFromFile()
         {
@@ -306,6 +316,12 @@ namespace BinaryTreeProject.ViewModels
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        // Loads Binary Tree from database
+        public void LoadTreeFromDB()
+        {
+            
         }
 
         // Returns to previous state of binary tree

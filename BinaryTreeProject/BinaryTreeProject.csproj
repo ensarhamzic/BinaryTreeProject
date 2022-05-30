@@ -65,8 +65,10 @@
     <Compile Include="ViewModels\BinaryTreeViewModel.cs" />
     <Compile Include="ViewModels\Commands\CancelAddCommand.cs" />
     <Compile Include="ViewModels\Commands\DeleteButtonClickCommand.cs" />
+    <Compile Include="ViewModels\Commands\TreeFromDBCommand.cs" />
     <Compile Include="ViewModels\Commands\TreeFromFileCommand.cs" />
     <Compile Include="ViewModels\Commands\TreeToFileCommand.cs" />
+    <Compile Include="ViewModels\Commands\TreeToDBCommand.cs" />
     <Compile Include="ViewModels\Commands\RedoCommand.cs" />
     <Compile Include="ViewModels\Commands\UndoCommand.cs" />
     <Compile Include="ViewModels\ValueConverters\IdToColorConverter.cs" />
