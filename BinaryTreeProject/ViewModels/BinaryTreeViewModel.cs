@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using Microsoft.Win32;
 using System.IO;
 using System.Windows;
+using BinaryTreeProject.Windows;
 
 namespace BinaryTreeProject.ViewModels
 {
@@ -142,7 +143,7 @@ namespace BinaryTreeProject.ViewModels
             {
                 undoStack = value;
             }
-        } 
+        }
 
         public Stack<List<int?>> RedoStack
         {
@@ -268,7 +269,11 @@ namespace BinaryTreeProject.ViewModels
         // Saves Binary Tree to database
         public void SaveTreeToDB()
         {
-            
+            var dbdialog = new DBDialog();
+            if (dbdialog.ShowDialog() == true)
+            {
+                MessageBox.Show(dbdialog.TreeName);
+            }
         }
 
         // Loads Binary Tree from file in preorder format
@@ -321,7 +326,7 @@ namespace BinaryTreeProject.ViewModels
         // Loads Binary Tree from database
         public void LoadTreeFromDB()
         {
-            
+
         }
 
         // Returns to previous state of binary tree

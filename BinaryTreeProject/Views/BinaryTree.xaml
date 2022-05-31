@@ -6,7 +6,7 @@
         xmlns:vm="clr-namespace:BinaryTreeProject.ViewModels"
         xmlns:converters="clr-namespace:BinaryTreeProject.ViewModels.ValueConverters"
         mc:Ignorable="d"
-        Title="BinaryTree" MinHeight="450" MinWidth="800">
+        Title="BinaryTree" MinHeight="450" MinWidth="800" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <vm:BinaryTreeViewModel x:Key="vm" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
@@ -66,25 +66,6 @@
                         </MenuItem>
                     </MenuItem>
                 </Menu>
-                <!-- 
-                <Button Command="{Binding SaveTreeCommand}" Cursor="Hand" Width="60" Background="Transparent" BorderThickness="0" Padding="5">
-                    <Button.Content>
-                        <StackPanel Orientation="Vertical">
-                            <Image Source="/Icons/save.png" Width="30" />
-                            <TextBlock HorizontalAlignment="Center" Text="Save" Margin="0 5 0 0" FontWeight="Bold" />
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
-
-                <Button Cursor="Hand" Width="60"  Background="Transparent" BorderThickness="0" Padding="5">
-                    <Button.Content>
-                        <StackPanel Orientation="Vertical">
-                            <Image Source="/Icons/load.png" Width="30" />
-                            <TextBlock HorizontalAlignment="Center" Text="Load" Margin="0 5 0 0" FontWeight="Bold"/>
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
-                -->
 
                 <Button Cursor="Hand" Width="60"  Background="Transparent" BorderThickness="0" Padding="5"
                         Command="{Binding UndoCommand}">
@@ -126,8 +107,6 @@
                         </StackPanel>
                     </Button.Content>
                 </Button>
-
-                
 
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
                     Orientation="Horizontal"
