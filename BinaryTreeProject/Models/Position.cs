@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace BinaryTreeProject.Models
 {
-    internal class Position : INotifyPropertyChanged
+    public class Position : INotifyPropertyChanged
     {
         private double _x;
         private double _y;

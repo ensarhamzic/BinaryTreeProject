@@ -30,6 +30,7 @@ namespace BinaryTreeProject.ViewModels
         private double addCircleDiameter; // diameter of the circle representing a node when adding a new node
         private Stack<List<int?>> undoStack;
         private Stack<List<int?>> redoStack;
+        private Database database;
 
         // collection of nodes (used for binding, to draw nodes on the canvas)
         public ObservableCollection<Node> Nodes { get; set; }
@@ -144,13 +145,23 @@ namespace BinaryTreeProject.ViewModels
                 undoStack = value;
             }
         }
-
         public Stack<List<int?>> RedoStack
         {
             get { return redoStack; }
             set
             {
                 redoStack = value;
+            }
+        }
+        public Database Database
+        {
+            get
+            {
+                return database;
+            }
+            set
+            {
+                database = value;
             }
         }
 
@@ -194,6 +205,7 @@ namespace BinaryTreeProject.ViewModels
             LinePositions = new ObservableCollection<LinePosition>();
             UndoStack = new Stack<List<int?>>();
             RedoStack = new Stack<List<int?>>();
+            Database = new Database();
         }
 
         // Adds new node and updates everything that need to be updated
@@ -269,10 +281,12 @@ namespace BinaryTreeProject.ViewModels
         // Saves Binary Tree to database
         public void SaveTreeToDB()
         {
+            List<Node> preorder = new List<Node>();
+            BinaryTree.Preorder(BinaryTree.Root, preorder);
             var dbdialog = new DBDialog();
             if (dbdialog.ShowDialog() == true)
             {
-                MessageBox.Show(dbdialog.TreeName);
+                Database.SaveTree(dbdialog.TreeName, preorder);
             }
         }
 

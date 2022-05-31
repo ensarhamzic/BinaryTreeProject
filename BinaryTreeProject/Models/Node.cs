@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BinaryTreeProject.Models
 {
-    internal class Node : INotifyPropertyChanged
+    public class Node : INotifyPropertyChanged
     {
         private int? _value;
         private int? id;

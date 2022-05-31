@@ -10,7 +10,7 @@ using System.Windows.Shapes;
 
 namespace BinaryTreeProject.Models
 {
-    internal class BinaryTree : INotifyPropertyChanged
+    public class BinaryTree : INotifyPropertyChanged
     {
         public static int nodeId;
         private Node _root; // tree root
@@ -88,6 +88,17 @@ namespace BinaryTreeProject.Models
             }
         }
 
+
+        public void Preorder(Node node, List<Node> values)
+        {
+            if (node == null)
+            {
+                return;
+            }
+            values.Add(node);
+            Preorder(node.LeftNode, values);
+            Preorder(node.RightNode, values);
+        }
 
         public void Preorder(Node node, List<int?> values)
         {

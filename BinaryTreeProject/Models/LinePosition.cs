@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace BinaryTreeProject.Models
 {
-    internal class LinePosition : INotifyPropertyChanged
+    public class LinePosition : INotifyPropertyChanged
     {
         private Position startPosition;
         private Position endPosition;
