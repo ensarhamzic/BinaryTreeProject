@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace BinaryTreeProject
         public string connectionString;
         public MySqlConnection connection;
         private MySqlCommand command;
+        private MySqlDataReader reader;
+        private MySqlDataAdapter adapter;
 
         public Database()
         {
@@ -30,7 +33,7 @@ namespace BinaryTreeProject
                 connection.Open();
                 command.Connection = connection;
                 command.CommandText = $"select id from tree where name='{treeName}'";
-                MySqlDataReader reader = command.ExecuteReader();
+                reader = command.ExecuteReader();
                 if (reader.Read()) // if name already exists, delete it so tree can be overwritten
                 {
                     int foundTreeId = reader.GetInt32(0);
@@ -94,6 +97,41 @@ namespace BinaryTreeProject
             {
                 connection.Close();
             }
+        }
+
+        public DataTable LoadTree(string treeName)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = $"select id from tree where name='{treeName}';";
+                reader = command.ExecuteReader();
+                if (reader.Read()) // if found tree, select all nodes
+                {
+                    int foundTreeId = reader.GetInt32(0);
+                    reader.Close();
+                    // gets all nodes
+                    command.CommandText = $"select * from node where tree_id = {foundTreeId};";
+                    adapter = new MySqlDataAdapter(command);
+                    adapter.SelectCommand = command;
+                    adapter.SelectCommand.Connection = connection;
+                    adapter.Fill(dt);
+                    return dt;
+                }
+                if (reader.IsClosed == false)
+                    reader.Close();
+            }
+            catch (MySqlException e)
+            {
+                MessageBox.Show(e.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return null;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -139,6 +140,46 @@ namespace BinaryTreeProject.Models
                 return node;
             }
             return null;
+        }
+
+        public void BuildTreeFromDatabase(List<Node> nodes, DataTable dt)
+        {
+            int lastId = 0;
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                int? parentId;
+                // Finds parent id
+                if (dt.Rows[i]["parent_id"] == DBNull.Value)
+                    parentId = null;
+                else
+                    parentId = Convert.ToInt32(dt.Rows[i]["parent_id"]);
+
+                if ((int)nodes[i].ID > lastId)
+                {
+                    // calculated biggest id so new nodes don't have same id
+                    lastId = (int)nodes[i].ID;
+                }
+
+                if (parentId == null)
+                {
+                    // If parent id is null, then it's root
+                    Root = nodes[i];
+                }
+                else
+                {
+                    // if not root, finds parent node and adds it as child
+                    nodes[i].ParentNode = nodes.Find(n => n.ID == parentId);
+                    if (dt.Rows[i]["side"] as string == "L")
+                    {
+                        nodes[i].ParentNode.LeftNode = nodes[i];
+                    }
+                    else
+                    {
+                        nodes[i].ParentNode.RightNode = nodes[i];
+                    }
+                }
+            }
+            nodeId = lastId + 1;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -126,11 +126,18 @@
     <Compile Include="Windows\DBDialog.xaml.cs">
       <DependentUpon>DBDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\LoadDBDialog.xaml.cs">
+      <DependentUpon>LoadDBDialog.xaml</DependentUpon>
+    </Compile>
     <Page Include="Views\BinaryTree.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\DBDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\LoadDBDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

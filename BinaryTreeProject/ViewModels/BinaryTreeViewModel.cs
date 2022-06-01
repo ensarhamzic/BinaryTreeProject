@@ -12,6 +12,7 @@ using Microsoft.Win32;
 using System.IO;
 using System.Windows;
 using BinaryTreeProject.Windows;
+using System.Data;
 
 namespace BinaryTreeProject.ViewModels
 {
@@ -340,7 +341,31 @@ namespace BinaryTreeProject.ViewModels
         // Loads Binary Tree from database
         public void LoadTreeFromDB()
         {
+            var loadDbDialog = new LoadDBDialog();
+            List<Node> foundNodes = new List<Node>();
+            DataTable dt;
+            if (loadDbDialog.ShowDialog() == true)
+            {
+                dt = loadDbDialog.NodesTable;
+                for(int i = 0; i < dt.Rows.Count; i++)
+                {
+                    Node temp = new Node
+                    {
+                        ID = Convert.ToInt32(dt.Rows[i]["id"]),
+                        Value = Convert.ToInt32(dt.Rows[i]["value"]),
+                    };
 
+                    foundNodes.Add(temp);
+                }
+
+                BinaryTree.BuildTreeFromDatabase(foundNodes, dt);
+                UpdateUI();
+                UndoStack = new Stack<List<int?>>();
+                RedoStack = new Stack<List<int?>>();
+                selectedNodeId = null;
+                selectedNullNodeId = null;
+                InputVisible = false;
+            }
         }
 
         // Returns to previous state of binary tree

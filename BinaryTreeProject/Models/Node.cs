@@ -82,7 +82,7 @@ namespace BinaryTreeProject.Models
             LeftNode = null;
             RightNode = null;
             ParentNode = null;
-            Position = null;
+            Position = new Position();
             ID = null;
         }
 
