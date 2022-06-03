@@ -29,9 +29,9 @@ namespace BinaryTreeProject.ViewModels
         private double verticalNodeOffset; // vertical offset between two nodes
         private double horizontalNodeOffset; // horizontal offset between two nodes
         private double addCircleDiameter; // diameter of the circle representing a node when adding a new node
-        private Stack<List<int?>> undoStack;
-        private Stack<List<int?>> redoStack;
-        private Database database;
+        private Stack<List<int?>> undoStack; // stack of undo operations
+        private Stack<List<int?>> redoStack; // stack of redo operations
+        private Database database; // database of the binary tree
 
         // collection of nodes (used for binding, to draw nodes on the canvas)
         public ObservableCollection<Node> Nodes { get; set; }
@@ -392,7 +392,6 @@ namespace BinaryTreeProject.ViewModels
             UpdateUI();
         }
 
-
         // Calculate positions of the nodes on the canvas
         private void CalculateNodePositions()
         {
@@ -449,7 +448,6 @@ namespace BinaryTreeProject.ViewModels
 
             return startX;
         }
-
 
         // Calculate canvas height
         private void CalculateCanvasHeight()
@@ -580,6 +578,7 @@ namespace BinaryTreeProject.ViewModels
             CalculateNullNodePositions();
         }
 
+        // Pushes current state of binary tree to passed stack
         private void UpdateStack(Stack<List<int?>> s)
         {
             List<int?> savedTree = new List<int?>();
