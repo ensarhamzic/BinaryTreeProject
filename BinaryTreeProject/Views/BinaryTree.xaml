@@ -1,13 +1,14 @@
-﻿<Window x:Class="BinaryTreeProject.Views.BinaryTree"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm="clr-namespace:BinaryTreeProject.ViewModels"
-        xmlns:converters="clr-namespace:BinaryTreeProject.ViewModels.ValueConverters"
-        mc:Ignorable="d"
-        Title="BinaryTree" MinHeight="450" MinWidth="800" WindowStartupLocation="CenterScreen">
-    <Window.Resources>
+﻿<UserControl x:Class="BinaryTreeProject.Views.BinaryTree"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BinaryTreeProject.Views"
+             xmlns:vm="clr-namespace:BinaryTreeProject.ViewModels"
+                xmlns:converters="clr-namespace:BinaryTreeProject.ViewModels.ValueConverters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
         <vm:BinaryTreeViewModel x:Key="vm" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <converters:IdToColorConverter x:Key="IdToColor" />
@@ -26,8 +27,7 @@
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Padding" Value="5" />
         </Style>
-
-    </Window.Resources>
+    </UserControl.Resources>
     <Grid DataContext="{StaticResource vm}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -145,14 +145,26 @@
                     </Button>
                 </StackPanel>
 
+                <Button Style="{StaticResource ToolbarButton}" Click="ChangeViewClick">
+                    <Button.Content>
+                        <StackPanel Orientation="Vertical">
+                            <Image Source="/Icons/h.png"  />
+                            <TextBlock Style="{StaticResource ToolbarText}" Text="Huffman" />
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+
             </ToolBar>
+
+            
 
             <Border BorderBrush="Black" BorderThickness="1"/>
         </StackPanel>
 
 
 
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True" Grid.Row="1" >
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                      CanContentScroll="True" Grid.Row="1" Background="White" >
             <Canvas
                 Width="{Binding CanvasWidth}"
                 Height="{Binding CanvasHeight}"
@@ -252,4 +264,4 @@
             </Canvas>
         </ScrollViewer>
     </Grid>
-</Window>
+</UserControl>

@@ -102,6 +102,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Database.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\Commands\AddButtonClickCommand.cs" />
     <Compile Include="ViewModels\Commands\AddNodeCommand.cs" />
     <Compile Include="Models\LinePosition.cs" />
@@ -115,13 +119,18 @@
     <Compile Include="ViewModels\Commands\TreeToDBCommand.cs" />
     <Compile Include="ViewModels\Commands\RedoCommand.cs" />
     <Compile Include="ViewModels\Commands\UndoCommand.cs" />
+    <Compile Include="ViewModels\HuffmanViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ValueConverters\IdToColorConverter.cs" />
-    <Compile Include="Views\BinaryTree.xaml.cs">
-      <DependentUpon>BinaryTree.xaml</DependentUpon>
-    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\BinaryTree.xaml.cs">
+      <DependentUpon>BinaryTree.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Huffman.xaml.cs">
+      <DependentUpon>Huffman.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\DBDialog.xaml.cs">
       <DependentUpon>DBDialog.xaml</DependentUpon>
@@ -129,7 +138,15 @@
     <Compile Include="Windows\LoadDBDialog.xaml.cs">
       <DependentUpon>LoadDBDialog.xaml</DependentUpon>
     </Compile>
+    <Page Include="MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\BinaryTree.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Huffman.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -194,6 +211,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\question.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\h.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

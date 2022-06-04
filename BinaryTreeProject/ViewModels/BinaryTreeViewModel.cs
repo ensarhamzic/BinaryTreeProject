@@ -16,7 +16,7 @@ using System.Data;
 
 namespace BinaryTreeProject.ViewModels
 {
-    internal class BinaryTreeViewModel : INotifyPropertyChanged
+    internal class BinaryTreeViewModel : BaseViewModel
     {
         private BinaryTree binaryTree; // instance of the binary tree
         private bool inputVisible; // is add input visible
@@ -585,12 +585,5 @@ namespace BinaryTreeProject.ViewModels
             BinaryTree.Preorder(BinaryTree.Root, savedTree);
             s.Push(savedTree);
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-
     }
 }

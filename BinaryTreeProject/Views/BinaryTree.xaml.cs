@@ -11,6 +11,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace BinaryTreeProject.Views
@@ -18,7 +19,7 @@ namespace BinaryTreeProject.Views
     /// <summary>
     /// Interaction logic for BinaryTree.xaml
     /// </summary>
-    public partial class BinaryTree : Window
+    public partial class BinaryTree : UserControl
     {
         public BinaryTree()
         {
@@ -60,5 +61,11 @@ namespace BinaryTreeProject.Views
             }
         }
 
+        private void ChangeViewClick(object sender, RoutedEventArgs e)
+        {
+            Window win = Window.GetWindow(this);
+            // Changes to view for Huffman Algorithm
+            (win.DataContext as MainViewModel).SelectedViewModel = new HuffmanViewModel();
+        }
     }
 }
