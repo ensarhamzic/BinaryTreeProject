@@ -6,6 +6,21 @@
              xmlns:viewmodels="clr-namespace:BinaryTreeProject.ViewModels"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <Style TargetType="Image">
+            <Setter Property="Width" Value="30" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="ToolbarText">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="0 5 0 0" />
+        </Style>
+        <Style TargetType="Button" x:Key="ToolbarButton">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Width" Value="60" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="5" />
+        </Style>
         <DataTemplate DataType="{x:Type viewmodels:BinaryTreeViewModel}">
             <views:BinaryTree />
         </DataTemplate>

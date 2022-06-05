@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BinaryTreeProject.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,14 @@ namespace BinaryTreeProject.Views
         public Huffman()
         {
             InitializeComponent();
+            DataContext = this.Resources["vm"];
+        }
+
+        private void ChangeViewClick(object sender, RoutedEventArgs e)
+        {
+            Window win = Window.GetWindow(this);
+            // Changes to view for Binary Tree
+            (win.DataContext as MainViewModel).SelectedViewModel = new BinaryTreeViewModel();
         }
     }
 }

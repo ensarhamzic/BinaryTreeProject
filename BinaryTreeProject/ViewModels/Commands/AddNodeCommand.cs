@@ -46,7 +46,7 @@ namespace BinaryTreeProject.ViewModels.Commands
             if(binaryTreeViewModel.SelectedNullNodeId == null)
             {
                 parentNode = null;
-                side = 'L'; // doesn't matter
+                side = '/'; // doesn't matter
             }
             else if (binaryTreeViewModel.NullNodes[(int)binaryTreeViewModel.SelectedNullNodeId-1].LeftNode != null)
             {

@@ -4,9 +4,152 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BinaryTreeProject.Views"
+             xmlns:vm="clr-namespace:BinaryTreeProject.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock>Huffman</TextBlock>
+    <UserControl.Resources>
+        <vm:HuffmanViewModel x:Key="vm"/>
+    </UserControl.Resources>
+    <Grid DataContext="{StaticResource vm}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Vertical" Grid.Row="0" >
+            <ToolBar ToolBarTray.IsLocked="True">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Orientation="Horizontal"
+                    Grid.Row="1"
+                    >
+                    <TextBlock Text="Enter text:" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBox Width="100" Margin="10 0 0 0"
+                             Text="{Binding EnteredText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              x:Name="NewNodeTB" />
+                </StackPanel>
+                <Button Style="{StaticResource ToolbarButton}"
+                        Command="{Binding StartCommand}">
+                    <Button.Content>
+                        <StackPanel Orientation="Vertical">
+                            <Image Source="/Icons/start.png"  />
+                            <TextBlock Text="Start" Style="{StaticResource ToolbarText}"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Button Style="{StaticResource ToolbarButton}"
+                        >
+                    <Button.Content>
+                        <StackPanel Orientation="Vertical">
+                            <Image Source="/Icons/undo.png"  />
+                            <TextBlock Text="Back" Style="{StaticResource ToolbarText}"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+
+                <Button Style="{StaticResource ToolbarButton}"
+                        >
+                    <Button.Content>
+                        <StackPanel Orientation="Vertical">
+                            <Image Source="/Icons/redo.png"  />
+                            <TextBlock Text="Forward" Style="{StaticResource ToolbarText}"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+
+                <Button Style="{StaticResource ToolbarButton}" >
+                    <Button.Content>
+                        <StackPanel Orientation="Vertical">
+                            <Image Source="/Icons/back.png"  />
+                            <TextBlock Text="To start" Style="{StaticResource ToolbarText}"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+
+                <Button Style="{StaticResource ToolbarButton}" >
+                    <Button.Content>
+                        <StackPanel Orientation="Vertical">
+                            <Image Source="/Icons/forward.png"  />
+                            <TextBlock Style="{StaticResource ToolbarText}" Text="To end" />
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+
+                
+
+                <Button Style="{StaticResource ToolbarButton}" Click="ChangeViewClick" Width="80">
+                    <Button.Content>
+                        <StackPanel Orientation="Vertical">
+                            <Image Source="/Icon.ico"  />
+                            <TextBlock Style="{StaticResource ToolbarText}" Text="Binary Tree" />
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+
+            </ToolBar>
+
+            <Border BorderBrush="Black" BorderThickness="1"/>
+        </StackPanel>
+
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                      CanContentScroll="True" Grid.Row="1" Background="White" >
+            <Canvas
+                Width="1800"
+                Height="800"
+                HorizontalAlignment="Center" VerticalAlignment="Top" >
+                <ItemsControl ItemsSource="{Binding Nodes}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.Left" Value="{Binding Position.X}" />
+                            <Setter Property="Canvas.Top" Value="{Binding Position.Y}" />
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Cursor="Hand" Tag="{Binding ID}"
+                                  >
+                                <Ellipse
+                                    DataContext="{StaticResource vm}"
+                                    Width="{Binding CircleDiameter}"
+                                    Height="{Binding CircleDiameter}"
+                                    Stroke="Black" StrokeThickness="3"
+                                    >
+                                </Ellipse>
+                                <TextBlock FontWeight="Bold" FontSize="20"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0}({1})">
+                                            <Binding Path="Character" />
+                                            <Binding Path="Value" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+
+                <!-- <ItemsControl ItemsSource="{Binding LinePositions}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Line Stroke="Black" StrokeThickness="3"
+                                  X1="{Binding StartPosition.X}" Y1="{Binding StartPosition.Y}"
+                                  X2="{Binding EndPosition.X}" Y2="{Binding EndPosition.Y}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl> -->
+
+            </Canvas>
+        </ScrollViewer>
     </Grid>
 </UserControl>

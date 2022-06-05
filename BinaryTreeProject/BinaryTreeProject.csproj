@@ -105,6 +105,9 @@
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Huffman.cs" />
+    <Compile Include="Models\HuffmanNode.cs" />
+    <Compile Include="Models\HuffmanTree.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\Commands\AddButtonClickCommand.cs" />
     <Compile Include="ViewModels\Commands\AddNodeCommand.cs" />
@@ -113,6 +116,7 @@
     <Compile Include="ViewModels\BinaryTreeViewModel.cs" />
     <Compile Include="ViewModels\Commands\CancelAddCommand.cs" />
     <Compile Include="ViewModels\Commands\DeleteButtonClickCommand.cs" />
+    <Compile Include="ViewModels\Commands\StartHuffmanCommand.cs" />
     <Compile Include="ViewModels\Commands\TreeFromDBCommand.cs" />
     <Compile Include="ViewModels\Commands\TreeFromFileCommand.cs" />
     <Compile Include="ViewModels\Commands\TreeToFileCommand.cs" />
@@ -214,6 +218,13 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\h.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\start.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\back.png" />
+    <Resource Include="Icons\forward.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

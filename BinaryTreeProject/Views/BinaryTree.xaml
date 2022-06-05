@@ -5,28 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BinaryTreeProject.Views"
              xmlns:vm="clr-namespace:BinaryTreeProject.ViewModels"
-                xmlns:converters="clr-namespace:BinaryTreeProject.ViewModels.ValueConverters"
+             xmlns:converters="clr-namespace:BinaryTreeProject.ViewModels.ValueConverters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <vm:BinaryTreeViewModel x:Key="vm" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <converters:IdToColorConverter x:Key="IdToColor" />
-        <Style TargetType="Image">
-            <Setter Property="Width" Value="30" />
-        </Style>
-        <Style TargetType="TextBlock" x:Key="ToolbarText">
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Margin" Value="0 5 0 0" />
-        </Style>
-        <Style TargetType="Button" x:Key="ToolbarButton">
-            <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="Width" Value="60" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Padding" Value="5" />
-        </Style>
+        
     </UserControl.Resources>
     <Grid DataContext="{StaticResource vm}">
         <Grid.RowDefinitions>
@@ -156,7 +142,7 @@
 
             </ToolBar>
 
-            
+
 
             <Border BorderBrush="Black" BorderThickness="1"/>
         </StackPanel>
