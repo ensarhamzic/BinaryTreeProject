@@ -60,6 +60,13 @@ namespace BinaryTreeProject.Views
                 }
             }
         }
+        
+        private void ZoomLevelChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var binaryTreeViewModel = DataContext as BinaryTreeViewModel;
+            if (binaryTreeViewModel == null) return;
+            binaryTreeViewModel.ZoomChanged();
+        }
 
         private void ChangeViewClick(object sender, RoutedEventArgs e)
         {
@@ -67,5 +74,7 @@ namespace BinaryTreeProject.Views
             // Changes to view for Huffman Algorithm
             (win.DataContext as MainViewModel).SelectedViewModel = new HuffmanViewModel();
         }
+
+        
     }
 }

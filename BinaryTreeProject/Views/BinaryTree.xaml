@@ -12,12 +12,13 @@
         <vm:BinaryTreeViewModel x:Key="vm" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <converters:IdToColorConverter x:Key="IdToColor" />
-        
+
     </UserControl.Resources>
-    <Grid DataContext="{StaticResource vm}">
+    <Grid DataContext="{StaticResource vm}" x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Vertical" Grid.Row="0" >
@@ -186,7 +187,7 @@
                                         </MultiBinding>
                                     </Ellipse.Fill>
                                 </Ellipse>
-                                <TextBlock FontWeight="Bold" FontSize="20"
+                                <TextBlock FontWeight="Bold" FontSize="{Binding DataContext.NodeValueSize, ElementName=MainGrid}"
                                            Text="{Binding Value}"
                                            HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Grid>
@@ -249,5 +250,24 @@
 
             </Canvas>
         </ScrollViewer>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Background="LightGray">
+            <TextBlock Padding="5" FontSize="15" FontWeight="Bold" Text="{Binding NumberOfNodes, StringFormat={}Number of nodes: {0}}" />
+            <TextBlock Padding="5" Margin="20 0 0 0" FontSize="15" FontWeight="Bold" Text="{Binding TreeDepth, StringFormat={}Tree depth: {0}}" />
+            <TextBlock Padding="5" Margin="20 0 0 0" FontSize="15" FontWeight="Bold" Text="{Binding MinNode, StringFormat={}Min node value: {0}}" />
+            <TextBlock Padding="5" Margin="20 0 0 0"
+                       FontSize="15" FontWeight="Bold"
+                       Text="{Binding MaxNode, StringFormat={}Max node value: {0}}"
+                       />
+            <TextBlock Padding="5" Margin="20 0 0 0" FontSize="15" FontWeight="Bold" Text="Zoom level:" />
+            <Slider Width="100"  
+                Minimum="1" 
+                Maximum="5"
+                TickFrequency="1" TickPlacement="BottomRight"
+                VerticalAlignment="Center" Value="{Binding ZoomLevel, Mode=TwoWay,
+                UpdateSourceTrigger=PropertyChanged}"
+                ValueChanged="ZoomLevelChanged"
+                Foreground="Black" />
+        </StackPanel>
     </Grid>
 </UserControl>

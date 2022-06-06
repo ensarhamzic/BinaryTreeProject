@@ -28,11 +28,17 @@ namespace BinaryTreeProject.ViewModels
         private double canvasHeight; // height of the canvas
         private double verticalNodeOffset; // vertical offset between two nodes
         private double horizontalNodeOffset; // horizontal offset between two nodes
+        private double nodeValueSize; // font size of the node value
         private double addCircleDiameter; // diameter of the circle representing a node when adding a new node
         private Stack<List<int?>> undoStack; // stack of undo operations
         private Stack<List<int?>> redoStack; // stack of redo operations
         private Database database; // database of the binary tree
-
+        private int numberOfNodes;
+        private int treeDepth;
+        private string maxNode;
+        private string minNode;
+        private int zoomLevel;
+        
         // collection of nodes (used for binding, to draw nodes on the canvas)
         public ObservableCollection<Node> Nodes { get; set; }
         // collection of line positions (used for binding, to draw lines connecting nodes)
@@ -91,6 +97,16 @@ namespace BinaryTreeProject.ViewModels
             {
                 circleDiameter = value;
                 OnPropertyChanged("CircleDiameter");
+            }
+        }
+
+        public double NodeValueSize
+        {
+            get { return nodeValueSize; }
+            set
+            {
+                nodeValueSize = value;
+                OnPropertyChanged("NodeValueSize");
             }
         }
         public double AddCircleDiameter
@@ -166,6 +182,71 @@ namespace BinaryTreeProject.ViewModels
             }
         }
 
+        public int NumberOfNodes
+        {
+            get
+            {
+                return numberOfNodes;
+            }
+            set
+            {
+                numberOfNodes = value;
+                OnPropertyChanged("NumberOfNodes");
+            }
+        }
+
+        public int TreeDepth
+        {
+            get
+            {
+                return treeDepth;
+            }
+            set
+            {
+                treeDepth = value;
+                OnPropertyChanged("TreeDepth");
+            }
+        }
+
+        public string MaxNode
+        {
+            get
+            {
+                return maxNode;
+            }
+            set
+            {
+                maxNode = value;
+                OnPropertyChanged("MaxNode");
+            }
+        }
+
+        public string MinNode
+        {
+            get
+            {
+                return minNode;
+            }
+            set
+            {
+                minNode = value;
+                OnPropertyChanged("MinNode");
+            }
+        }
+
+        public int ZoomLevel
+        {
+            get
+            {
+                return zoomLevel;
+            }
+            set
+            {
+                zoomLevel = value;
+                OnPropertyChanged("ZoomLevel");
+            }
+        }
+
         // commands
         public ICommand AddNewNodeCommand { get; private set; }
         public ICommand AddButtonClickCommand { get; private set; }
@@ -196,18 +277,20 @@ namespace BinaryTreeProject.ViewModels
             NullNodes = new ObservableCollection<Node>();
             SelectedNodeId = null;
             SelectedNullNodeId = null;
-            CircleDiameter = 50;
             CanvasWidth = 0;
             CanvasHeight = 0;
-            VerticalNodeOffset = CircleDiameter * 0.5;
-            HorizontalNodeOffset = CircleDiameter * 0.7;
-            AddCircleDiameter = CircleDiameter * 0.3;
+            SetNodeSizes(50);
             Nodes = new ObservableCollection<Node>();
             LinePositions = new ObservableCollection<LinePosition>();
             UndoStack = new Stack<List<int?>>();
             RedoStack = new Stack<List<int?>>();
             Database = new Database();
-        }
+            NumberOfNodes = 0;
+            TreeDepth = 0;
+            MaxNode = "/";
+            MinNode = "/";
+            ZoomLevel = 1;
+    }
 
         // Adds new node and updates everything that need to be updated
         public void AddNode(Node parentNode, int v, char side)
@@ -232,6 +315,10 @@ namespace BinaryTreeProject.ViewModels
                 Nodes.Clear();
                 LinePositions.Clear();
                 NullNodes.Clear();
+                NumberOfNodes = 0;
+                TreeDepth = 0;
+                MaxNode = "/";
+                MinNode = "/";
             }
             else
             {
@@ -569,6 +656,32 @@ namespace BinaryTreeProject.ViewModels
         {
             SelectedNullNodeId = nullNodeId;
         }
+        
+        public void ZoomChanged()
+        {
+            switch(ZoomLevel)
+            {
+                case 1:
+                    SetNodeSizes(50);
+                    break;
+                case 2:
+                    SetNodeSizes(65);
+                    break;
+                case 3:
+                    SetNodeSizes(75);
+                    break;
+                case 4:
+                    SetNodeSizes(85);
+                    break;
+                case 5:
+                    SetNodeSizes(100);
+                    break;
+                default:
+                    SetNodeSizes(50);
+                    break;
+            }
+            UpdateUI();
+        }
 
         private void UpdateUI()
         {
@@ -576,6 +689,19 @@ namespace BinaryTreeProject.ViewModels
             CalculateNodePositions();
             UpdateLinePositions(BinaryTree.Root);
             CalculateNullNodePositions();
+            NumberOfNodes = Nodes.Count;
+            TreeDepth = BinaryTree.CalculateMaxDepth(BinaryTree.Root);
+            MaxNode = Nodes.Max(node => node.Value).ToString();
+            MinNode = Nodes.Min(node => node.Value).ToString();
+        }
+
+        private void SetNodeSizes(int circleDiameter)
+        {
+            CircleDiameter = circleDiameter;
+            VerticalNodeOffset = CircleDiameter * 0.5;
+            HorizontalNodeOffset = CircleDiameter * 0.7;
+            AddCircleDiameter = CircleDiameter * 0.3;
+            NodeValueSize = CircleDiameter * 0.4;
         }
 
         // Pushes current state of binary tree to passed stack

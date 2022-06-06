@@ -94,8 +94,8 @@
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
                       CanContentScroll="True" Grid.Row="1" Background="White" >
             <Canvas
-                Width="1800"
-                Height="800"
+                Width="{Binding CanvasWidth}"
+                Height="{Binding CanvasHeight}"
                 HorizontalAlignment="Center" VerticalAlignment="Top" >
                 <ItemsControl ItemsSource="{Binding Nodes}">
                     <ItemsControl.ItemsPanel>

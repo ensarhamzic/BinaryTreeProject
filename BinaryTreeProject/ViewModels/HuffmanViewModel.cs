@@ -124,7 +124,7 @@ namespace BinaryTreeProject.ViewModels
             CanvasWidth = 0;
             CanvasHeight = 0;
             VerticalNodeOffset = CircleDiameter * 0.5;
-            HorizontalNodeOffset = CircleDiameter * 0.7;
+            HorizontalNodeOffset = CircleDiameter * 1.3;
             isStarted = false;
             PreviousStates = new Stack<List<HuffmanTree>>();
             // commands
@@ -234,16 +234,8 @@ namespace BinaryTreeProject.ViewModels
             double startX = 0; // must change
             foreach (var node in Nodes)
             {
-                //if (node.ParentNode == null)
-                //{
-                node.Position.X = startX + (horizontalNodeOffset * 2);
-                startX += HorizontalNodeOffset * 2;
-                //}
-                //else
-                //{
-                //    node.Position.X = startX + HorizontalNodeOffset;
-                //    startX += HorizontalNodeOffset;
-                //}
+                node.Position.X = startX + HorizontalNodeOffset;
+                startX += HorizontalNodeOffset;
             }
 
             CalculateVerticalPositions();
@@ -323,11 +315,27 @@ namespace BinaryTreeProject.ViewModels
             UpdateNodesFromTree(node.RightNode);
         }
 
+        private void CalculateCanvasSize()
+        {
+            double maxWidth = 0;
+            double maxHeight = 0;
+            foreach (var node in Nodes)
+            {
+                if (node.Position.X + CircleDiameter > maxWidth)
+                    maxWidth = node.Position.X + CircleDiameter;
+                if (node.Position.Y + CircleDiameter > maxHeight)
+                    maxHeight = node.Position.Y + CircleDiameter;
+            }
+            CanvasWidth = maxWidth + HorizontalNodeOffset;
+            CanvasHeight = maxHeight + VerticalNodeOffset;
+        }
+
         private void UpdateUI()
         {
             UpdateNodesCollection();
             CalculateNodePositions();
             UpdateLinePositions();
+            CalculateCanvasSize();
         }
     }
 }

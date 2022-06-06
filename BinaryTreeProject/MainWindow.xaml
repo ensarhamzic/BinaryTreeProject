@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BinaryTreeProject"
         mc:Ignorable="d"
-        Title="Binary Tree" MinHeight="450" MinWidth="800"
+        Title="Binary Tree" MinHeight="500" MinWidth="900"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <ContentControl Content="{Binding SelectedViewModel}" />
