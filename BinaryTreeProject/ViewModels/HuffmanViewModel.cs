@@ -19,7 +19,8 @@ namespace BinaryTreeProject.ViewModels
         private double canvasHeight; // height of the canvas
         private double verticalNodeOffset; // vertical offset between two nodes
         private double horizontalNodeOffset; // horizontal offset between two nodes
-        private bool isStarted;
+        private bool isStarted; // is huffman algorithm started
+        private Stack<List<HuffmanTree>> previousStates; // previous states of the algorithm
 
         public Huffman Huffman
         {
@@ -30,7 +31,6 @@ namespace BinaryTreeProject.ViewModels
                 OnPropertyChanged("Huffman");
             }
         }
-
         public double CanvasWidth
         {
             get { return canvasWidth; }
@@ -88,6 +88,15 @@ namespace BinaryTreeProject.ViewModels
                 OnPropertyChanged("IsStarted");
             }
         }
+        public Stack<List<HuffmanTree>> PreviousStates
+        {
+            get { return previousStates; }
+            set
+            {
+                previousStates = value;
+                OnPropertyChanged("PreviousStates");
+            }
+        }
 
         public ObservableCollection<HuffmanNode> Nodes { get; set; }
         public ObservableCollection<LinePosition> LinePositions { get; set; }
@@ -103,6 +112,9 @@ namespace BinaryTreeProject.ViewModels
 
         public ICommand StartCommand { get; private set; }
         public ICommand NextStepCommand { get; private set; }
+        public ICommand PreviousStepCommand { get; private set; }
+        public ICommand SkipToEndCommand { get; private set; }
+        public ICommand BackToStartCommand { get; private set; }
         public HuffmanViewModel()
         {
             Huffman = new Huffman();
@@ -114,14 +126,19 @@ namespace BinaryTreeProject.ViewModels
             VerticalNodeOffset = CircleDiameter * 0.5;
             HorizontalNodeOffset = CircleDiameter * 0.7;
             isStarted = false;
+            PreviousStates = new Stack<List<HuffmanTree>>();
             // commands
             StartCommand = new StartHuffmanCommand(this);
             NextStepCommand = new NextStepHuffmanCommand(this);
+            PreviousStepCommand = new PreviousStepHuffmanCommand(this);
+            SkipToEndCommand = new SkipToEndHuffmanCommand(this);
+            BackToStartCommand = new BackToStartHuffmanCommand(this);
         }
 
         public void StartHuffman()
         {
             IsStarted = true;
+            PreviousStates.Clear();
             Huffman.Trees.Clear();
             UpdateUI();
             List<char> previousChars = new List<char>();
@@ -147,6 +164,7 @@ namespace BinaryTreeProject.ViewModels
 
         public void NextStep()
         {
+            SaveCurrentState();
             HuffmanTree first = Huffman.Trees[0];
             HuffmanTree second = Huffman.Trees[1];
             HuffmanTree mergedTree = new HuffmanTree(new HuffmanNode(null,
@@ -163,6 +181,54 @@ namespace BinaryTreeProject.ViewModels
             UpdateUI();
         }
 
+        private void SaveCurrentState()
+        {
+            List<HuffmanTree> currentState = new List<HuffmanTree>();
+            foreach (HuffmanTree tree in Huffman.Trees)
+            {
+                HuffmanTree newTree = new HuffmanTree();
+                newTree.Root = SaveTree(tree.Root);
+                currentState.Add(newTree);
+            }
+            PreviousStates.Push(currentState);
+        }
+
+        private HuffmanNode SaveTree(HuffmanNode node)
+        {
+            if (node == null)
+                return null;
+            HuffmanNode newNode = new HuffmanNode(node.Character, (int)node.Value, node.ID);
+            newNode.LeftNode = SaveTree(node.LeftNode);
+            if (newNode.LeftNode != null)
+                newNode.LeftNode.ParentNode = newNode;
+            newNode.RightNode = SaveTree(node.RightNode);
+            if (newNode.RightNode != null)
+                newNode.RightNode.ParentNode = newNode;
+            return newNode;
+        }
+
+        public void PreviousStep()
+        {
+            Huffman.Trees = PreviousStates.Pop();
+            UpdateUI();
+        }
+
+        public void SkipToEnd()
+        {
+            while (Huffman.Trees.Count > 1)
+            {
+                NextStep();
+            }
+        }
+
+        public void BackToStart()
+        {
+            while (PreviousStates.Count > 0)
+            {
+                PreviousStep();
+            }
+        }
+
         private void CalculateNodePositions()
         {
             double startX = 0; // must change
@@ -170,8 +236,8 @@ namespace BinaryTreeProject.ViewModels
             {
                 //if (node.ParentNode == null)
                 //{
-                    node.Position.X = startX + (horizontalNodeOffset * 2);
-                    startX += HorizontalNodeOffset * 2;
+                node.Position.X = startX + (horizontalNodeOffset * 2);
+                startX += HorizontalNodeOffset * 2;
                 //}
                 //else
                 //{

@@ -37,7 +37,7 @@
                     </Button.Content>
                 </Button>
                 <Button Style="{StaticResource ToolbarButton}"
-                        >
+                        Command="{Binding PreviousStepCommand}">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/undo.png"  />
@@ -56,7 +56,8 @@
                     </Button.Content>
                 </Button>
 
-                <Button Style="{StaticResource ToolbarButton}" >
+                <Button Style="{StaticResource ToolbarButton}"
+                        Command="{Binding BackToStartCommand}">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/back.png"  />
@@ -65,7 +66,7 @@
                     </Button.Content>
                 </Button>
 
-                <Button Style="{StaticResource ToolbarButton}" >
+                <Button Style="{StaticResource ToolbarButton}" Command="{Binding SkipToEndCommand}" >
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/forward.png"  />
