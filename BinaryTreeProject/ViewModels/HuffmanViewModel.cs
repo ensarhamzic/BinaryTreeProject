@@ -122,6 +122,8 @@ namespace BinaryTreeProject.ViewModels
         public void StartHuffman()
         {
             IsStarted = true;
+            Huffman.Trees.Clear();
+            UpdateUI();
             List<char> previousChars = new List<char>();
 
             foreach (char c in enteredText)
