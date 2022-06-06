@@ -116,6 +116,7 @@
     <Compile Include="ViewModels\BinaryTreeViewModel.cs" />
     <Compile Include="ViewModels\Commands\CancelAddCommand.cs" />
     <Compile Include="ViewModels\Commands\DeleteButtonClickCommand.cs" />
+    <Compile Include="ViewModels\Commands\NextStepHuffmanCommand.cs" />
     <Compile Include="ViewModels\Commands\StartHuffmanCommand.cs" />
     <Compile Include="ViewModels\Commands\TreeFromDBCommand.cs" />
     <Compile Include="ViewModels\Commands\TreeFromFileCommand.cs" />

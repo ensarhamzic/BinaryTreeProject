@@ -47,7 +47,7 @@
                 </Button>
 
                 <Button Style="{StaticResource ToolbarButton}"
-                        >
+                        Command="{Binding NextStepCommand}">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
                             <Image Source="/Icons/redo.png"  />
@@ -134,7 +134,7 @@
                 </ItemsControl>
 
 
-                <!-- <ItemsControl ItemsSource="{Binding LinePositions}">
+                <ItemsControl ItemsSource="{Binding LinePositions}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas/>
@@ -147,7 +147,7 @@
                                   X2="{Binding EndPosition.X}" Y2="{Binding EndPosition.Y}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
-                </ItemsControl> -->
+                </ItemsControl>
 
             </Canvas>
         </ScrollViewer>

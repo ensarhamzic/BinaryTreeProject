@@ -8,7 +8,7 @@ namespace BinaryTreeProject.Models
 {
     public class HuffmanNode : Node
     {
-        private char character;
+        private char? character;
         private HuffmanNode _leftNode;
         private HuffmanNode _rightNode;
         private HuffmanNode _parentNode;
@@ -53,7 +53,7 @@ namespace BinaryTreeProject.Models
         }
 
 
-        public char Character
+        public char? Character
         {
             get
             {
@@ -65,7 +65,7 @@ namespace BinaryTreeProject.Models
                 OnPropertyChanged("Character");
             }
         }
-        public HuffmanNode(char character, int frequency, int? id = null)
+        public HuffmanNode(char? character, int frequency, int? id = null)
         {
             ID = id;
             Character = character;
