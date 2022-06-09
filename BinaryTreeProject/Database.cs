@@ -29,25 +29,29 @@ namespace BinaryTreeProject
         {
             try
             {
-                int insertedTreeId;
+                int foundTreeId;
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = $"select id from tree where name='{treeName}'";
+                command.CommandText = $"select id from tree where name='{treeName}';";
                 reader = command.ExecuteReader();
-                if (reader.Read()) // if name already exists, delete it so tree can be overwritten
+                if (reader.Read()) // if name already exists, delete all nodes from that tree
                 {
-                    int foundTreeId = reader.GetInt32(0);
+                    foundTreeId = reader.GetInt32(0);
                     reader.Close();
-                    // this also deletes all nodes in the nodes table (on delete cascade)
-                    command.CommandText = $"delete from tree where id = {foundTreeId};";
+                    command.CommandText = $"delete from node where tree_id = {foundTreeId};";
                     command.ExecuteNonQuery();
+                }
+                else
+                {
+                    reader.Close();
+                    command.CommandText = $"insert into tree (name) values ('{treeName}');";
+                    command.ExecuteNonQuery();
+                    foundTreeId = (int)command.LastInsertedId;
                 }
                 if (reader.IsClosed == false)
                     reader.Close();
 
-                command.CommandText = $"insert into tree (name) values ('{treeName}');";
-                command.ExecuteNonQuery();
-                insertedTreeId = (int)command.LastInsertedId;
+                
 
                 string valuesString = "";
 
@@ -70,7 +74,7 @@ namespace BinaryTreeProject
                     else
                         parentId = node.ParentNode.ID.ToString();
                     // Building query string
-                    valuesString += $"({node.ID}, {insertedTreeId}, {node.Value}, {parentId},";
+                    valuesString += $"({node.ID}, {foundTreeId}, {node.Value}, {parentId},";
                     if(side == null)
                         valuesString += $"null)";
                     else

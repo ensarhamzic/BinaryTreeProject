@@ -12,7 +12,7 @@
         <vm:BinaryTreeViewModel x:Key="vm" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <converters:IdToColorConverter x:Key="IdToColor" />
-
+        <converters:BoolToTextConverter x:Key="BoolToText" />
     </UserControl.Resources>
     <Grid DataContext="{StaticResource vm}" x:Name="MainGrid">
         <Grid.RowDefinitions>
@@ -20,6 +20,33 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
+
+        <Popup Margin="5" HorizontalAlignment="Left"   
+            VerticalAlignment="Top" IsOpen="{Binding PopupVisible}" Placement="Mouse">
+            <Border BorderThickness="3" BorderBrush="Black">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Orientation="Horizontal" Background="White"
+                    >
+                    <TextBlock Padding="5" Text="Value:" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBox Width="40" Margin="10" FontSize="14" FontWeight="Bold"
+                             Text="{Binding NewNodeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             KeyDown="NewNodeTextBox_KeyDown" x:Name="NewNodeTB" />
+                    <Button  Cursor="Hand" Padding="5" Margin="5" BorderBrush="Transparent"
+                             BorderThickness="0" Background="Transparent"
+                             Command="{Binding AddNewNodeCommand}" CommandParameter="{Binding NewNodeValue}">
+                        <Button.Content>
+                            <Image Source="/Icons/done.png" Width="20" />
+                        </Button.Content>
+                    </Button>
+                    <Button Cursor="Hand" Command="{Binding CancelAddCommand}" Padding="5" Margin="5"
+                            BorderBrush="Transparent" BorderThickness="0" Background="Transparent">
+                        <Button.Content>
+                            <Image Source="/Icons/cancel.png" Width="20" />
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </Border>
+        </Popup>
 
         <StackPanel Orientation="Vertical" Grid.Row="0" >
             <ToolBar ToolBarTray.IsLocked="True">
@@ -102,12 +129,26 @@
                 <Button Style="{StaticResource ToolbarButton}" Command="{Binding AddButtonClickCommand}">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
-                            <Image Source="/Icons/add.png"  />
-                            <TextBlock Style="{StaticResource ToolbarText}" Text="Add" />
+                            <Image Width="30">
+                                <Image.Style>
+                                    <Style TargetType="{x:Type Image}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding InputVisible}" Value="False">
+                                                <Setter Property="Source" Value="/Icons/add.png"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding InputVisible}" Value="True">
+                                                <Setter Property="Source" Value="/Icons/cancel.png"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                            <TextBlock Style="{StaticResource ToolbarText}" Text="{Binding InputVisible, Converter={StaticResource BoolToText}}" />
                         </StackPanel>
                     </Button.Content>
                 </Button>
 
+                <!--
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
                     Orientation="Horizontal"
                     Visibility="{Binding InputVisible, Converter={StaticResource BoolToVis}}"
@@ -131,6 +172,7 @@
                         </Button.Content>
                     </Button>
                 </StackPanel>
+                -->
 
                 <Button Style="{StaticResource ToolbarButton}" Click="ChangeViewClick">
                     <Button.Content>

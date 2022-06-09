@@ -20,6 +20,7 @@ namespace BinaryTreeProject.ViewModels
     {
         private BinaryTree binaryTree; // instance of the binary tree
         private bool inputVisible; // is add input visible
+        private bool popupVisible; // is popup visible
         private int? selectedNodeId; // id of existing node selected
         private int? selectedNullNodeId; // id of null (non-existing) node selected
         private string newNodeValue; // value of user input
@@ -143,6 +144,16 @@ namespace BinaryTreeProject.ViewModels
             {
                 inputVisible = value;
                 OnPropertyChanged("InputVisible");
+            }
+        }
+
+        public bool PopupVisible
+        {
+            get { return popupVisible; }
+            set
+            {
+                popupVisible = value;
+                OnPropertyChanged("PopupVisible");
             }
         }
         public string NewNodeValue
@@ -277,8 +288,8 @@ namespace BinaryTreeProject.ViewModels
             NullNodes = new ObservableCollection<Node>();
             SelectedNodeId = null;
             SelectedNullNodeId = null;
-            CanvasWidth = 0;
-            CanvasHeight = 0;
+            CanvasWidth = 300;
+            CanvasHeight = 300;
             SetNodeSizes(50);
             Nodes = new ObservableCollection<Node>();
             LinePositions = new ObservableCollection<LinePosition>();
@@ -299,6 +310,7 @@ namespace BinaryTreeProject.ViewModels
             RedoStack = new Stack<List<int?>>();
             BinaryTree.AddNode(parentNode, v, side);
             UpdateUI();
+            PopupVisible = false;
             SelectedNullNodeId = null;
         }
 
@@ -310,6 +322,7 @@ namespace BinaryTreeProject.ViewModels
             BinaryTree.DeleteNode(nodeToDelete);
             selectedNodeId = null;
             InputVisible = false;
+            PopupVisible = false;
             if (BinaryTree.Root == null)
             {
                 Nodes.Clear();
@@ -606,6 +619,13 @@ namespace BinaryTreeProject.ViewModels
 
         public void AddButtonClick()
         {
+            if(InputVisible)
+            {
+                InputVisible = false;
+                PopupVisible = false;
+                selectedNullNodeId = null;
+                return;
+            }
             CalculateNullNodePositions();
             InputVisible = true;
         }
@@ -615,28 +635,38 @@ namespace BinaryTreeProject.ViewModels
         {
             NullNodes.Clear();
             int nodeId = 0;
-            foreach (var node in Nodes)
+            if(Nodes.Count > 0)
             {
-                if (node.LeftNode == null)
+                foreach (var node in Nodes)
                 {
-                    Node nullNode = new Node();
-                    nullNode.ID = ++nodeId; // used for click on node
-                    nullNode.LeftNode = node; // used to know if node is parents left or right node
-                    nullNode.Position = new Position(node.Position.X, node.Position.Y + CircleDiameter);
-                    NullNodes.Add(nullNode);
-                }
+                    if (node.LeftNode == null)
+                    {
+                        Node nullNode = new Node();
+                        nullNode.ID = ++nodeId; // used for click on node
+                        nullNode.LeftNode = node; // used to know if node is parents left or right node
+                        nullNode.Position = new Position(node.Position.X, node.Position.Y + CircleDiameter);
+                        NullNodes.Add(nullNode);
+                    }
 
-                if (node.RightNode == null)
-                {
-                    Node nullNode = new Node();
-                    nullNode.ID = ++nodeId;
-                    nullNode.ParentNode = node;
-                    nullNode.RightNode = node; // used to know if node is parents left or right node
-                    nullNode.Position = new Position(node.Position.X + CircleDiameter - AddCircleDiameter,
-                        node.Position.Y + CircleDiameter);
-                    NullNodes.Add(nullNode);
+                    if (node.RightNode == null)
+                    {
+                        Node nullNode = new Node();
+                        nullNode.ID = ++nodeId;
+                        nullNode.RightNode = node; // used to know if node is parents left or right node
+                        nullNode.Position = new Position(node.Position.X + CircleDiameter - AddCircleDiameter,
+                            node.Position.Y + CircleDiameter);
+                        NullNodes.Add(nullNode);
+                    }
                 }
             }
+            else
+            {
+                Node nullNode = new Node();
+                nullNode.ID = ++nodeId;
+                nullNode.Position = new Position(CanvasWidth/2 - CircleDiameter/2, VerticalNodeOffset + CircleDiameter/2);
+                NullNodes.Add(nullNode);
+            }
+            
         }
 
         public void NodeClick(int nodeId)
@@ -654,6 +684,9 @@ namespace BinaryTreeProject.ViewModels
 
         public void NullNodeClick(int nullNodeId)
         {
+            if(PopupVisible)
+                PopupVisible = false;
+            PopupVisible = true;
             SelectedNullNodeId = nullNodeId;
         }
         
@@ -693,6 +726,11 @@ namespace BinaryTreeProject.ViewModels
             TreeDepth = BinaryTree.CalculateMaxDepth(BinaryTree.Root);
             MaxNode = Nodes.Max(node => node.Value).ToString();
             MinNode = Nodes.Min(node => node.Value).ToString();
+
+            if (string.IsNullOrEmpty(MaxNode))
+                MaxNode = "/";
+            if (string.IsNullOrEmpty(MinNode))
+                MinNode = "/";
         }
 
         private void SetNodeSizes(int circleDiameter)

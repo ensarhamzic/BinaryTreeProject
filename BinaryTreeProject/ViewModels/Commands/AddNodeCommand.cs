@@ -11,10 +11,10 @@ namespace BinaryTreeProject.ViewModels.Commands
 {
     internal class AddNodeCommand : ICommand
     {
-        private BinaryTreeViewModel binaryTreeViewModel;
-        public AddNodeCommand(BinaryTreeViewModel binaryTreeViewModel)
+        private BinaryTreeViewModel binaryTreeVM;
+        public AddNodeCommand(BinaryTreeViewModel binaryTreeVM)
         {
-            this.binaryTreeViewModel = binaryTreeViewModel;
+            this.binaryTreeVM = binaryTreeVM;
         }
 
         public event EventHandler CanExecuteChanged
@@ -34,8 +34,8 @@ namespace BinaryTreeProject.ViewModels.Commands
             string value = parameter as string;
             int number;
             // TODO: number check temporary here (till I fix the issue with numbers overflow from node in the view)
-            bool isValid = int.TryParse(value, out number) && (number > -1000 && number < 10000); 
-            return (isValid && (binaryTreeViewModel.SelectedNullNodeId != null)) || (isValid && binaryTreeViewModel.NullNodes.Count == 0);
+            bool isValid = int.TryParse(value, out number) && (number > -1000 && number < 1000); 
+            return (isValid && (binaryTreeVM.SelectedNullNodeId != null)) || (isValid && binaryTreeVM.NullNodes.Count == 0);
         }
 
         public void Execute(object parameter)
@@ -43,22 +43,24 @@ namespace BinaryTreeProject.ViewModels.Commands
             string value = parameter as string;
             char side;
             Node parentNode;
-            if(binaryTreeViewModel.SelectedNullNodeId == null)
+            if(binaryTreeVM.SelectedNullNodeId == null
+                || (binaryTreeVM.NullNodes[(int)binaryTreeVM.SelectedNullNodeId - 1].LeftNode == null
+                && binaryTreeVM.NullNodes[(int)binaryTreeVM.SelectedNullNodeId - 1].RightNode == null))
             {
                 parentNode = null;
                 side = '/'; // doesn't matter
             }
-            else if (binaryTreeViewModel.NullNodes[(int)binaryTreeViewModel.SelectedNullNodeId-1].LeftNode != null)
+            else if (binaryTreeVM.NullNodes[(int)binaryTreeVM.SelectedNullNodeId-1].LeftNode != null)
             {
-                parentNode = binaryTreeViewModel.NullNodes[(int)binaryTreeViewModel.SelectedNullNodeId - 1].LeftNode;
+                parentNode = binaryTreeVM.NullNodes[(int)binaryTreeVM.SelectedNullNodeId - 1].LeftNode;
                 side = 'L';
             }
             else
             {
-                parentNode = binaryTreeViewModel.NullNodes[(int)binaryTreeViewModel.SelectedNullNodeId - 1].RightNode;
+                parentNode = binaryTreeVM.NullNodes[(int)binaryTreeVM.SelectedNullNodeId - 1].RightNode;
                 side = 'R';
             }
-            binaryTreeViewModel.AddNode(parentNode, int.Parse(value), side);
+            binaryTreeVM.AddNode(parentNode, int.Parse(value), side);
         }
     }
 }

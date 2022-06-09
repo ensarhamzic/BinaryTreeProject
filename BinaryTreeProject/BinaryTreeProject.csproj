@@ -129,6 +129,7 @@
     <Compile Include="ViewModels\Commands\UndoCommand.cs" />
     <Compile Include="ViewModels\HuffmanViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\ValueConverters\BoolToTextConverter.cs" />
     <Compile Include="ViewModels\ValueConverters\IdToColorConverter.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
