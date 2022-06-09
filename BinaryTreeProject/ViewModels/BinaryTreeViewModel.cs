@@ -324,7 +324,7 @@ namespace BinaryTreeProject.ViewModels
             selectedNullNodeId = null;
             InputVisible = false;
             PopupVisible = false;
-            if (BinaryTree.Root == null)
+            /*if (BinaryTree.Root == null)
             {
                 Nodes.Clear();
                 LinePositions.Clear();
@@ -336,9 +336,9 @@ namespace BinaryTreeProject.ViewModels
                 CalculateNullNodePositions();
             }
             else
-            {
+            { */
                 UpdateUI();
-            }
+            //}
         }
 
         // Saves Binary Tree to file in preorder format
@@ -723,6 +723,8 @@ namespace BinaryTreeProject.ViewModels
             UpdateNodesCollection(BinaryTree.Root);
             CalculateNodePositions();
             UpdateLinePositions(BinaryTree.Root);
+            if (Nodes.Count == 0)
+                LinePositions.Clear();
             CalculateNullNodePositions();
             NumberOfNodes = Nodes.Count;
             TreeDepth = BinaryTree.CalculateMaxDepth(BinaryTree.Root);
