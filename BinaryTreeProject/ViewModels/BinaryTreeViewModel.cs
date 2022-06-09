@@ -322,8 +322,8 @@ namespace BinaryTreeProject.ViewModels
             BinaryTree.DeleteNode(nodeToDelete);
             selectedNodeId = null;
             selectedNullNodeId = null;
-            // InputVisible = false;
-            // PopupVisible = false;
+            InputVisible = false;
+            PopupVisible = false;
             if (BinaryTree.Root == null)
             {
                 Nodes.Clear();
