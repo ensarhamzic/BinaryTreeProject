@@ -74,7 +74,23 @@ namespace BinaryTreeProject.Views
             // Changes to view for Huffman Algorithm
             (win.DataContext as MainViewModel).SelectedViewModel = new HuffmanViewModel();
         }
-
         
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var binaryTreeVM = DataContext as BinaryTreeViewModel;
+            MenuItem menuItem = sender as MenuItem;
+            var contextMenu = menuItem.Parent as ContextMenu;
+            var parent = contextMenu.PlacementTarget as Grid;
+            if (menuItem != null)
+            {
+                //ContextMenu menu = menuItem.ContextMenu;
+                //binaryTreeVM.SelectedNullNodeId = (int)(menu.Parent as Grid).Tag;
+                binaryTreeVM.SelectedNodeId = (int)parent.Tag;
+                if (binaryTreeVM.DeleteButtonClickCommand.CanExecute(null))
+                {
+                    binaryTreeVM.DeleteButtonClickCommand.Execute(null);
+                }
+            }
+        }
     }
 }

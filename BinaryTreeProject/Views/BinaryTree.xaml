@@ -215,6 +215,15 @@
                         <DataTemplate>
                             <Grid MouseLeftButtonDown="NodeClick" Cursor="Hand" Tag="{Binding ID}" x:Name="NodeGrid"
                                   >
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Delete this node" Click="MenuItem_Click">
+                                            <MenuItem.Icon>
+                                                <Image Source="/Icons/delete.png" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
                                 <Ellipse
                                     DataContext="{StaticResource vm}"
                                     Width="{Binding CircleDiameter}"

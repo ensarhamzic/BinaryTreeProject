@@ -321,8 +321,9 @@ namespace BinaryTreeProject.ViewModels
             RedoStack = new Stack<List<int?>>();
             BinaryTree.DeleteNode(nodeToDelete);
             selectedNodeId = null;
-            InputVisible = false;
-            PopupVisible = false;
+            selectedNullNodeId = null;
+            // InputVisible = false;
+            // PopupVisible = false;
             if (BinaryTree.Root == null)
             {
                 Nodes.Clear();
@@ -332,6 +333,7 @@ namespace BinaryTreeProject.ViewModels
                 TreeDepth = 0;
                 MaxNode = "/";
                 MinNode = "/";
+                CalculateNullNodePositions();
             }
             else
             {
