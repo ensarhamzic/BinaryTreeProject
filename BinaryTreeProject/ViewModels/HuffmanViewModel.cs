@@ -135,6 +135,7 @@ namespace BinaryTreeProject.ViewModels
             BackToStartCommand = new BackToStartHuffmanCommand(this);
         }
 
+        // Starts Huffman algorithm
         public void StartHuffman()
         {
             IsStarted = true;
@@ -143,6 +144,7 @@ namespace BinaryTreeProject.ViewModels
             UpdateUI();
             List<char> previousChars = new List<char>();
 
+            // Creates trees for every node, while calculating its frequency
             foreach (char c in enteredText)
             {
                 if (!previousChars.Contains(c))
@@ -162,6 +164,7 @@ namespace BinaryTreeProject.ViewModels
             UpdateUI();
         }
 
+        // Calculates trees states of next step of algorithm and updates UI
         public void NextStep()
         {
             SaveCurrentState();
@@ -181,6 +184,7 @@ namespace BinaryTreeProject.ViewModels
             UpdateUI();
         }
 
+        // Saves current state of the algorithm to be able to go back to it
         private void SaveCurrentState()
         {
             List<HuffmanTree> currentState = new List<HuffmanTree>();
@@ -193,6 +197,7 @@ namespace BinaryTreeProject.ViewModels
             PreviousStates.Push(currentState);
         }
 
+        // Helper function to SaveCurrentState
         private HuffmanNode SaveTree(HuffmanNode node)
         {
             if (node == null)
@@ -207,12 +212,14 @@ namespace BinaryTreeProject.ViewModels
             return newNode;
         }
 
+        // Goes back one step in the algorithm
         public void PreviousStep()
         {
             Huffman.Trees = PreviousStates.Pop();
             UpdateUI();
         }
 
+        // Ends the algorithm
         public void SkipToEnd()
         {
             while (Huffman.Trees.Count > 1)
@@ -221,6 +228,7 @@ namespace BinaryTreeProject.ViewModels
             }
         }
 
+        // Goes back to the start of the algorithm
         public void BackToStart()
         {
             while (PreviousStates.Count > 0)
@@ -229,6 +237,7 @@ namespace BinaryTreeProject.ViewModels
             }
         }
 
+        // Calculates node positons on the canvas
         private void CalculateNodePositions()
         {
             double startX = 0; // must change
@@ -241,6 +250,7 @@ namespace BinaryTreeProject.ViewModels
             CalculateVerticalPositions();
         }
 
+        // Helper function for CalculateNodePositions
         private void CalculateVerticalPositions()
         {
             foreach (var tree in Huffman.Trees)
@@ -249,6 +259,7 @@ namespace BinaryTreeProject.ViewModels
             }
         }
 
+        // Helper function for CalculateNodePositions
         private void VerticalPositionsTree(HuffmanNode node)
         {
             if (node == null) return;
@@ -272,6 +283,7 @@ namespace BinaryTreeProject.ViewModels
             VerticalPositionsTree(node.RightNode);
         }
 
+        // Calculates line positions between nodes
         private void UpdateLinePositions()
         {
             LinePositions.Clear();
@@ -281,6 +293,7 @@ namespace BinaryTreeProject.ViewModels
             }
         }
 
+        // Helper function for UpdateLinePositions
         private void UpdateTreeLines(HuffmanNode node)
         {
             if (node == null)
@@ -296,6 +309,7 @@ namespace BinaryTreeProject.ViewModels
             UpdateTreeLines(node.RightNode);
         }
 
+        // Updates Nodes in the algorithm
         private void UpdateNodesCollection()
         {
             Nodes.Clear();
@@ -306,6 +320,7 @@ namespace BinaryTreeProject.ViewModels
             }
         }
 
+        // Helper function for UpdateNodesCollection
         private void UpdateNodesFromTree(HuffmanNode node)
         {
             if (node == null)
@@ -315,6 +330,7 @@ namespace BinaryTreeProject.ViewModels
             UpdateNodesFromTree(node.RightNode);
         }
 
+        // Calculates canvas sizes
         private void CalculateCanvasSize()
         {
             double maxWidth = 0;
@@ -330,6 +346,7 @@ namespace BinaryTreeProject.ViewModels
             CanvasHeight = maxHeight + VerticalNodeOffset;
         }
 
+        // Updates everything to draw latest algorithm state on the canvas
         private void UpdateUI()
         {
             UpdateNodesCollection();

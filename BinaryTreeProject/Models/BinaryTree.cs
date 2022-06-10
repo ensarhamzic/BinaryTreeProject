@@ -53,7 +53,7 @@ namespace BinaryTreeProject.Models
             }
         }
 
-        // TODO:  Stupid but working (must change)
+        // TODO:  Improve deleting (setting node to NULL does not work)
         public void DeleteNode(Node nodeToDelete)
         {
             if (nodeToDelete == Root)
@@ -88,8 +88,8 @@ namespace BinaryTreeProject.Models
                     return (rDepth + 1);
             }
         }
-
-
+        
+        // Preorder that returs list od Nodes
         public void Preorder(Node node, List<Node> values)
         {
             if (node == null)
@@ -101,6 +101,7 @@ namespace BinaryTreeProject.Models
             Preorder(node.RightNode, values);
         }
 
+        // Preorder that returns list of nullable int values
         public void Preorder(Node node, List<int?> values)
         {
             if(node == null)
@@ -114,7 +115,7 @@ namespace BinaryTreeProject.Models
         }
 
         // Build tree from preorder list of tree
-        public int preId = 0;
+        public int preId = 0; // cuurent id of node
         public Node BuildTreeFromPreorder(List<int?> preorder, bool first)
         {
             if(first) {
@@ -142,6 +143,7 @@ namespace BinaryTreeProject.Models
             return null;
         }
 
+        // Build tree from data taken from database
         public void BuildTreeFromDatabase(List<Node> nodes, DataTable dt)
         {
             int lastId = 0;
@@ -170,13 +172,9 @@ namespace BinaryTreeProject.Models
                     // if not root, finds parent node and adds it as child
                     nodes[i].ParentNode = nodes.Find(n => n.ID == parentId);
                     if (dt.Rows[i]["side"] as string == "L")
-                    {
                         nodes[i].ParentNode.LeftNode = nodes[i];
-                    }
                     else
-                    {
                         nodes[i].ParentNode.RightNode = nodes[i];
-                    }
                 }
             }
             nodeId = lastId + 1;

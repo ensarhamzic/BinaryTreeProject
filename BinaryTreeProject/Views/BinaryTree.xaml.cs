@@ -52,9 +52,9 @@ namespace BinaryTreeProject.Views
             {
                 var binaryTreeViewModel = DataContext as BinaryTreeViewModel;
                 TextBox tb = sender as TextBox;
-                if (binaryTreeViewModel.AddNewNodeCommand.CanExecute(binaryTreeViewModel.NewNodeValue))
+                if (binaryTreeViewModel.AddOrUpdateNodeCommand.CanExecute(binaryTreeViewModel.NewNodeValue))
                 {
-                    binaryTreeViewModel.AddNewNodeCommand.Execute(binaryTreeViewModel.NewNodeValue);
+                    binaryTreeViewModel.AddOrUpdateNodeCommand.Execute(binaryTreeViewModel.NewNodeValue);
                     tb.Text = "";
                     tb.Focus();
                 }
@@ -75,7 +75,25 @@ namespace BinaryTreeProject.Views
             (win.DataContext as MainViewModel).SelectedViewModel = new HuffmanViewModel();
         }
         
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void DeleteMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var binaryTreeVM = DataContext as BinaryTreeViewModel;
+            MenuItem menuItem = sender as MenuItem;
+            if (menuItem != null)
+            {
+                var contextMenu = menuItem.Parent as ContextMenu;
+                var parent = contextMenu.PlacementTarget as Grid;
+                //ContextMenu menu = menuItem.ContextMenu;
+                //binaryTreeVM.SelectedNullNodeId = (int)(menu.Parent as Grid).Tag;
+                binaryTreeVM.SelectedNodeId = (int)parent.Tag;
+                if (binaryTreeVM.DeleteButtonClickCommand.CanExecute(null))
+                {
+                    binaryTreeVM.DeleteButtonClickCommand.Execute(null);
+                }
+            }
+        }
+
+        private void ChangeMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var binaryTreeVM = DataContext as BinaryTreeViewModel;
             MenuItem menuItem = sender as MenuItem;
@@ -83,12 +101,13 @@ namespace BinaryTreeProject.Views
             var parent = contextMenu.PlacementTarget as Grid;
             if (menuItem != null)
             {
-                //ContextMenu menu = menuItem.ContextMenu;
-                //binaryTreeVM.SelectedNullNodeId = (int)(menu.Parent as Grid).Tag;
-                binaryTreeVM.SelectedNodeId = (int)parent.Tag;
-                if (binaryTreeVM.DeleteButtonClickCommand.CanExecute(null))
+                binaryTreeVM.SelectedChangeNodeId = (int)parent.Tag;
+                binaryTreeVM.SelectedNullNodeId = null;
+                binaryTreeVM.PopupVisible = false;
+                binaryTreeVM.PopupVisible = true;
+                if (binaryTreeVM.AddOrUpdateNodeCommand.CanExecute(null))
                 {
-                    binaryTreeVM.DeleteButtonClickCommand.Execute(null);
+                    binaryTreeVM.AddOrUpdateNodeCommand.Execute(null);
                 }
             }
         }

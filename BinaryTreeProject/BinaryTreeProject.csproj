@@ -110,7 +110,7 @@
     <Compile Include="Models\HuffmanTree.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\Commands\AddButtonClickCommand.cs" />
-    <Compile Include="ViewModels\Commands\AddNodeCommand.cs" />
+    <Compile Include="ViewModels\Commands\AddOrUpdateNodeCommand.cs" />
     <Compile Include="Models\LinePosition.cs" />
     <Compile Include="Models\Position.cs" />
     <Compile Include="ViewModels\BinaryTreeViewModel.cs" />
@@ -230,6 +230,9 @@
   <ItemGroup>
     <Resource Include="Icons\back.png" />
     <Resource Include="Icons\forward.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\change.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

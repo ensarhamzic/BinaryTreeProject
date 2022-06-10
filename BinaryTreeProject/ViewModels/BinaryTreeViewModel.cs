@@ -23,6 +23,7 @@ namespace BinaryTreeProject.ViewModels
         private bool popupVisible; // is popup visible
         private int? selectedNodeId; // id of existing node selected
         private int? selectedNullNodeId; // id of null (non-existing) node selected
+        private int? selectedChangeNodeId; // id of node to change its value
         private string newNodeValue; // value of user input
         private int circleDiameter; // diameter of the circle representing a node
         private double canvasWidth; // width of the canvas
@@ -34,12 +35,12 @@ namespace BinaryTreeProject.ViewModels
         private Stack<List<int?>> undoStack; // stack of undo operations
         private Stack<List<int?>> redoStack; // stack of redo operations
         private Database database; // database of the binary tree
-        private int numberOfNodes;
-        private int treeDepth;
-        private string maxNode;
-        private string minNode;
-        private int zoomLevel;
-        
+        private int numberOfNodes; // number of nodes in the binary tree
+        private int treeDepth; // depth of the binary tree
+        private string maxNode; // maximum node value in the binary tree
+        private string minNode; // minimum node value in the binary tree
+        private int zoomLevel; // zoom level of the canvas
+
         // collection of nodes (used for binding, to draw nodes on the canvas)
         public ObservableCollection<Node> Nodes { get; set; }
         // collection of line positions (used for binding, to draw lines connecting nodes)
@@ -135,6 +136,16 @@ namespace BinaryTreeProject.ViewModels
             {
                 selectedNullNodeId = value;
                 OnPropertyChanged("SelectedNullNodeId");
+            }
+        }
+
+        public int? SelectedChangeNodeId
+        {
+            get { return selectedChangeNodeId; }
+            set
+            {
+                selectedChangeNodeId = value;
+                OnPropertyChanged("SelectedChangeNodeId");
             }
         }
         public bool InputVisible
@@ -259,7 +270,7 @@ namespace BinaryTreeProject.ViewModels
         }
 
         // commands
-        public ICommand AddNewNodeCommand { get; private set; }
+        public ICommand AddOrUpdateNodeCommand { get; private set; }
         public ICommand AddButtonClickCommand { get; private set; }
         public ICommand CancelAddCommand { get; private set; }
         public ICommand DeleteButtonClickCommand { get; private set; }
@@ -274,7 +285,7 @@ namespace BinaryTreeProject.ViewModels
         {
             BinaryTree = new BinaryTree();
             // Commands
-            AddNewNodeCommand = new AddNodeCommand(this);
+            AddOrUpdateNodeCommand = new AddOrUpdateNodeCommand(this);
             AddButtonClickCommand = new AddButtonClickCommand(this);
             CancelAddCommand = new CancelAddCommand(this);
             DeleteButtonClickCommand = new DeleteButtonClickCommand(this);
@@ -288,6 +299,7 @@ namespace BinaryTreeProject.ViewModels
             NullNodes = new ObservableCollection<Node>();
             SelectedNodeId = null;
             SelectedNullNodeId = null;
+            SelectedChangeNodeId = null;
             CanvasWidth = 300;
             CanvasHeight = 300;
             SetNodeSizes(50);
@@ -301,20 +313,24 @@ namespace BinaryTreeProject.ViewModels
             MaxNode = "/";
             MinNode = "/";
             ZoomLevel = 1;
-    }
+        }
 
-        // Adds new node and updates everything that need to be updated
-        public void AddNode(Node parentNode, int v, char side)
+        // Adds or updates new node and updates UI
+        public void AddOrUpdateNode(Node parentNode, int v, char side, bool isUpdate = false)
         {
             UpdateStack(UndoStack);
             RedoStack = new Stack<List<int?>>();
-            BinaryTree.AddNode(parentNode, v, side);
+            if (isUpdate)
+                Nodes.First(x => x.ID == SelectedChangeNodeId).Value = v;
+            else
+                BinaryTree.AddNode(parentNode, v, side);
             UpdateUI();
             PopupVisible = false;
             SelectedNullNodeId = null;
+            SelectedChangeNodeId = null;
         }
 
-        // Deletes node and updates everything that need to be updated
+        // Deletes node and updates UI
         public void DeleteNode(Node nodeToDelete)
         {
             UpdateStack(UndoStack);
@@ -324,21 +340,7 @@ namespace BinaryTreeProject.ViewModels
             selectedNullNodeId = null;
             InputVisible = false;
             PopupVisible = false;
-            /*if (BinaryTree.Root == null)
-            {
-                Nodes.Clear();
-                LinePositions.Clear();
-                NullNodes.Clear();
-                NumberOfNodes = 0;
-                TreeDepth = 0;
-                MaxNode = "/";
-                MinNode = "/";
-                CalculateNullNodePositions();
-            }
-            else
-            { */
-                UpdateUI();
-            //}
+            UpdateUI();
         }
 
         // Saves Binary Tree to file in preorder format
@@ -449,7 +451,7 @@ namespace BinaryTreeProject.ViewModels
             if (loadDbDialog.ShowDialog() == true)
             {
                 dt = loadDbDialog.NodesTable;
-                for(int i = 0; i < dt.Rows.Count; i++)
+                for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     Node temp = new Node
                     {
@@ -621,11 +623,12 @@ namespace BinaryTreeProject.ViewModels
 
         public void AddButtonClick()
         {
-            if(InputVisible)
+            if (InputVisible)
             {
                 InputVisible = false;
                 PopupVisible = false;
                 selectedNullNodeId = null;
+                SelectedChangeNodeId = null;
                 return;
             }
             CalculateNullNodePositions();
@@ -637,7 +640,7 @@ namespace BinaryTreeProject.ViewModels
         {
             NullNodes.Clear();
             int nodeId = 0;
-            if(Nodes.Count > 0)
+            if (Nodes.Count > 0)
             {
                 foreach (var node in Nodes)
                 {
@@ -665,36 +668,33 @@ namespace BinaryTreeProject.ViewModels
             {
                 Node nullNode = new Node();
                 nullNode.ID = ++nodeId;
-                nullNode.Position = new Position(CanvasWidth/2 - CircleDiameter/2, VerticalNodeOffset + CircleDiameter/2);
+                nullNode.Position = new Position(CanvasWidth / 2 - CircleDiameter / 2, VerticalNodeOffset + CircleDiameter / 2);
                 NullNodes.Add(nullNode);
             }
-            
+
         }
 
         public void NodeClick(int nodeId)
         {
             if (selectedNodeId == nodeId)
-            {
                 selectedNodeId = null;
-            }
             else
-            {
                 SelectedNodeId = nodeId;
-            }
             UpdateUI();
         }
 
         public void NullNodeClick(int nullNodeId)
         {
-            if(PopupVisible)
+            if (PopupVisible)
                 PopupVisible = false;
             PopupVisible = true;
             SelectedNullNodeId = nullNodeId;
+            SelectedChangeNodeId = null;
         }
-        
+
         public void ZoomChanged()
         {
-            switch(ZoomLevel)
+            switch (ZoomLevel)
             {
                 case 1:
                     SetNodeSizes(50);
@@ -718,8 +718,10 @@ namespace BinaryTreeProject.ViewModels
             UpdateUI();
         }
 
+        // Updates UI so it representes the current state of the tree
         private void UpdateUI()
         {
+            SelectedChangeNodeId = null;
             UpdateNodesCollection(BinaryTree.Root);
             CalculateNodePositions();
             UpdateLinePositions(BinaryTree.Root);
@@ -737,6 +739,7 @@ namespace BinaryTreeProject.ViewModels
                 MinNode = "/";
         }
 
+        // Sets sizes of nodes depending on the node diameter
         private void SetNodeSizes(int circleDiameter)
         {
             CircleDiameter = circleDiameter;

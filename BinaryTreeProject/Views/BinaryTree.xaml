@@ -33,7 +33,7 @@
                              KeyDown="NewNodeTextBox_KeyDown" x:Name="NewNodeTB" />
                     <Button  Cursor="Hand" Padding="5" Margin="5" BorderBrush="Transparent"
                              BorderThickness="0" Background="Transparent"
-                             Command="{Binding AddNewNodeCommand}" CommandParameter="{Binding NewNodeValue}">
+                             Command="{Binding AddOrUpdateNodeCommand}" CommandParameter="{Binding NewNodeValue}">
                         <Button.Content>
                             <Image Source="/Icons/done.png" Width="20" />
                         </Button.Content>
@@ -148,32 +148,6 @@
                     </Button.Content>
                 </Button>
 
-                <!--
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
-                    Orientation="Horizontal"
-                    Visibility="{Binding InputVisible, Converter={StaticResource BoolToVis}}"
-                    Grid.Row="1"
-                    >
-                    <TextBlock Text="New Node Value:" FontWeight="Bold" VerticalAlignment="Center"/>
-                    <TextBox Width="100" Margin="10 0 0 0"
-                             Text="{Binding NewNodeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             KeyDown="NewNodeTextBox_KeyDown" x:Name="NewNodeTB" />
-                    <Button  Cursor="Hand" Margin="10 0 0 0" BorderBrush="Transparent"
-                             BorderThickness="0" Background="Transparent"
-                             Command="{Binding AddNewNodeCommand}" CommandParameter="{Binding NewNodeValue}">
-                        <Button.Content>
-                            <Image Source="/Icons/done.png" Width="20" />
-                        </Button.Content>
-                    </Button>
-                    <Button Cursor="Hand" Command="{Binding CancelAddCommand}" Margin="10 0 0 0"
-                            BorderBrush="Transparent" BorderThickness="0" Background="Transparent">
-                        <Button.Content>
-                            <Image Source="/Icons/cancel.png" Width="20" />
-                        </Button.Content>
-                    </Button>
-                </StackPanel>
-                -->
-
                 <Button Style="{StaticResource ToolbarButton}" Click="ChangeViewClick">
                     <Button.Content>
                         <StackPanel Orientation="Vertical">
@@ -217,7 +191,12 @@
                                   >
                                 <Grid.ContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="Delete this node" Click="MenuItem_Click">
+                                        <MenuItem Header="Change value" Click="ChangeMenuItem_Click">
+                                            <MenuItem.Icon>
+                                                <Image Source="/Icons/change.png" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Header="Delete this node" Click="DeleteMenuItem_Click">
                                             <MenuItem.Icon>
                                                 <Image Source="/Icons/delete.png" />
                                             </MenuItem.Icon>
