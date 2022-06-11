@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:BinaryTreeProject.Views"
              xmlns:vm="clr-namespace:BinaryTreeProject.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" PreviewKeyDown="KeyDownHandler">
     <UserControl.Resources>
         <vm:HuffmanViewModel x:Key="vm"/>
     </UserControl.Resources>

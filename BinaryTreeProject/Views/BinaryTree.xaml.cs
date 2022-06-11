@@ -21,40 +21,39 @@ namespace BinaryTreeProject.Views
     /// </summary>
     public partial class BinaryTree : UserControl
     {
+        BinaryTreeViewModel bTVM;
         public BinaryTree()
         {
             InitializeComponent();
             DataContext = this.Resources["vm"];
+            bTVM = DataContext as BinaryTreeViewModel;
         }
 
         private void NodeClick(object sender, MouseButtonEventArgs e)
         {
-            var binaryTreeViewModel = DataContext as BinaryTreeViewModel;
             Grid clickedGrid = sender as Grid;
             string tagString = clickedGrid.Tag.ToString();
             int.TryParse(tagString, out int tag);
-            binaryTreeViewModel.NodeClick(tag);
+            bTVM.NodeClick(tag);
 
         }
 
         private void NullNodeClick(object sender, MouseButtonEventArgs e)
         {
-            var binaryTreeViewModel = DataContext as BinaryTreeViewModel;
             Grid clickedGrid = sender as Grid;
             string tagString = clickedGrid.Tag.ToString();
             int.TryParse(tagString, out int tag);
-            binaryTreeViewModel.NullNodeClick(tag);
+            bTVM.NullNodeClick(tag);
         }
 
         private void NewNodeTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                var binaryTreeViewModel = DataContext as BinaryTreeViewModel;
                 TextBox tb = sender as TextBox;
-                if (binaryTreeViewModel.AddOrUpdateNodeCommand.CanExecute(binaryTreeViewModel.NewNodeValue))
+                if (bTVM.AddOrUpdateNodeCommand.CanExecute(bTVM.NewNodeValue))
                 {
-                    binaryTreeViewModel.AddOrUpdateNodeCommand.Execute(binaryTreeViewModel.NewNodeValue);
+                    bTVM.AddOrUpdateNodeCommand.Execute(bTVM.NewNodeValue);
                     tb.Text = "";
                     tb.Focus();
                 }
@@ -63,24 +62,21 @@ namespace BinaryTreeProject.Views
         
         private void ZoomLevelChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            var binaryTreeViewModel = DataContext as BinaryTreeViewModel;
-            if (binaryTreeViewModel == null) return;
-            binaryTreeViewModel.ZoomChanged();
+            if (bTVM == null) return;
+            bTVM.ZoomChanged();
         }
 
         private void ChangeViewClick(object sender, RoutedEventArgs e)
         {
             Window win = Window.GetWindow(this);
-            var btVM = DataContext as BinaryTreeViewModel;
             var vm = win.DataContext as MainViewModel;
             // Changes to view for Huffman Algorithm
-            BinaryTreeViewModel.SavedBTVM = btVM;
+            BinaryTreeViewModel.SavedBTVM = bTVM;
             vm.SelectedViewModel = new HuffmanViewModel();
         }
         
         private void DeleteMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var binaryTreeVM = DataContext as BinaryTreeViewModel;
             MenuItem menuItem = sender as MenuItem;
             if (menuItem != null)
             {
@@ -88,30 +84,29 @@ namespace BinaryTreeProject.Views
                 var parent = contextMenu.PlacementTarget as Grid;
                 //ContextMenu menu = menuItem.ContextMenu;
                 //binaryTreeVM.SelectedNullNodeId = (int)(menu.Parent as Grid).Tag;
-                binaryTreeVM.SelectedNodeId = (int)parent.Tag;
-                if (binaryTreeVM.DeleteButtonClickCommand.CanExecute(null))
+                bTVM.SelectedNodeId = (int)parent.Tag;
+                if (bTVM.DeleteButtonClickCommand.CanExecute(null))
                 {
-                    binaryTreeVM.DeleteButtonClickCommand.Execute(null);
+                    bTVM.DeleteButtonClickCommand.Execute(null);
                 }
             }
         }
 
         private void ChangeMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var binaryTreeVM = DataContext as BinaryTreeViewModel;
             MenuItem menuItem = sender as MenuItem;
             var contextMenu = menuItem.Parent as ContextMenu;
             var parent = contextMenu.PlacementTarget as Grid;
             if (menuItem != null)
             {
-                binaryTreeVM.SelectedChangeNodeId = (int)parent.Tag;
-                binaryTreeVM.SelectedNullNodeId = null;
-                NewNodeTB.Text = binaryTreeVM.Nodes.First(x => x.ID == binaryTreeVM.SelectedChangeNodeId).Value.ToString();
-                binaryTreeVM.PopupVisible = false;
-                binaryTreeVM.PopupVisible = true;
-                if (binaryTreeVM.AddOrUpdateNodeCommand.CanExecute(null))
+                bTVM.SelectedChangeNodeId = (int)parent.Tag;
+                bTVM.SelectedNullNodeId = null;
+                NewNodeTB.Text = bTVM.Nodes.First(x => x.ID == bTVM.SelectedChangeNodeId).Value.ToString();
+                bTVM.PopupVisible = false;
+                bTVM.PopupVisible = true;
+                if (bTVM.AddOrUpdateNodeCommand.CanExecute(null))
                 {
-                    binaryTreeVM.AddOrUpdateNodeCommand.Execute(null);
+                    bTVM.AddOrUpdateNodeCommand.Execute(null);
                 }
             }
         }
