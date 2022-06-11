@@ -103,6 +103,7 @@ namespace BinaryTreeProject.Views
             {
                 binaryTreeVM.SelectedChangeNodeId = (int)parent.Tag;
                 binaryTreeVM.SelectedNullNodeId = null;
+                NewNodeTB.Text = binaryTreeVM.Nodes.First(x => x.ID == binaryTreeVM.SelectedChangeNodeId).Value.ToString();
                 binaryTreeVM.PopupVisible = false;
                 binaryTreeVM.PopupVisible = true;
                 if (binaryTreeVM.AddOrUpdateNodeCommand.CanExecute(null))

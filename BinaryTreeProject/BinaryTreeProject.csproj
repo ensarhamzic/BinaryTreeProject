@@ -115,6 +115,7 @@
     <Compile Include="Models\Position.cs" />
     <Compile Include="ViewModels\BinaryTreeViewModel.cs" />
     <Compile Include="ViewModels\Commands\CancelAddCommand.cs" />
+    <Compile Include="ViewModels\Commands\ClosePopupCommand.cs" />
     <Compile Include="ViewModels\Commands\DeleteButtonClickCommand.cs" />
     <Compile Include="ViewModels\Commands\PreviousStepHuffmanCommand.cs" />
     <Compile Include="ViewModels\Commands\BackToStartHuffmanCommand.cs" />
