@@ -270,9 +270,7 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-
-
-
+                
                 <ItemsControl ItemsSource="{Binding NullNodes}"
                               Visibility="{Binding InputVisible, Converter={StaticResource BoolToVis}}">
                     <ItemsControl.ItemsPanel>

@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using BinaryTreeProject.ViewModels.Commands;
 using BinaryTreeProject.Models;
 using System.Collections.ObjectModel;
 using Microsoft.Win32;
 using System.IO;
-using System.Windows;
 using BinaryTreeProject.Windows;
 using System.Data;
 using System.Timers;
@@ -24,16 +20,11 @@ namespace BinaryTreeProject.ViewModels
         private bool popupVisible; // is new node popup visible
         private bool messagePopupVisible; // is message popup visible
         private string popupMessage; // message to display in popup
-        private bool isError;
+        private bool isError; // is message popup an error or success
         private int? selectedNodeId; // id of existing node selected
         private int? selectedNullNodeId; // id of null (non-existing) node selected
         private int? selectedChangeNodeId; // id of node to change its value
         private string newNodeValue; // value of user input
-        private int circleDiameter; // diameter of the circle representing a node
-        private double canvasWidth; // width of the canvas
-        private double canvasHeight; // height of the canvas
-        private double verticalNodeOffset; // vertical offset between two nodes
-        private double horizontalNodeOffset; // horizontal offset between two nodes
         private double nodeValueSize; // font size of the node value
         private double addCircleDiameter; // diameter of the circle representing a node when adding a new node
         private Stack<List<int?>> undoStack; // stack of undo operations
@@ -44,7 +35,6 @@ namespace BinaryTreeProject.ViewModels
         private string maxNode; // maximum node value in the binary tree
         private string minNode; // minimum node value in the binary tree
         private int zoomLevel; // zoom level of the canvas
-
         private Timer timer; // timer for the popup
         public static BinaryTreeViewModel SavedBTVM; // saved binary tree view model
 
@@ -57,256 +47,103 @@ namespace BinaryTreeProject.ViewModels
         public BinaryTree BinaryTree
         {
             get { return binaryTree; }
-            set
-            {
-                binaryTree = value;
-                OnPropertyChanged("BinaryTree");
-            }
+            set { binaryTree = value; OnPropertyChanged("BinaryTree"); }
         }
-        public double CanvasWidth
-        {
-            get { return canvasWidth; }
-            set
-            {
-                canvasWidth = value;
-                OnPropertyChanged("CanvasWidth");
-            }
-        }
-        public double CanvasHeight
-        {
-            get { return canvasHeight; }
-            set
-            {
-                canvasHeight = value;
-                OnPropertyChanged("CanvasHeight");
-            }
-        }
-        public double VerticalNodeOffset
-        {
-            get { return verticalNodeOffset; }
-            set
-            {
-                verticalNodeOffset = value;
-                OnPropertyChanged("verticalNodeOffset");
-            }
-        }
-        public double HorizontalNodeOffset
-        {
-            get { return horizontalNodeOffset; }
-            set
-            {
-                horizontalNodeOffset = value;
-                OnPropertyChanged("horizontalNodeOffset");
-            }
-        }
-        public int CircleDiameter
-        {
-            get { return circleDiameter; }
-            set
-            {
-                circleDiameter = value;
-                OnPropertyChanged("CircleDiameter");
-            }
-        }
-
         public double NodeValueSize
         {
             get { return nodeValueSize; }
-            set
-            {
-                nodeValueSize = value;
-                OnPropertyChanged("NodeValueSize");
-            }
+            set { nodeValueSize = value; OnPropertyChanged("NodeValueSize"); }
         }
         public double AddCircleDiameter
         {
             get { return addCircleDiameter; }
-            set
-            {
-                addCircleDiameter = value;
-                OnPropertyChanged("AddCircleDiameter");
-            }
+            set { addCircleDiameter = value; OnPropertyChanged("AddCircleDiameter"); }
         }
         public int? SelectedNodeId
         {
             get { return selectedNodeId; }
-            set
-            {
-                selectedNodeId = value;
-                OnPropertyChanged("SelectedNodeId");
-            }
+            set { selectedNodeId = value; OnPropertyChanged("SelectedNodeId"); }
         }
         public int? SelectedNullNodeId
         {
             get { return selectedNullNodeId; }
-            set
-            {
-                selectedNullNodeId = value;
-                OnPropertyChanged("SelectedNullNodeId");
-            }
+            set { selectedNullNodeId = value; OnPropertyChanged("SelectedNullNodeId"); }
         }
-
         public int? SelectedChangeNodeId
         {
             get { return selectedChangeNodeId; }
-            set
-            {
-                selectedChangeNodeId = value;
-                OnPropertyChanged("SelectedChangeNodeId");
-            }
+            set { selectedChangeNodeId = value; }
         }
         public bool InputVisible
         {
             get { return inputVisible; }
-            set
-            {
-                inputVisible = value;
-                OnPropertyChanged("InputVisible");
-            }
+            set { inputVisible = value; OnPropertyChanged("InputVisible"); }
         }
-
         public bool PopupVisible
         {
             get { return popupVisible; }
-            set
-            {
-                popupVisible = value;
-                OnPropertyChanged("PopupVisible");
-            }
+            set { popupVisible = value; OnPropertyChanged("PopupVisible"); }
         }
-
         public bool MessagePopupVisible
         {
             get { return messagePopupVisible; }
-            set
-            {
-                messagePopupVisible = value;
-                OnPropertyChanged("MessagePopupVisible");
-            }
+            set { messagePopupVisible = value; OnPropertyChanged("MessagePopupVisible"); }
         }
-
         public string PopupMessage
         {
             get { return popupMessage; }
-            set
-            {
-                popupMessage = value;
-                OnPropertyChanged("PopupMessage");
-            }
+            set { popupMessage = value; OnPropertyChanged("PopupMessage"); }
         }
-
         public bool IsError
         {
             get { return isError; }
-            set
-            {
-                isError = value;
-                OnPropertyChanged("IsError");
-            }
+            set { isError = value; OnPropertyChanged("IsError"); }
         }
-        
         public string NewNodeValue
         {
             get { return newNodeValue; }
-            set
-            {
-                newNodeValue = value;
-                OnPropertyChanged("NewNodeValue");
-            }
+            set { newNodeValue = value; OnPropertyChanged("NewNodeValue"); }
         }
         public Stack<List<int?>> UndoStack
         {
             get { return undoStack; }
-            set
-            {
-                undoStack = value;
-            }
+            set { undoStack = value; }
         }
         public Stack<List<int?>> RedoStack
         {
             get { return redoStack; }
-            set
-            {
-                redoStack = value;
-            }
+            set { redoStack = value; }
         }
         public Database Database
         {
-            get
-            {
-                return database;
-            }
-            set
-            {
-                database = value;
-            }
+            get { return database; }
+            set { database = value; }
         }
-
         public int NumberOfNodes
         {
-            get
-            {
-                return numberOfNodes;
-            }
-            set
-            {
-                numberOfNodes = value;
-                OnPropertyChanged("NumberOfNodes");
-            }
+            get { return numberOfNodes; }
+            set { numberOfNodes = value; OnPropertyChanged("NumberOfNodes"); }
         }
-
         public int TreeDepth
         {
-            get
-            {
-                return treeDepth;
-            }
-            set
-            {
-                treeDepth = value;
-                OnPropertyChanged("TreeDepth");
-            }
+            get { return treeDepth; }
+            set { treeDepth = value; OnPropertyChanged("TreeDepth"); }
         }
-
         public string MaxNode
         {
-            get
-            {
-                return maxNode;
-            }
-            set
-            {
-                maxNode = value;
-                OnPropertyChanged("MaxNode");
-            }
+            get { return maxNode; }
+            set { maxNode = value; OnPropertyChanged("MaxNode"); }
         }
-
         public string MinNode
         {
-            get
-            {
-                return minNode;
-            }
-            set
-            {
-                minNode = value;
-                OnPropertyChanged("MinNode");
-            }
+            get { return minNode; }
+            set { minNode = value; OnPropertyChanged("MinNode"); }
         }
-
         public int ZoomLevel
         {
-            get
-            {
-                return zoomLevel;
-            }
-            set
-            {
-                zoomLevel = value;
-                OnPropertyChanged("ZoomLevel");
-            }
+            get { return zoomLevel; }
+            set { zoomLevel = value; }
         }
-
         // commands
         public ICommand AddOrUpdateNodeCommand { get; private set; }
         public ICommand AddButtonClickCommand { get; private set; }
@@ -397,11 +234,9 @@ namespace BinaryTreeProject.ViewModels
             try
             {
                 SaveFileDialog sfd = new SaveFileDialog();
-
                 sfd.Filter = "Text files (*.txt)|*.txt";
                 sfd.ShowDialog();
                 if (sfd.FileName != "")
-                {
                     using (FileStream fs = new FileStream(sfd.FileName, FileMode.Create, FileAccess.Write))
                     {
                         using (StreamWriter sw = new StreamWriter(fs))
@@ -419,7 +254,6 @@ namespace BinaryTreeProject.ViewModels
                             sw.WriteLine(text);
                         }
                     }
-                }
                 ShowPopup(false, "Successfully saved the tree to file");
             }
             catch
@@ -437,7 +271,7 @@ namespace BinaryTreeProject.ViewModels
             if (dbdialog.ShowDialog() == true)
             {
                 bool isSaved = Database.SaveTree(dbdialog.TreeName, preorder);
-                if(isSaved)
+                if (isSaved)
                     ShowPopup(false, "Successfully saved the tree to database");
                 else
                     ShowPopup(true, "Error saving the tree to database");
@@ -450,11 +284,9 @@ namespace BinaryTreeProject.ViewModels
             try
             {
                 OpenFileDialog ofd = new OpenFileDialog();
-
                 ofd.Filter = "Text files (*.txt)|*.txt";
                 ofd.ShowDialog();
                 if (ofd.FileName != "")
-                {
                     using (FileStream fs = new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read))
                     {
                         using (StreamReader sr = new StreamReader(fs))
@@ -465,13 +297,9 @@ namespace BinaryTreeProject.ViewModels
                             foreach (var s in preorderString)
                             {
                                 if (s == "null" || s == "")
-                                {
                                     preorder.Add(null);
-                                }
                                 else
-                                {
                                     preorder.Add(int.Parse(s));
-                                }
                             }
                             BinaryTree = new BinaryTree();
                             BinaryTree.Root = BinaryTree.BuildTreeFromPreorder(preorder, true);
@@ -483,8 +311,7 @@ namespace BinaryTreeProject.ViewModels
                             InputVisible = false;
                         }
                     }
-                    ShowPopup(false, "Successfully loaded tree from file");
-                }
+                ShowPopup(false, "Successfully loaded tree from file");
             }
             catch
             {
@@ -570,18 +397,11 @@ namespace BinaryTreeProject.ViewModels
             foreach (var node in Nodes)
             {
                 if (isLeftSubtree && node != BinaryTree.Root)
-                {
                     leftSubtreeNodes++;
-                }
                 else if (node == BinaryTree.Root)
-                {
                     isLeftSubtree = false;
-                }
                 else
-                {
                     rightSubtreeNodes++;
-                }
-
             }
             if (leftSubtreeNodes > rightSubtreeNodes)
             {
@@ -592,15 +412,10 @@ namespace BinaryTreeProject.ViewModels
             {
                 startX = (rightSubtreeNodes - leftSubtreeNodes) * HorizontalNodeOffset;
                 if (rightSubtreeNodes == 0)
-                {
                     CanvasWidth = HorizontalNodeOffset * 4;
-                }
                 else
-                {
                     CanvasWidth = ((rightSubtreeNodes + 2) * HorizontalNodeOffset) * 2;
-                }
             }
-
             return startX;
         }
 
@@ -616,10 +431,7 @@ namespace BinaryTreeProject.ViewModels
             if (node == null)
                 return;
             if (node == BinaryTree.Root)
-            {
                 LinePositions.Clear();
-            }
-
             if (node.ParentNode != null)
             {
                 var line = new LinePosition();
@@ -635,13 +447,9 @@ namespace BinaryTreeProject.ViewModels
         private void UpdateNodesCollection(Node node)
         {
             if (node == BinaryTree.Root)
-            {
                 Nodes.Clear();
-            }
             if (node == null)
-            {
                 return;
-            }
             UpdateNodesCollection(node.LeftNode);
             Nodes.Add(node);
             UpdateNodesCollection(node.RightNode);
@@ -650,24 +458,13 @@ namespace BinaryTreeProject.ViewModels
         // Calculating Y positions of the nodes
         private void CalculateVerticalPositions(Node node)
         {
-
             if (node == null) return;
-
             if (node == BinaryTree.Root)
-            {
                 node.Position.Y = VerticalNodeOffset;
-            }
-
             if (node.LeftNode != null)
-            {
                 node.LeftNode.Position.Y = node.Position.Y + (CircleDiameter + VerticalNodeOffset);
-            }
-
             if (node.RightNode != null)
-            {
                 node.RightNode.Position.Y = node.Position.Y + (CircleDiameter + VerticalNodeOffset);
-            }
-
             CalculateVerticalPositions(node.LeftNode);
             CalculateVerticalPositions(node.RightNode);
         }
@@ -768,7 +565,7 @@ namespace BinaryTreeProject.ViewModels
             }
             UpdateUI();
         }
-
+        
         // Updates UI so it representes the current state of the tree
         public void UpdateUI()
         {
@@ -783,7 +580,6 @@ namespace BinaryTreeProject.ViewModels
             TreeDepth = BinaryTree.CalculateMaxDepth(BinaryTree.Root);
             MaxNode = Nodes.Max(node => node.Value).ToString();
             MinNode = Nodes.Min(node => node.Value).ToString();
-
             if (string.IsNullOrEmpty(MaxNode))
                 MaxNode = "/";
             if (string.IsNullOrEmpty(MinNode))
@@ -800,12 +596,13 @@ namespace BinaryTreeProject.ViewModels
             NodeValueSize = CircleDiameter * 0.4;
         }
 
+        // When timer elapses, hide popup
         private void TimerElapsed(Object source, ElapsedEventArgs e)
         {
-            MessagePopupVisible = false;
-            PopupMessage = "";
-            timer.Stop();
+            ClosePopup();
         }
+
+        // Show popup on the screen and start its duration timer
         private void ShowPopup(bool isError, string msg)
         {
             IsError = isError;
@@ -820,6 +617,7 @@ namespace BinaryTreeProject.ViewModels
         {
             MessagePopupVisible = false;
             PopupMessage = "";
+            timer.Stop();
         }
 
         // Pushes current state of binary tree to passed stack
@@ -829,19 +627,18 @@ namespace BinaryTreeProject.ViewModels
             BinaryTree.Preorder(BinaryTree.Root, savedTree);
             s.Push(savedTree);
         }
-
+        
+        // Loads previous state of binary tree when loading view
         private void LoadSavedData()
         {
-            if (SavedBTVM != null)
-            {
-                BinaryTree = SavedBTVM.BinaryTree;
-                ZoomLevel = SavedBTVM.ZoomLevel;
-                ZoomChanged();
-                SelectedNodeId = SavedBTVM.SelectedNodeId;
-                UndoStack = SavedBTVM.UndoStack;
-                RedoStack = SavedBTVM.RedoStack;
-                UpdateUI();
-            }
+            if (SavedBTVM == null) return;
+            BinaryTree = SavedBTVM.BinaryTree;
+            ZoomLevel = SavedBTVM.ZoomLevel;
+            ZoomChanged();
+            SelectedNodeId = SavedBTVM.SelectedNodeId;
+            UndoStack = SavedBTVM.UndoStack;
+            RedoStack = SavedBTVM.RedoStack;
+            UpdateUI();
         }
     }
 }

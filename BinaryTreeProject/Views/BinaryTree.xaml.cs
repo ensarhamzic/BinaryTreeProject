@@ -1,18 +1,8 @@
 ﻿using BinaryTreeProject.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace BinaryTreeProject.Views
 {
@@ -29,15 +19,16 @@ namespace BinaryTreeProject.Views
             bTVM = DataContext as BinaryTreeViewModel;
         }
 
+        // Handling click on node
         private void NodeClick(object sender, MouseButtonEventArgs e)
         {
             Grid clickedGrid = sender as Grid;
             string tagString = clickedGrid.Tag.ToString();
             int.TryParse(tagString, out int tag);
             bTVM.NodeClick(tag);
-
         }
 
+        // Handling click on node where new node can be added
         private void NullNodeClick(object sender, MouseButtonEventArgs e)
         {
             Grid clickedGrid = sender as Grid;
@@ -59,37 +50,31 @@ namespace BinaryTreeProject.Views
                 }
             }
         }
-        
+
         private void ZoomLevelChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (bTVM == null) return;
             bTVM.ZoomChanged();
         }
 
+        // Changes to view for Huffman algorithm
         private void ChangeViewClick(object sender, RoutedEventArgs e)
         {
             Window win = Window.GetWindow(this);
             var vm = win.DataContext as MainViewModel;
-            // Changes to view for Huffman Algorithm
+            // saving current state so we load it again when user goes back to binary tree
             BinaryTreeViewModel.SavedBTVM = bTVM;
             vm.SelectedViewModel = new HuffmanViewModel();
         }
-        
+
         private void DeleteMenuItem_Click(object sender, RoutedEventArgs e)
         {
             MenuItem menuItem = sender as MenuItem;
-            if (menuItem != null)
-            {
-                var contextMenu = menuItem.Parent as ContextMenu;
-                var parent = contextMenu.PlacementTarget as Grid;
-                //ContextMenu menu = menuItem.ContextMenu;
-                //binaryTreeVM.SelectedNullNodeId = (int)(menu.Parent as Grid).Tag;
-                bTVM.SelectedNodeId = (int)parent.Tag;
-                if (bTVM.DeleteButtonClickCommand.CanExecute(null))
-                {
-                    bTVM.DeleteButtonClickCommand.Execute(null);
-                }
-            }
+            var contextMenu = menuItem.Parent as ContextMenu;
+            var parent = contextMenu.PlacementTarget as Grid;
+            bTVM.SelectedNodeId = (int)parent.Tag;
+            if (bTVM.DeleteButtonClickCommand.CanExecute(null))
+                bTVM.DeleteButtonClickCommand.Execute(null);
         }
 
         private void ChangeMenuItem_Click(object sender, RoutedEventArgs e)
@@ -97,18 +82,13 @@ namespace BinaryTreeProject.Views
             MenuItem menuItem = sender as MenuItem;
             var contextMenu = menuItem.Parent as ContextMenu;
             var parent = contextMenu.PlacementTarget as Grid;
-            if (menuItem != null)
-            {
-                bTVM.SelectedChangeNodeId = (int)parent.Tag;
-                bTVM.SelectedNullNodeId = null;
-                NewNodeTB.Text = bTVM.Nodes.First(x => x.ID == bTVM.SelectedChangeNodeId).Value.ToString();
-                bTVM.PopupVisible = false;
-                bTVM.PopupVisible = true;
-                if (bTVM.AddOrUpdateNodeCommand.CanExecute(null))
-                {
-                    bTVM.AddOrUpdateNodeCommand.Execute(null);
-                }
-            }
+            bTVM.SelectedChangeNodeId = (int)parent.Tag;
+            bTVM.SelectedNullNodeId = null;
+            NewNodeTB.Text = bTVM.Nodes.First(x => x.ID == bTVM.SelectedChangeNodeId).Value.ToString();
+            bTVM.PopupVisible = false;
+            bTVM.PopupVisible = true;
+            if (bTVM.AddOrUpdateNodeCommand.CanExecute(null))
+                bTVM.AddOrUpdateNodeCommand.Execute(null);
         }
     }
 }

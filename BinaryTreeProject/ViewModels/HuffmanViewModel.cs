@@ -1,11 +1,8 @@
 ﻿using BinaryTreeProject.Models;
 using BinaryTreeProject.ViewModels.Commands;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace BinaryTreeProject.ViewModels
@@ -14,103 +11,32 @@ namespace BinaryTreeProject.ViewModels
     {
         private Huffman huffman; // instance of huffman algorithm
         private string enteredText; // text entered by user
-        private int circleDiameter; // diameter of the circle representing a node
-        private double canvasWidth; // width of the canvas
-        private double canvasHeight; // height of the canvas
-        private double verticalNodeOffset; // vertical offset between two nodes
-        private double horizontalNodeOffset; // horizontal offset between two nodes
         private bool isStarted; // is huffman algorithm started
         private Stack<List<HuffmanTree>> previousStates; // previous states of the algorithm
-
         public static HuffmanViewModel SavedHVM;
 
         public Huffman Huffman
         {
             get { return huffman; }
-            set
-            {
-                huffman = value;
-                OnPropertyChanged("Huffman");
-            }
-        }
-        public double CanvasWidth
-        {
-            get { return canvasWidth; }
-            set
-            {
-                canvasWidth = value;
-                OnPropertyChanged("CanvasWidth");
-            }
-        }
-        public double CanvasHeight
-        {
-            get { return canvasHeight; }
-            set
-            {
-                canvasHeight = value;
-                OnPropertyChanged("CanvasHeight");
-            }
-        }
-        public double VerticalNodeOffset
-        {
-            get { return verticalNodeOffset; }
-            set
-            {
-                verticalNodeOffset = value;
-                OnPropertyChanged("verticalNodeOffset");
-            }
-        }
-        public double HorizontalNodeOffset
-        {
-            get { return horizontalNodeOffset; }
-            set
-            {
-                horizontalNodeOffset = value;
-                OnPropertyChanged("horizontalNodeOffset");
-            }
-        }
-        public int CircleDiameter
-        {
-            get { return circleDiameter; }
-            set
-            {
-                circleDiameter = value;
-                OnPropertyChanged("CircleDiameter");
-            }
+            set { huffman = value; OnPropertyChanged("Huffman"); }
         }
         public bool IsStarted
         {
-            get
-            {
-                return isStarted;
-            }
-            set
-            {
-                isStarted = value;
-                OnPropertyChanged("IsStarted");
-            }
+            get { return isStarted; }
+            set { isStarted = value; OnPropertyChanged("IsStarted"); }
         }
         public Stack<List<HuffmanTree>> PreviousStates
         {
             get { return previousStates; }
-            set
-            {
-                previousStates = value;
-                OnPropertyChanged("PreviousStates");
-            }
+            set { previousStates = value; OnPropertyChanged("PreviousStates"); }
         }
-
-        public ObservableCollection<HuffmanNode> Nodes { get; set; }
-        public ObservableCollection<LinePosition> LinePositions { get; set; }
         public string EnteredText
         {
             get { return enteredText; }
-            set
-            {
-                enteredText = value;
-                OnPropertyChanged("EnteredText");
-            }
+            set { enteredText = value; OnPropertyChanged("EnteredText"); }
         }
+        public ObservableCollection<HuffmanNode> Nodes { get; set; }
+        public ObservableCollection<LinePosition> LinePositions { get; set; }
 
         public ICommand StartCommand { get; private set; }
         public ICommand NextStepCommand { get; private set; }
@@ -135,7 +61,6 @@ namespace BinaryTreeProject.ViewModels
             PreviousStepCommand = new PreviousStepHuffmanCommand(this);
             SkipToEndCommand = new SkipToEndHuffmanCommand(this);
             BackToStartCommand = new BackToStartHuffmanCommand(this);
-
             LoadSavedData();
         }
 
@@ -147,24 +72,19 @@ namespace BinaryTreeProject.ViewModels
             Huffman.Trees.Clear();
             UpdateUI();
             List<char> previousChars = new List<char>();
-
             // Creates trees for every node, while calculating its frequency
             foreach (char c in enteredText)
-            {
                 if (!previousChars.Contains(c))
                 {
                     int frequency = 0;
                     foreach (char ch in enteredText)
                     {
                         if (ch == c)
-                        {
                             frequency++;
-                        }
                     }
                     Huffman.Trees.Add(new HuffmanTree(new HuffmanNode(c, frequency)));
                     previousChars.Add(c);
                 }
-            }
             UpdateUI();
         }
 
@@ -181,10 +101,8 @@ namespace BinaryTreeProject.ViewModels
             mergedTree.Root.RightNode = second.Root;
             first.Root.ParentNode = mergedTree.Root;
             second.Root.ParentNode = mergedTree.Root;
-
             Huffman.Trees.RemoveRange(0, 2);
             Huffman.Trees.Add(mergedTree);
-
             UpdateUI();
         }
 
@@ -227,18 +145,14 @@ namespace BinaryTreeProject.ViewModels
         public void SkipToEnd()
         {
             while (Huffman.Trees.Count > 1)
-            {
                 NextStep();
-            }
         }
 
         // Goes back to the start of the algorithm
         public void BackToStart()
         {
             while (PreviousStates.Count > 0)
-            {
                 PreviousStep();
-            }
         }
 
         // Calculates node positons on the canvas
@@ -250,7 +164,6 @@ namespace BinaryTreeProject.ViewModels
                 node.Position.X = startX + HorizontalNodeOffset;
                 startX += HorizontalNodeOffset;
             }
-
             CalculateVerticalPositions();
         }
 
@@ -258,31 +171,19 @@ namespace BinaryTreeProject.ViewModels
         private void CalculateVerticalPositions()
         {
             foreach (var tree in Huffman.Trees)
-            {
                 VerticalPositionsTree(tree.Root);
-            }
         }
 
         // Helper function for CalculateNodePositions
         private void VerticalPositionsTree(HuffmanNode node)
         {
             if (node == null) return;
-
             if (node.ParentNode == null)
-            {
                 node.Position.Y = VerticalNodeOffset;
-            }
-
             if (node.LeftNode != null)
-            {
                 node.LeftNode.Position.Y = node.Position.Y + (CircleDiameter + VerticalNodeOffset);
-            }
-
             if (node.RightNode != null)
-            {
                 node.RightNode.Position.Y = node.Position.Y + (CircleDiameter + VerticalNodeOffset);
-            }
-
             VerticalPositionsTree(node.LeftNode);
             VerticalPositionsTree(node.RightNode);
         }
@@ -292,9 +193,7 @@ namespace BinaryTreeProject.ViewModels
         {
             LinePositions.Clear();
             foreach (var tree in Huffman.Trees)
-            {
                 UpdateTreeLines(tree.Root);
-            }
         }
 
         // Helper function for UpdateLinePositions
@@ -319,16 +218,13 @@ namespace BinaryTreeProject.ViewModels
             Nodes.Clear();
             Huffman.Trees = Huffman.Trees.OrderBy(t => (int)t.Root.Value).ToList();
             foreach (var tree in Huffman.Trees)
-            {
                 UpdateNodesFromTree(tree.Root);
-            }
         }
 
         // Helper function for UpdateNodesCollection
         private void UpdateNodesFromTree(HuffmanNode node)
         {
-            if (node == null)
-                return;
+            if (node == null) return;
             UpdateNodesFromTree(node.LeftNode);
             Nodes.Add(node);
             UpdateNodesFromTree(node.RightNode);
@@ -358,17 +254,15 @@ namespace BinaryTreeProject.ViewModels
             UpdateLinePositions();
             CalculateCanvasSize();
         }
-
+        // Loads previous state of algorithm when loading view
         private void LoadSavedData()
         {
-            if (SavedHVM != null)
-            {
-                Huffman = SavedHVM.Huffman;
-                EnteredText = SavedHVM.EnteredText;
-                IsStarted = SavedHVM.IsStarted;
-                PreviousStates = SavedHVM.PreviousStates;
-                UpdateUI();
-            }
+            if (SavedHVM == null) return;
+            Huffman = SavedHVM.Huffman;
+            EnteredText = SavedHVM.EnteredText;
+            IsStarted = SavedHVM.IsStarted;
+            PreviousStates = SavedHVM.PreviousStates;
+            UpdateUI();
         }
     }
 }
