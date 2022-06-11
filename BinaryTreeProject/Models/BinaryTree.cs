@@ -13,7 +13,7 @@ namespace BinaryTreeProject.Models
 {
     public class BinaryTree : INotifyPropertyChanged
     {
-        public static int nodeId;
+        public int nodeId;
         private Node _root; // tree root
 
         public Node Root

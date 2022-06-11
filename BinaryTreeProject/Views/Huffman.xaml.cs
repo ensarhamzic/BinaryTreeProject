@@ -30,8 +30,11 @@ namespace BinaryTreeProject.Views
         private void ChangeViewClick(object sender, RoutedEventArgs e)
         {
             Window win = Window.GetWindow(this);
+            var hVM = DataContext as HuffmanViewModel;
+            var vm = win.DataContext as MainViewModel;
             // Changes to view for Binary Tree
-            (win.DataContext as MainViewModel).SelectedViewModel = new BinaryTreeViewModel();
+            HuffmanViewModel.SavedHVM = hVM;
+            vm.SelectedViewModel = new BinaryTreeViewModel();
         }
     }
 }

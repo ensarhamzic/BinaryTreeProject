@@ -17,7 +17,7 @@ using System.Timers;
 
 namespace BinaryTreeProject.ViewModels
 {
-    internal class BinaryTreeViewModel : BaseViewModel
+    public class BinaryTreeViewModel : BaseViewModel
     {
         private BinaryTree binaryTree; // instance of the binary tree
         private bool inputVisible; // is add input visible
@@ -46,6 +46,7 @@ namespace BinaryTreeProject.ViewModels
         private int zoomLevel; // zoom level of the canvas
 
         private Timer timer; // timer for the popup
+        public static BinaryTreeViewModel SavedBTVM; // saved binary tree view model
 
         // collection of nodes (used for binding, to draw nodes on the canvas)
         public ObservableCollection<Node> Nodes { get; set; }
@@ -358,6 +359,7 @@ namespace BinaryTreeProject.ViewModels
             MinNode = "/";
             ZoomLevel = 1;
             timer = new Timer();
+            LoadSavedData();
         }
 
         // Adds or updates new node and updates UI
@@ -437,6 +439,8 @@ namespace BinaryTreeProject.ViewModels
                 bool isSaved = Database.SaveTree(dbdialog.TreeName, preorder);
                 if(isSaved)
                     ShowPopup(false, "Successfully saved the tree to database");
+                else
+                    ShowPopup(true, "Error saving the tree to database");
             }
         }
 
@@ -766,7 +770,7 @@ namespace BinaryTreeProject.ViewModels
         }
 
         // Updates UI so it representes the current state of the tree
-        private void UpdateUI()
+        public void UpdateUI()
         {
             SelectedChangeNodeId = null;
             UpdateNodesCollection(BinaryTree.Root);
@@ -824,6 +828,20 @@ namespace BinaryTreeProject.ViewModels
             List<int?> savedTree = new List<int?>();
             BinaryTree.Preorder(BinaryTree.Root, savedTree);
             s.Push(savedTree);
+        }
+
+        private void LoadSavedData()
+        {
+            if (SavedBTVM != null)
+            {
+                BinaryTree = SavedBTVM.BinaryTree;
+                ZoomLevel = SavedBTVM.ZoomLevel;
+                ZoomChanged();
+                SelectedNodeId = SavedBTVM.SelectedNodeId;
+                UndoStack = SavedBTVM.UndoStack;
+                RedoStack = SavedBTVM.RedoStack;
+                UpdateUI();
+            }
         }
     }
 }

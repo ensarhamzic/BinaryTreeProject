@@ -22,6 +22,8 @@ namespace BinaryTreeProject.ViewModels
         private bool isStarted; // is huffman algorithm started
         private Stack<List<HuffmanTree>> previousStates; // previous states of the algorithm
 
+        public static HuffmanViewModel SavedHVM;
+
         public Huffman Huffman
         {
             get { return huffman; }
@@ -133,6 +135,8 @@ namespace BinaryTreeProject.ViewModels
             PreviousStepCommand = new PreviousStepHuffmanCommand(this);
             SkipToEndCommand = new SkipToEndHuffmanCommand(this);
             BackToStartCommand = new BackToStartHuffmanCommand(this);
+
+            LoadSavedData();
         }
 
         // Starts Huffman algorithm
@@ -347,12 +351,24 @@ namespace BinaryTreeProject.ViewModels
         }
 
         // Updates everything to draw latest algorithm state on the canvas
-        private void UpdateUI()
+        public void UpdateUI()
         {
             UpdateNodesCollection();
             CalculateNodePositions();
             UpdateLinePositions();
             CalculateCanvasSize();
+        }
+
+        private void LoadSavedData()
+        {
+            if (SavedHVM != null)
+            {
+                Huffman = SavedHVM.Huffman;
+                EnteredText = SavedHVM.EnteredText;
+                IsStarted = SavedHVM.IsStarted;
+                PreviousStates = SavedHVM.PreviousStates;
+                UpdateUI();
+            }
         }
     }
 }

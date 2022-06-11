@@ -18,5 +18,8 @@ namespace BinaryTreeProject.ViewModels
                 OnPropertyChanged("SelectedViewModel");
             }
         }
+
+
+
     }
 }

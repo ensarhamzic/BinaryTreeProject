@@ -71,8 +71,11 @@ namespace BinaryTreeProject.Views
         private void ChangeViewClick(object sender, RoutedEventArgs e)
         {
             Window win = Window.GetWindow(this);
+            var btVM = DataContext as BinaryTreeViewModel;
+            var vm = win.DataContext as MainViewModel;
             // Changes to view for Huffman Algorithm
-            (win.DataContext as MainViewModel).SelectedViewModel = new HuffmanViewModel();
+            BinaryTreeViewModel.SavedBTVM = btVM;
+            vm.SelectedViewModel = new HuffmanViewModel();
         }
         
         private void DeleteMenuItem_Click(object sender, RoutedEventArgs e)
