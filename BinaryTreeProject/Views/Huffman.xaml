@@ -16,80 +16,87 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Vertical" Grid.Row="0" >
-            <ToolBar ToolBarTray.IsLocked="True">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
-                    Orientation="Horizontal"
-                    Grid.Row="1"
-                    >
-                    <TextBlock Text="Enter text:" FontWeight="Bold" VerticalAlignment="Center"/>
-                    <TextBox Width="100" Margin="10 0 0 0"
+        <Border Grid.Row="0" BorderBrush="Black" BorderThickness="0 0 0 3" Background="{StaticResource HeaderColor}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+
+                <ToolBarPanel Grid.Column="0" ClipToBounds="True">
+                    <ToolBar Background="Transparent" ToolBarTray.IsLocked="True" Margin="5 0 -16 0" >
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                            <TextBlock Text="Enter text:" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <TextBox Width="100" Margin="10 0 0 0"
                              Text="{Binding EnteredText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               x:Name="NewNodeTB" />
-                </StackPanel>
-                <Button Style="{StaticResource ToolbarButton}"
+                        </StackPanel>
+                        <Button Style="{StaticResource ToolbarButton}"
                         Command="{Binding StartCommand}">
-                    <Button.Content>
-                        <StackPanel Orientation="Vertical">
-                            <Image Source="/Icons/start.png"  />
-                            <TextBlock Text="Start" Style="{StaticResource ToolbarText}"/>
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
-                <Button Style="{StaticResource ToolbarButton}"
+                            <Button.Content>
+                                <StackPanel Orientation="Vertical">
+                                    <Image Source="/Icons/start.png"  />
+                                    <TextBlock Text="Start" Style="{StaticResource ToolbarText}"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                        <Button Style="{StaticResource ToolbarButton}"
                         Command="{Binding PreviousStepCommand}">
-                    <Button.Content>
-                        <StackPanel Orientation="Vertical">
-                            <Image Source="/Icons/undo.png"  />
-                            <TextBlock Text="Back" Style="{StaticResource ToolbarText}"/>
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
+                            <Button.Content>
+                                <StackPanel Orientation="Vertical">
+                                    <Image Source="/Icons/undo.png"  />
+                                    <TextBlock Text="Back" Style="{StaticResource ToolbarText}"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
 
-                <Button Style="{StaticResource ToolbarButton}"
+                        <Button Style="{StaticResource ToolbarButton}"
                         Command="{Binding NextStepCommand}">
-                    <Button.Content>
-                        <StackPanel Orientation="Vertical">
-                            <Image Source="/Icons/redo.png"  />
-                            <TextBlock Text="Forward" Style="{StaticResource ToolbarText}"/>
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
+                            <Button.Content>
+                                <StackPanel Orientation="Vertical">
+                                    <Image Source="/Icons/redo.png"  />
+                                    <TextBlock Text="Forward" Style="{StaticResource ToolbarText}"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
 
-                <Button Style="{StaticResource ToolbarButton}"
+                        <Button Style="{StaticResource ToolbarButton}"
                         Command="{Binding BackToStartCommand}">
-                    <Button.Content>
-                        <StackPanel Orientation="Vertical">
-                            <Image Source="/Icons/back.png"  />
-                            <TextBlock Text="To start" Style="{StaticResource ToolbarText}"/>
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
+                            <Button.Content>
+                                <StackPanel Orientation="Vertical">
+                                    <Image Source="/Icons/back.png"  />
+                                    <TextBlock Text="To start" Style="{StaticResource ToolbarText}"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
 
-                <Button Style="{StaticResource ToolbarButton}" Command="{Binding SkipToEndCommand}" >
-                    <Button.Content>
-                        <StackPanel Orientation="Vertical">
-                            <Image Source="/Icons/forward.png"  />
-                            <TextBlock Style="{StaticResource ToolbarText}" Text="To end" />
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
+                        <Button Style="{StaticResource ToolbarButton}" Command="{Binding SkipToEndCommand}" >
+                            <Button.Content>
+                                <StackPanel Orientation="Vertical">
+                                    <Image Source="/Icons/forward.png"  />
+                                    <TextBlock Style="{StaticResource ToolbarText}" Text="To end" />
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </ToolBar>
 
-                
+                </ToolBarPanel>
 
-                <Button Style="{StaticResource ToolbarButton}" Click="ChangeViewClick" Width="80">
-                    <Button.Content>
-                        <StackPanel Orientation="Vertical">
-                            <Image Source="/Icon.ico"  />
-                            <TextBlock Style="{StaticResource ToolbarText}" Text="Binary Tree" />
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
+                <StackPanel Orientation="Horizontal" Grid.Column="2" Margin="0 0 10 0">
+                    <Button Style="{StaticResource ToolbarButton}" Click="ChangeViewClick" Width="80">
+                        <Button.Content>
+                            <StackPanel Orientation="Vertical">
+                                <Image Source="/Icon.ico"  />
+                                <TextBlock Style="{StaticResource ToolbarText}" Text="Binary Tree" />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
 
-            </ToolBar>
-
-            <Border BorderBrush="Black" BorderThickness="1"/>
-        </StackPanel>
+            </Grid>
+        </Border>
 
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
                       CanContentScroll="True" Grid.Row="1" Background="White" >

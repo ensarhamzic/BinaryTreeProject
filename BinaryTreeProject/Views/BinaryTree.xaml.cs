@@ -90,5 +90,6 @@ namespace BinaryTreeProject.Views
             if (bTVM.AddOrUpdateNodeCommand.CanExecute(null))
                 bTVM.AddOrUpdateNodeCommand.Execute(null);
         }
+
     }
 }

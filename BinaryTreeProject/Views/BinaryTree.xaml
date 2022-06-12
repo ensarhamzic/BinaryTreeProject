@@ -34,8 +34,22 @@
                     <Button  Cursor="Hand" Padding="5" Margin="5" BorderBrush="Transparent"
                              BorderThickness="0" Background="Transparent"
                              Command="{Binding AddOrUpdateNodeCommand}" CommandParameter="{Binding NewNodeValue}">
+
                         <Button.Content>
-                            <Image Source="/Icons/done.png" Width="20" />
+                            <Image Width="20">
+                                <Image.Style>
+                                    <Style TargetType="{x:Type Image}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsEnabled" Value="True">
+                                                <Setter Property="Source" Value="/Icons/done.png" />
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Source" Value="/Icons/done-gray.png" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
                         </Button.Content>
                     </Button>
                     <Button Cursor="Hand" Command="{Binding CancelAddCommand}" Padding="5" Margin="5"
@@ -94,121 +108,127 @@
             </Border>
         </Popup>
 
-        <StackPanel Orientation="Vertical" Grid.Row="0" >
-            <ToolBar ToolBarTray.IsLocked="True">
-                <Menu VerticalAlignment="Center" Background="Transparent">
-                    <MenuItem Width="60">
-                        <MenuItem.Icon>
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60">
-                                <Image Source="/Icons/save.png" />
-                                <TextBlock Text="Save" Style="{StaticResource ToolbarText}"/>
-                            </StackPanel>
-                        </MenuItem.Icon>
+        <Border Grid.Row="0" BorderBrush="Black" BorderThickness="0 0 0 3" Background="{StaticResource HeaderColor}" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <ToolBarPanel Grid.Column="0" ClipToBounds="True">
+                    <ToolBar Background="Transparent" ToolBarTray.IsLocked="True" Margin="5 0 -16 0" >
+                        <Menu VerticalAlignment="Center" Background="Transparent">
+                            <MenuItem Width="60">
+                                <MenuItem.Icon>
+                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60">
+                                        <Image Source="/Icons/save.png" />
+                                        <TextBlock Text="Save" Style="{StaticResource ToolbarText}"/>
+                                    </StackPanel>
+                                </MenuItem.Icon>
 
-                        <MenuItem Header="Save to file" Command="{Binding SaveTreeToFileCommand}">
-                            <MenuItem.Icon>
-                                <Image Source="/Icons/file.png"/>
-                            </MenuItem.Icon>
-                        </MenuItem>
+                                <MenuItem Header="Save to file" Command="{Binding SaveTreeToFileCommand}">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Icons/file.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
 
-                        <MenuItem Header="Save to database" Command="{Binding SaveTreeToDBCommand}">
-                            <MenuItem.Icon>
-                                <Image Source="/Icons/database.png"/>
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </MenuItem>
-                </Menu>
+                                <MenuItem Header="Save to database" Command="{Binding SaveTreeToDBCommand}">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Icons/database.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </MenuItem>
+                        </Menu>
 
-                <Menu VerticalAlignment="Center" Background="Transparent">
-                    <MenuItem Width="60">
-                        <MenuItem.Icon>
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60">
-                                <Image Source="/Icons/load.png" />
-                                <TextBlock Text="Load" Style="{StaticResource ToolbarText}"/>
-                            </StackPanel>
-                        </MenuItem.Icon>
+                        <Menu VerticalAlignment="Center" Background="Transparent">
+                            <MenuItem Width="60">
+                                <MenuItem.Icon>
+                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60">
+                                        <Image Source="/Icons/load.png" />
+                                        <TextBlock Text="Load" Style="{StaticResource ToolbarText}"/>
+                                    </StackPanel>
+                                </MenuItem.Icon>
 
-                        <MenuItem Header="Load from file" Command="{Binding LoadTreeFromFileCommand}">
-                            <MenuItem.Icon>
-                                <Image Source="/Icons/file.png" />
-                            </MenuItem.Icon>
-                        </MenuItem>
+                                <MenuItem Header="Load from file" Command="{Binding LoadTreeFromFileCommand}">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Icons/file.png" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
 
-                        <MenuItem Header="Load from database" Command="{Binding LoadTreeFromDBCommand}">
-                            <MenuItem.Icon>
-                                <Image Source="/Icons/database.png"/>
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </MenuItem>
-                </Menu>
+                                <MenuItem Header="Load from database" Command="{Binding LoadTreeFromDBCommand}">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Icons/database.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </MenuItem>
+                        </Menu>
 
-                <Button Style="{StaticResource ToolbarButton}"
+                        <Button Style="{StaticResource ToolbarButton}"
                         Command="{Binding UndoCommand}">
-                    <Button.Content>
-                        <StackPanel Orientation="Vertical">
-                            <Image Source="/Icons/undo.png"  />
-                            <TextBlock Text="Undo" Style="{StaticResource ToolbarText}"/>
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
+                            <Button.Content>
+                                <StackPanel Orientation="Vertical">
+                                    <Image Source="/Icons/undo.png"  />
+                                    <TextBlock Text="Undo" Style="{StaticResource ToolbarText}"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
 
-                <Button Style="{StaticResource ToolbarButton}"
+                        <Button Style="{StaticResource ToolbarButton}"
                         Command="{Binding RedoCommand}">
-                    <Button.Content>
-                        <StackPanel Orientation="Vertical">
-                            <Image Source="/Icons/redo.png"  />
-                            <TextBlock Text="Redo" Style="{StaticResource ToolbarText}"/>
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
+                            <Button.Content>
+                                <StackPanel Orientation="Vertical">
+                                    <Image Source="/Icons/redo.png"  />
+                                    <TextBlock Text="Redo" Style="{StaticResource ToolbarText}"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
 
 
-                <Button Style="{StaticResource ToolbarButton}" Command="{Binding DeleteButtonClickCommand}">
-                    <Button.Content>
-                        <StackPanel Orientation="Vertical">
-                            <Image Source="/Icons/delete.png"  />
-                            <TextBlock Text="Delete" Style="{StaticResource ToolbarText}"/>
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
+                        <Button Style="{StaticResource ToolbarButton}" Command="{Binding DeleteButtonClickCommand}">
+                            <Button.Content>
+                                <StackPanel Orientation="Vertical">
+                                    <Image Source="/Icons/delete.png"  />
+                                    <TextBlock Text="Delete" Style="{StaticResource ToolbarText}"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
 
-                <Button Style="{StaticResource ToolbarButton}" Command="{Binding AddButtonClickCommand}">
-                    <Button.Content>
-                        <StackPanel Orientation="Vertical">
-                            <Image Width="30">
-                                <Image.Style>
-                                    <Style TargetType="{x:Type Image}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding InputVisible}" Value="False">
-                                                <Setter Property="Source" Value="/Icons/add.png"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding InputVisible}" Value="True">
-                                                <Setter Property="Source" Value="/Icons/cancel.png"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Image.Style>
-                            </Image>
-                            <TextBlock Style="{StaticResource ToolbarText}" Text="{Binding InputVisible, Converter={StaticResource BoolToText}}" />
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
+                        <Button Style="{StaticResource ToolbarButton}" Command="{Binding AddButtonClickCommand}">
+                            <Button.Content>
+                                <StackPanel Orientation="Vertical">
+                                    <Image Width="30">
+                                        <Image.Style>
+                                            <Style TargetType="{x:Type Image}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding InputVisible}" Value="False">
+                                                        <Setter Property="Source" Value="/Icons/add.png"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding InputVisible}" Value="True">
+                                                        <Setter Property="Source" Value="/Icons/cancel.png"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                    <TextBlock Style="{StaticResource ToolbarText}" Text="{Binding InputVisible, Converter={StaticResource BoolToText}}" />
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </ToolBar>
+                </ToolBarPanel>
 
-                <Button Style="{StaticResource ToolbarButton}" Click="ChangeViewClick">
-                    <Button.Content>
-                        <StackPanel Orientation="Vertical">
-                            <Image Source="/Icons/h.png"  />
-                            <TextBlock Style="{StaticResource ToolbarText}" Text="Huffman" />
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
-
-            </ToolBar>
-
-
-
-            <Border BorderBrush="Black" BorderThickness="1"/>
-        </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Column="2" Margin="0 0 10 0">
+                    <Button Style="{StaticResource ToolbarButton}" Click="ChangeViewClick">
+                        <Button.Content>
+                            <StackPanel Orientation="Vertical">
+                                <Image Source="/Icons/h.png"  />
+                                <TextBlock Style="{StaticResource ToolbarText}" Text="Huffman" />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
 
 
 
@@ -270,7 +290,7 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                
+
                 <ItemsControl ItemsSource="{Binding NullNodes}"
                               Visibility="{Binding InputVisible, Converter={StaticResource BoolToVis}}">
                     <ItemsControl.ItemsPanel>
@@ -324,23 +344,35 @@
             </Canvas>
         </ScrollViewer>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Background="LightGray" x:Name="BottomSP">
-            <TextBlock Padding="5" FontSize="15" FontWeight="Bold" Text="{Binding NumberOfNodes, StringFormat={}Number of nodes: {0}}" />
-            <TextBlock Padding="5" Margin="20 0 0 0" FontSize="15" FontWeight="Bold" Text="{Binding TreeDepth, StringFormat={}Tree depth: {0}}" />
-            <TextBlock Padding="5" Margin="20 0 0 0" FontSize="15" FontWeight="Bold" Text="{Binding MinNode, StringFormat={}Min node value: {0}}" />
-            <TextBlock Padding="5" Margin="20 0 0 0"
+        <Border Grid.Row="2" Background="{StaticResource FooterColor}" BorderBrush="Black" BorderThickness="0 3 0 0">
+            <Grid x:Name="BottomSP">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" Grid.Column="0" Margin="20 0 0 0">
+                    <TextBlock Padding="5" FontSize="15" FontWeight="Bold"
+                           Text="{Binding NumberOfNodes, StringFormat={}Number of nodes: {0}}" />
+                    <TextBlock Padding="5" Margin="20 0 0 0" FontSize="15"
+                           FontWeight="Bold" Text="{Binding TreeDepth, StringFormat={}Tree depth: {0}}" />
+                    <TextBlock Padding="5" Margin="20 0 0 0" FontSize="15"
+                           FontWeight="Bold" Text="{Binding MinNode, StringFormat={}Min node value: {0}}" />
+                    <TextBlock Padding="5" Margin="20 0 0 0"
                        FontSize="15" FontWeight="Bold"
                        Text="{Binding MaxNode, StringFormat={}Max node value: {0}}"
                        />
-            <TextBlock Padding="5" Margin="20 0 0 0" FontSize="15" FontWeight="Bold" Text="Zoom level:" />
-            <Slider Width="100"  
-                Minimum="1" 
-                Maximum="5"
-                TickFrequency="1" TickPlacement="BottomRight"
-                VerticalAlignment="Center" Value="{Binding ZoomLevel, Mode=TwoWay,
-                UpdateSourceTrigger=PropertyChanged}"
-                ValueChanged="ZoomLevelChanged"
-                Foreground="Black" />
-        </StackPanel>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Right" Margin="0 0 20 0">
+                    <TextBlock Padding="5" Margin="20 0 0 0" FontSize="15" FontWeight="Bold" Text="Zoom level:" />
+                    <Slider Width="100" Minimum="1"  Maximum="5" TickFrequency="1" TickPlacement="BottomRight"
+                        VerticalAlignment="Center" Value="{Binding ZoomLevel, Mode=TwoWay,
+                        UpdateSourceTrigger=PropertyChanged}"
+                        ValueChanged="ZoomLevelChanged" Foreground="Black" />
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

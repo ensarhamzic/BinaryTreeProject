@@ -21,6 +21,8 @@
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Padding" Value="5" />
         </Style>
+        <SolidColorBrush  x:Key="HeaderColor">#fff4ed</SolidColorBrush>
+        <SolidColorBrush  x:Key="FooterColor">#BCAF9F</SolidColorBrush>
 
         <DataTemplate DataType="{x:Type viewmodels:BinaryTreeViewModel}">
             <views:BinaryTree />

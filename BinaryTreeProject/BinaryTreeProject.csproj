@@ -235,5 +235,8 @@
   <ItemGroup>
     <Resource Include="Icons\change.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\done-gray.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

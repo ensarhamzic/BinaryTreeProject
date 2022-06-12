@@ -533,6 +533,7 @@ namespace BinaryTreeProject.ViewModels
 
         public void NullNodeClick(int nullNodeId)
         {
+            if (SelectedNullNodeId == nullNodeId) return;
             if (PopupVisible)
                 PopupVisible = false;
             PopupVisible = true;
