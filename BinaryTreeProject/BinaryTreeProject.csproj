@@ -108,6 +108,7 @@
     <Compile Include="Models\Huffman.cs" />
     <Compile Include="Models\HuffmanNode.cs" />
     <Compile Include="Models\HuffmanTree.cs" />
+    <Compile Include="Models\LineCode.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\Commands\AddButtonClickCommand.cs" />
     <Compile Include="ViewModels\Commands\AddOrUpdateNodeCommand.cs" />

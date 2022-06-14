@@ -37,6 +37,7 @@ namespace BinaryTreeProject.ViewModels
         }
         public ObservableCollection<HuffmanNode> Nodes { get; set; }
         public ObservableCollection<LinePosition> LinePositions { get; set; }
+        public ObservableCollection<LineCode> LineCodes { get; set; }
 
         public ICommand StartCommand { get; private set; }
         public ICommand NextStepCommand { get; private set; }
@@ -48,6 +49,7 @@ namespace BinaryTreeProject.ViewModels
             Huffman = new Huffman();
             Nodes = new ObservableCollection<HuffmanNode>();
             LinePositions = new ObservableCollection<LinePosition>();
+            LineCodes = new ObservableCollection<LineCode>();
             CircleDiameter = 50;
             CanvasWidth = 0;
             CanvasHeight = 0;
@@ -78,10 +80,8 @@ namespace BinaryTreeProject.ViewModels
                 {
                     int frequency = 0;
                     foreach (char ch in enteredText)
-                    {
                         if (ch == c)
                             frequency++;
-                    }
                     Huffman.Trees.Add(new HuffmanTree(new HuffmanNode(c, frequency)));
                     previousChars.Add(c);
                 }
@@ -246,6 +246,24 @@ namespace BinaryTreeProject.ViewModels
             CanvasHeight = maxHeight + VerticalNodeOffset;
         }
 
+        private void UpdateLineCodes()
+        {
+            LineCodes.Clear();
+            if (Huffman.Trees.Count != 1) return;
+            foreach (var line in LinePositions)
+            {
+                int code;
+                if (line.StartPosition.X < line.EndPosition.X)
+                    code = 1;
+                else
+                    code = 0;
+                Position pos = new Position((line.StartPosition.X + line.EndPosition.X) / 2,
+                    (line.StartPosition.Y + line.EndPosition.Y) / 2 );
+                LineCode newLC = new LineCode(code, pos);
+                LineCodes.Add(newLC);
+            }
+        }
+
         // Updates everything to draw latest algorithm state on the canvas
         public void UpdateUI()
         {
@@ -253,6 +271,7 @@ namespace BinaryTreeProject.ViewModels
             CalculateNodePositions();
             UpdateLinePositions();
             CalculateCanvasSize();
+            UpdateLineCodes();
         }
         // Loads previous state of algorithm when loading view
         private void LoadSavedData()
