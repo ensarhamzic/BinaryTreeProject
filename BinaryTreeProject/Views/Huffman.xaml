@@ -9,6 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800" PreviewKeyDown="KeyDownHandler">
     <UserControl.Resources>
         <vm:HuffmanViewModel x:Key="vm"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </UserControl.Resources>
     <Grid DataContext="{StaticResource vm}">
         <Grid.RowDefinitions>
@@ -177,6 +178,22 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+
+                <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding CharacterCodes}"
+                          Canvas.Left="{Binding TablePosition.X}" Canvas.Top="{Binding TablePosition.Y}"
+                          IsReadOnly="True" Visibility="{Binding TableVisible, Converter={StaticResource BoolToVis}}"
+                          HeadersVisibility="Column" FontSize="18">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Character" Width="100" Binding="{Binding Character}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Code" Width="100" Binding="{Binding Code}"></DataGridTextColumn>
+                    </DataGrid.Columns>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Height" Value="30" />
+                        </Style>
+                    </DataGrid.RowStyle>
+                    
+                </DataGrid>
 
             </Canvas>
         </ScrollViewer>

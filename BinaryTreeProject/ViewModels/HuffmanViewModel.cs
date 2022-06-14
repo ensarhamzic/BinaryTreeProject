@@ -1,5 +1,6 @@
 ﻿using BinaryTreeProject.Models;
 using BinaryTreeProject.ViewModels.Commands;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -12,8 +13,13 @@ namespace BinaryTreeProject.ViewModels
         private Huffman huffman; // instance of huffman algorithm
         private string enteredText; // text entered by user
         private bool isStarted; // is huffman algorithm started
+        private List<char> characters; // list of unique characters in algorithm
         private Stack<List<HuffmanTree>> previousStates; // previous states of the algorithm
-        public static HuffmanViewModel SavedHVM;
+        public static HuffmanViewModel SavedHVM; // saved huffman view model
+        
+        private bool tableVisible; // is algorithm end table visible
+        private Position tablePosition; // position of the algorithm end table
+
 
         public Huffman Huffman
         {
@@ -30,14 +36,31 @@ namespace BinaryTreeProject.ViewModels
             get { return previousStates; }
             set { previousStates = value; OnPropertyChanged("PreviousStates"); }
         }
+        public List<char> Characters
+        {
+            get { return characters; }
+            set { characters = value; OnPropertyChanged("Characters"); }
+        }
         public string EnteredText
         {
             get { return enteredText; }
             set { enteredText = value; OnPropertyChanged("EnteredText"); }
         }
+
+        public bool TableVisible
+        {
+            get { return tableVisible; }
+            set { tableVisible = value; OnPropertyChanged("TableVisible"); }
+        }
+        public Position TablePosition
+        {
+            get { return tablePosition; }
+            set { tablePosition = value; OnPropertyChanged("TablePosition"); }
+        }
         public ObservableCollection<HuffmanNode> Nodes { get; set; }
         public ObservableCollection<LinePosition> LinePositions { get; set; }
         public ObservableCollection<LineCode> LineCodes { get; set; }
+        public ObservableCollection<CharacterCode> CharacterCodes { get; set; }
 
         public ICommand StartCommand { get; private set; }
         public ICommand NextStepCommand { get; private set; }
@@ -50,12 +73,16 @@ namespace BinaryTreeProject.ViewModels
             Nodes = new ObservableCollection<HuffmanNode>();
             LinePositions = new ObservableCollection<LinePosition>();
             LineCodes = new ObservableCollection<LineCode>();
+            CharacterCodes = new ObservableCollection<CharacterCode>();
             CircleDiameter = 50;
             CanvasWidth = 0;
             CanvasHeight = 0;
             VerticalNodeOffset = CircleDiameter * 0.5;
             HorizontalNodeOffset = CircleDiameter * 1.3;
             isStarted = false;
+            TableVisible = false;
+            TablePosition = new Position();
+            Characters = new List<char>();
             PreviousStates = new Stack<List<HuffmanTree>>();
             // commands
             StartCommand = new StartHuffmanCommand(this);
@@ -69,21 +96,21 @@ namespace BinaryTreeProject.ViewModels
         // Starts Huffman algorithm
         public void StartHuffman()
         {
+            Characters.Clear();
             IsStarted = true;
             PreviousStates.Clear();
             Huffman.Trees.Clear();
             UpdateUI();
-            List<char> previousChars = new List<char>();
             // Creates trees for every node, while calculating its frequency
             foreach (char c in enteredText)
-                if (!previousChars.Contains(c))
+                if (!Characters.Contains(c))
                 {
                     int frequency = 0;
                     foreach (char ch in enteredText)
                         if (ch == c)
                             frequency++;
                     Huffman.Trees.Add(new HuffmanTree(new HuffmanNode(c, frequency)));
-                    previousChars.Add(c);
+                    Characters.Add(c);
                 }
             UpdateUI();
         }
@@ -264,6 +291,51 @@ namespace BinaryTreeProject.ViewModels
             }
         }
 
+        private void UpdateCharacterCodes()
+        {
+            CharacterCodes.Clear();
+            if (Huffman.Trees.Count != 1)
+            {
+                TableVisible = false;
+                return;
+            }
+            foreach(var ch in Characters)
+            {
+                string code = "";
+                HuffmanNode node = Nodes.FirstOrDefault(n => n.Character == ch);
+                while(node.ParentNode != null)
+                {
+                    if (node.ParentNode.LeftNode == node)
+                        code += "0";
+                    else
+                        code += "1";
+                    node = node.ParentNode;
+                }
+                // Reversing array
+                char[] charArray = code.ToCharArray();
+                Array.Reverse(charArray);
+                code = new string(charArray);
+                // Adding code to list
+                CharacterCode newCC = new CharacterCode(ch, code);
+                CharacterCodes.Add(newCC);
+            }
+            
+            // Calculating max Y position
+            double yPos = 0;
+            foreach (var node in Nodes)
+                if (node.Position.Y > yPos)
+                    yPos = node.Position.Y;
+            yPos += CircleDiameter + 20; // moves datagrid below nodes
+
+            // Calculating X position
+            double xPos = CanvasWidth / 2 - 100;
+            TablePosition = new Position(xPos, yPos);
+            TableVisible = true;
+
+            CanvasHeight += (Characters.Count + 3) * 30;
+        }
+
+
         // Updates everything to draw latest algorithm state on the canvas
         public void UpdateUI()
         {
@@ -272,6 +344,7 @@ namespace BinaryTreeProject.ViewModels
             UpdateLinePositions();
             CalculateCanvasSize();
             UpdateLineCodes();
+            UpdateCharacterCodes();
         }
         // Loads previous state of algorithm when loading view
         private void LoadSavedData()
@@ -281,6 +354,7 @@ namespace BinaryTreeProject.ViewModels
             EnteredText = SavedHVM.EnteredText;
             IsStarted = SavedHVM.IsStarted;
             PreviousStates = SavedHVM.PreviousStates;
+            Characters = SavedHVM.Characters;
             UpdateUI();
         }
     }

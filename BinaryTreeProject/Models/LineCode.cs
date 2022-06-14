@@ -15,21 +15,13 @@ namespace BinaryTreeProject.Models
         public int Code
         {
             get { return _code; }
-            set
-            {
-                _code = value;
-                OnPropertyChanged("Code");
-            }
+            set { _code = value; OnPropertyChanged("Code"); }
         }
 
         public Position Position
         {
             get { return _pos; }
-            set
-            {
-                _pos = value;
-                OnPropertyChanged("Pos");
-            }
+            set { _pos = value; OnPropertyChanged("Pos"); }
         }
 
         public LineCode()

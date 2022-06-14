@@ -105,6 +105,7 @@
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\CharacterCode.cs" />
     <Compile Include="Models\Huffman.cs" />
     <Compile Include="Models\HuffmanNode.cs" />
     <Compile Include="Models\HuffmanTree.cs" />
