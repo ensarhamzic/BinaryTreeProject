@@ -30,7 +30,7 @@
                     <TextBlock Padding="5" Text="Value:" FontWeight="Bold" VerticalAlignment="Center"/>
                     <TextBox Width="40" Margin="10" FontSize="14" FontWeight="Bold"
                              Text="{Binding NewNodeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             KeyDown="NewNodeTextBox_KeyDown" x:Name="NewNodeTB" />
+                             KeyDown="NewNodeTB_KeyDown" x:Name="NewNodeTB" />
                     <Button  Cursor="Hand" Padding="5" Margin="5" BorderBrush="Transparent"
                              BorderThickness="0" Background="Transparent"
                              Command="{Binding AddOrUpdateNodeCommand}" CommandParameter="{Binding NewNodeValue}">

@@ -1,5 +1,7 @@
 ﻿using BinaryTreeProject.ViewModels;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -35,9 +37,16 @@ namespace BinaryTreeProject.Views
             string tagString = clickedGrid.Tag.ToString();
             int.TryParse(tagString, out int tag);
             bTVM.NullNodeClick(tag);
+            Task.Delay(100).ContinueWith(_ =>
+            {
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    NewNodeTB.Focus();
+                }));
+            });
         }
 
-        private void NewNodeTextBox_KeyDown(object sender, KeyEventArgs e)
+        private void NewNodeTB_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
@@ -85,11 +94,17 @@ namespace BinaryTreeProject.Views
             bTVM.SelectedChangeNodeId = (int)parent.Tag;
             bTVM.SelectedNullNodeId = null;
             NewNodeTB.Text = bTVM.Nodes.First(x => x.ID == bTVM.SelectedChangeNodeId).Value.ToString();
-            bTVM.PopupVisible = false;
+            if(bTVM.PopupVisible)
+                bTVM.PopupVisible = false;
             bTVM.PopupVisible = true;
-            if (bTVM.AddOrUpdateNodeCommand.CanExecute(null))
-                bTVM.AddOrUpdateNodeCommand.Execute(null);
+            Task.Delay(100).ContinueWith(_ =>
+            {
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    NewNodeTB.SelectAll();
+                    NewNodeTB.Focus();
+                }));
+            });
         }
-
     }
 }
