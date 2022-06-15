@@ -138,6 +138,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ViewModels\ValueConverters\ValueToStringConverter.cs" />
     <Compile Include="Views\BinaryTree.xaml.cs">
       <DependentUpon>BinaryTree.xaml</DependentUpon>
     </Compile>

@@ -12,6 +12,7 @@
         <vm:BinaryTreeViewModel x:Key="vm" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <converters:IdToColorConverter x:Key="IdToColor" />
+        <converters:ValueToStringConverter x:Key="ValueToString" />
         <converters:BoolToTextConverter x:Key="BoolToText" />
     </UserControl.Resources>
     <Grid DataContext="{StaticResource vm}" x:Name="MainGrid">
@@ -254,7 +255,8 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid MouseLeftButtonDown="NodeClick" Cursor="Hand" Tag="{Binding ID}" x:Name="NodeGrid"
-                                  >
+                                  ToolTipService.InitialShowDelay="200"  ToolTipService.ShowDuration="5000" 
+                                    ToolTipService.BetweenShowDelay="500" ToolTip="{Binding Value}">
                                 <Grid.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="Change value" Click="ChangeMenuItem_Click">
@@ -284,7 +286,7 @@
                                     </Ellipse.Fill>
                                 </Ellipse>
                                 <TextBlock FontWeight="Bold" FontSize="{Binding DataContext.NodeValueSize, ElementName=MainGrid}"
-                                           Text="{Binding Value}"
+                                           Text="{Binding Value, Converter={StaticResource ValueToString}}"
                                            HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Grid>
                         </DataTemplate>

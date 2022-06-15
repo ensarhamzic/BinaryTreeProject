@@ -184,7 +184,7 @@ namespace BinaryTreeProject.ViewModels
             IsError = false;
             CanvasWidth = 300;
             CanvasHeight = 300;
-            SetNodeSizes(50);
+            SetNodeSizes(60);
             Nodes = new ObservableCollection<Node>();
             LinePositions = new ObservableCollection<LinePosition>();
             UndoStack = new Stack<List<int?>>();
@@ -570,22 +570,22 @@ namespace BinaryTreeProject.ViewModels
             switch (ZoomLevel)
             {
                 case 1:
-                    SetNodeSizes(50);
+                    SetNodeSizes(60);
                     break;
                 case 2:
-                    SetNodeSizes(65);
-                    break;
-                case 3:
                     SetNodeSizes(75);
                     break;
-                case 4:
+                case 3:
                     SetNodeSizes(85);
                     break;
-                case 5:
+                case 4:
                     SetNodeSizes(100);
                     break;
+                case 5:
+                    SetNodeSizes(120);
+                    break;
                 default:
-                    SetNodeSizes(50);
+                    SetNodeSizes(60);
                     break;
             }
             UpdateUI();

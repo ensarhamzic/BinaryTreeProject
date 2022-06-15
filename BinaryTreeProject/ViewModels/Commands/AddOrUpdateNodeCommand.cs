@@ -27,9 +27,7 @@ namespace BinaryTreeProject.ViewModels.Commands
         public bool CanExecute(object parameter)
         {
             string value = parameter as string;
-            int number;
-            // TODO: number check temporary here (till I fix the issue with numbers overflow from node in the view)
-            bool isValid = int.TryParse(value, out number) && (number > -1000 && number < 1000); 
+            bool isValid = int.TryParse(value, out _);
             return (isValid && (binaryTreeVM.SelectedNullNodeId != null)) || (isValid && binaryTreeVM.NullNodes.Count == 0)
                 || (isValid && binaryTreeVM.SelectedChangeNodeId != null);
         }
