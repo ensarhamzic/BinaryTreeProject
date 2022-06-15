@@ -231,7 +231,6 @@ namespace BinaryTreeProject.ViewModels
             if (node.ParentNode != null)
             {
                 var line = new LinePosition();
-                //line.StartPosition = new Position(node.ParentNode.Position.X + CircleDiameter / 2, node.ParentNode.Position.Y + CircleDiameter);
                 double startX, startY;
                 if (node.Position.X < node.ParentNode.Position.X)
                 {
@@ -243,6 +242,7 @@ namespace BinaryTreeProject.ViewModels
                     startX = (CircleDiameter / 2) * Math.Abs(Math.Sin(45)) + node.ParentNode.Position.X + CircleDiameter * 0.25;
                     startY = (CircleDiameter / 2) * Math.Abs(Math.Cos(45)) + node.ParentNode.Position.Y + CircleDiameter * 0.7;
                 }
+                //line.StartPosition = new Position(node.ParentNode.Position.X + CircleDiameter / 2, node.ParentNode.Position.Y + CircleDiameter);
                 line.StartPosition = new Position(startX, startY);
                 line.EndPosition = new Position(node.Position.X + CircleDiameter / 2, node.Position.Y);
                 LinePositions.Add(line);
