@@ -435,7 +435,31 @@ namespace BinaryTreeProject.ViewModels
             if (node.ParentNode != null)
             {
                 var line = new LinePosition();
-                line.StartPosition = new Position(node.ParentNode.Position.X + CircleDiameter / 2, node.ParentNode.Position.Y + CircleDiameter);
+                double startX, startY;
+                //double startX = node.ParentNode.Position.X + CircleDiameter / 2;
+                //double startY = node.ParentNode.Position.Y + CircleDiameter;
+                /*if(node.Position.X < node.ParentNode.Position.X)
+                {
+                    startX = (CircleDiameter / 2) * Math.Sin(225) + node.ParentNode.Position.X + CircleDiameter * 0.75;
+                    startY = (CircleDiameter / 2) * Math.Cos(225) + node.ParentNode.Position.Y + CircleDiameter * 0.75;
+                } else
+                {
+                    startX = (CircleDiameter / 2) * Math.Sin(315) + node.ParentNode.Position.X + CircleDiameter * 0.25;
+                    startY = (CircleDiameter / 2) * Math.Cos(315) + node.ParentNode.Position.Y + CircleDiameter * 0.625;
+                }    */
+
+                if (node.Position.X < node.ParentNode.Position.X)
+                {
+                    startX = (CircleDiameter / 2) * Math.Abs(Math.Sin(135)) + node.ParentNode.Position.X + CircleDiameter * 0.25;
+                    startY = (CircleDiameter / 2) * Math.Abs(Math.Cos(135)) + node.ParentNode.Position.Y + CircleDiameter * 0.45;
+                }
+                else
+                {
+                    startX = (CircleDiameter / 2) * Math.Abs(Math.Sin(45)) + node.ParentNode.Position.X + CircleDiameter * 0.25;
+                    startY = (CircleDiameter / 2) * Math.Abs(Math.Cos(45)) + node.ParentNode.Position.Y + CircleDiameter * 0.7;
+                }
+
+                line.StartPosition = new Position(startX, startY);
                 line.EndPosition = new Position(node.Position.X + CircleDiameter / 2, node.Position.Y);
                 LinePositions.Add(line);
             }

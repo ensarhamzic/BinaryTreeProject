@@ -30,9 +30,8 @@
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
                     Orientation="Horizontal">
                             <TextBlock Text="Enter text:" FontWeight="Bold" VerticalAlignment="Center"/>
-                            <TextBox Width="100" Margin="10 0 0 0"
-                             Text="{Binding EnteredText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                              x:Name="NewNodeTB" />
+                            <TextBox Width="100" Margin="10 0 0 0" FontSize="18" FontWeight="Bold"
+                             Text="{Binding EnteredText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <Button Style="{StaticResource ToolbarButton}"
                         Command="{Binding StartCommand}">
@@ -128,7 +127,7 @@
                                     Stroke="Black" StrokeThickness="3"
                                     >
                                 </Ellipse>
-                                <TextBlock FontWeight="Bold" FontSize="20"
+                                <TextBlock FontWeight="Bold" FontSize="25"
                                            HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <TextBlock.Text>
                                         <MultiBinding StringFormat="{}{0}({1})">
@@ -173,7 +172,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>
-                                <TextBlock Text="{Binding Code}" FontWeight="Bold" FontSize="20" />
+                                <TextBlock Text="{Binding Code}" FontWeight="Bold" FontSize="25" />
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
