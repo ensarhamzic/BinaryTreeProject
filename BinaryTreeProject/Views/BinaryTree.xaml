@@ -281,7 +281,7 @@
                                             <Binding Path="Tag" ElementName="NodeGrid" />
                                             <Binding Path="SelectedNodeId" />
                                             <Binding Source="White" />
-                                            <Binding Source="Aqua" />
+                                            <Binding Source="AntiqueWhite" />
                                         </MultiBinding>
                                     </Ellipse.Fill>
                                 </Ellipse>
@@ -314,15 +314,16 @@
                                     DataContext="{StaticResource vm}"
                                     Width="{Binding AddCircleDiameter}"
                                     Height="{Binding AddCircleDiameter}"
+                                    StrokeThickness="3" Fill="Transparent"
                                 >
-                                    <Ellipse.Fill>
+                                    <Ellipse.Stroke>
                                         <MultiBinding Converter="{StaticResource IdToColor}">
                                             <Binding Path="Tag" ElementName="NullNode" />
                                             <Binding Path="SelectedNullNodeId" />
+                                            <Binding Source="Black" />
                                             <Binding Source="Red" />
-                                            <Binding Source="Blue" />
                                         </MultiBinding>
-                                    </Ellipse.Fill>
+                                    </Ellipse.Stroke>
                                 </Ellipse>
                             </Grid>
                         </DataTemplate>

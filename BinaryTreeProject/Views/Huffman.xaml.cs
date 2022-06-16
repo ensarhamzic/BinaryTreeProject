@@ -37,5 +37,10 @@ namespace BinaryTreeProject.Views
                 if (hVM.PreviousStepCommand.CanExecute(null))
                     hVM.PreviousStepCommand.Execute(null);
         }
+
+        private void MoreInfoClick(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("Huffman_Info.pdf");
+        }
     }
 }

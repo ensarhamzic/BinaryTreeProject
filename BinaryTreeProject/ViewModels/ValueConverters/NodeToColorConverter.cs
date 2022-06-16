@@ -1,26 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
 
 namespace BinaryTreeProject.ViewModels.ValueConverters
 {
-    internal class IdToColorConverter : IMultiValueConverter
+    public class NodeToColorConverter : IMultiValueConverter
     {
-
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            int? id = values[0] as int?;
-            int? selectedId = values[1] as int?;
+            char? character = values[0] as char?;
             Color clr;
-            if (id == selectedId)
-                clr = ColorConverter.ConvertFromString(values[3] as string) as Color? ?? Colors.Red;   
+            if (character != null)
+                clr = (Color)(ColorConverter.ConvertFromString("#BCAF9F") as Color?);
             else
-                clr = ColorConverter.ConvertFromString(values[2] as string) as Color? ?? Colors.White;
-            
+                clr = (Color)(ColorConverter.ConvertFromString("#fff4ed") as Color?);
+
             return new SolidColorBrush(clr);
         }
-
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {

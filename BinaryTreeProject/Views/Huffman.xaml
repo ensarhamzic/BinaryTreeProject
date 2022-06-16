@@ -5,13 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BinaryTreeProject.Views"
              xmlns:vm="clr-namespace:BinaryTreeProject.ViewModels"
+             xmlns:converters="clr-namespace:BinaryTreeProject.ViewModels.ValueConverters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" PreviewKeyDown="KeyDownHandler">
     <UserControl.Resources>
         <vm:HuffmanViewModel x:Key="vm"/>
+        <converters:NodeToStringConverter x:Key="NodeToString" />
+        <converters:NodeToColorConverter x:Key="NodeToColor" />
+        <converters:CharToStringConverter x:Key="CharToString" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </UserControl.Resources>
-    <Grid DataContext="{StaticResource vm}">
+    <Grid DataContext="{StaticResource vm}" x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
@@ -85,6 +89,14 @@
                 </ToolBarPanel>
 
                 <StackPanel Orientation="Horizontal" Grid.Column="2" Margin="0 0 10 0">
+                    <Button Style="{StaticResource ToolbarButton}" Click="MoreInfoClick" Width="80">
+                        <Button.Content>
+                            <StackPanel Orientation="Vertical">
+                                <Image Source="/Icons/info.png"  />
+                                <TextBlock Style="{StaticResource ToolbarText}" Text="More info" />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
                     <Button Style="{StaticResource ToolbarButton}" Click="ChangeViewClick" Width="80">
                         <Button.Content>
                             <StackPanel Orientation="Vertical">
@@ -118,19 +130,24 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid Cursor="Hand" Tag="{Binding ID}"
+                            <Grid Tag="{Binding ID}"
                                   >
                                 <Ellipse
-                                    DataContext="{StaticResource vm}"
-                                    Width="{Binding CircleDiameter}"
-                                    Height="{Binding CircleDiameter}"
+                                    Width="{Binding DataContext.CircleDiameter, ElementName=MainGrid}"
+                                    Height="{Binding DataContext.CircleDiameter, ElementName=MainGrid}"
                                     Stroke="Black" StrokeThickness="3"
                                     >
+                                    <Ellipse.Fill>
+                                        <MultiBinding Converter="{StaticResource NodeToColor}">
+                                            <Binding Path="Character" />
+                                            <Binding Path="Value" />
+                                        </MultiBinding>
+                                    </Ellipse.Fill>
                                 </Ellipse>
-                                <TextBlock FontWeight="Bold" FontSize="25"
+                                <TextBlock FontWeight="Bold" FontSize="23"
                                            HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}{0}({1})">
+                                        <MultiBinding Converter="{StaticResource NodeToString}">
                                             <Binding Path="Character" />
                                             <Binding Path="Value" />
                                         </MultiBinding>
@@ -183,9 +200,9 @@
                           IsReadOnly="True" Visibility="{Binding TableVisible, Converter={StaticResource BoolToVis}}"
                           HeadersVisibility="Column" FontSize="18">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Character" Width="100" Binding="{Binding Character}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Frequency" Width="100" Binding="{Binding Frequency}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Code" Width="100" Binding="{Binding Code}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Character" Width="100" Binding="{Binding Character, Converter={StaticResource CharToString}}" />
+                        <DataGridTextColumn Header="Frequency" Width="100" Binding="{Binding Frequency}" />
+                        <DataGridTextColumn Header="Code" Width="100" Binding="{Binding Code}" />
                     </DataGrid.Columns>
                     <DataGrid.RowStyle>
                         <Style TargetType="DataGridRow">

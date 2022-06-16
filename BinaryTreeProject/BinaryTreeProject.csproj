@@ -133,11 +133,14 @@
     <Compile Include="ViewModels\HuffmanViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ValueConverters\BoolToTextConverter.cs" />
+    <Compile Include="ViewModels\ValueConverters\CharToStringConverter.cs" />
     <Compile Include="ViewModels\ValueConverters\IdToColorConverter.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ViewModels\ValueConverters\NodeToColorConverter.cs" />
+    <Compile Include="ViewModels\ValueConverters\NodeToStringConverter.cs" />
     <Compile Include="ViewModels\ValueConverters\ValueToStringConverter.cs" />
     <Compile Include="Views\BinaryTree.xaml.cs">
       <DependentUpon>BinaryTree.xaml</DependentUpon>
@@ -240,6 +243,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\done-gray.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\info.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
