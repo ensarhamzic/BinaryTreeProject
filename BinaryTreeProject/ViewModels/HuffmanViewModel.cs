@@ -314,7 +314,9 @@ namespace BinaryTreeProject.ViewModels
             foreach(var ch in Characters)
             {
                 string code = "";
+                int freq;
                 HuffmanNode node = Nodes.FirstOrDefault(n => n.Character == ch);
+                freq = (int)node.Value;
                 while(node.ParentNode != null)
                 {
                     if (node.ParentNode.LeftNode == node)
@@ -328,7 +330,7 @@ namespace BinaryTreeProject.ViewModels
                 Array.Reverse(charArray);
                 code = new string(charArray);
                 // Adding code to list
-                CharacterCode newCC = new CharacterCode(ch, code);
+                CharacterCode newCC = new CharacterCode(ch, (int)freq, code);
                 CharacterCodes.Add(newCC);
             }
             
@@ -340,7 +342,7 @@ namespace BinaryTreeProject.ViewModels
             yPos += CircleDiameter + 20; // moves datagrid below nodes
 
             // Calculating X position
-            double xPos = CanvasWidth / 2 - 100;
+            double xPos = CanvasWidth / 2 - 150;
             TablePosition = new Position(xPos, yPos);
             TableVisible = true;
 

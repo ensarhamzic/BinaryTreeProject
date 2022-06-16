@@ -184,6 +184,7 @@
                           HeadersVisibility="Column" FontSize="18">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Character" Width="100" Binding="{Binding Character}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Frequency" Width="100" Binding="{Binding Frequency}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Code" Width="100" Binding="{Binding Code}"></DataGridTextColumn>
                     </DataGrid.Columns>
                     <DataGrid.RowStyle>
