@@ -195,11 +195,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="bin\Debug\Huffman_Info.pdf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Resources\BinaryTree_Info.pdf" />
+    <None Include="Resources\Huffman_Info.pdf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

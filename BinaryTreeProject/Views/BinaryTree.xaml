@@ -219,6 +219,14 @@
                 </ToolBarPanel>
 
                 <StackPanel Orientation="Horizontal" Grid.Column="2" Margin="0 0 10 0">
+                    <Button Style="{StaticResource ToolbarButton}" Click="MoreInfoClick" Width="80">
+                        <Button.Content>
+                            <StackPanel Orientation="Vertical">
+                                <Image Source="/Icons/info.png"  />
+                                <TextBlock Style="{StaticResource ToolbarText}" Text="More info" />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
                     <Button Style="{StaticResource ToolbarButton}" Click="ChangeViewClick">
                         <Button.Content>
                             <StackPanel Orientation="Vertical">

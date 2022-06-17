@@ -1,4 +1,6 @@
 ﻿using BinaryTreeProject.ViewModels;
+using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -40,7 +42,8 @@ namespace BinaryTreeProject.Views
 
         private void MoreInfoClick(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("Huffman_Info.pdf");
+            string path = $"{Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).FullName)}\\Resources\\Huffman_Info.pdf";
+            Process.Start(path);
         }
     }
 }
