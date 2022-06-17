@@ -17,8 +17,11 @@ namespace BinaryTreeProject.Windows
         public DBDialog(string treeName = null)
         {
             InitializeComponent();
-            (FindName("TreeNameTB") as TextBox).Focus();
+            var tb = FindName("TreeNameTB") as TextBox;
+            tb.Focus();
             TreeName = treeName;
+            tb.SelectionStart = tb.Text.Length;
+            tb.SelectionLength = 0;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)

@@ -243,7 +243,7 @@ namespace BinaryTreeProject.ViewModels
             {
                 SaveFileDialog sfd = new SaveFileDialog();
                 sfd.Filter = "Text files (*.txt)|*.txt";
-                if(!string.IsNullOrEmpty(LoadedTreeName))
+                if (!string.IsNullOrEmpty(LoadedTreeName))
                     sfd.FileName = $"{LoadedTreeName}.txt";
                 if (sfd.ShowDialog() == true)
                 {
@@ -265,6 +265,7 @@ namespace BinaryTreeProject.ViewModels
                                 sw.WriteLine(text);
                             }
                         }
+                    LoadedTreeName = sfd.SafeFileName.Substring(0, sfd.SafeFileName.Length - 4);
                     ShowPopup(false, "Successfully saved the tree to file");
                 }
             }
@@ -288,7 +289,10 @@ namespace BinaryTreeProject.ViewModels
                     BinaryTree.Preorder(BinaryTree.Root, preorder);
                     bool isSaved = Database.SaveTree(dbDialog.TreeName, preorder);
                     if (isSaved)
+                    {
                         ShowPopup(false, "Successfully saved the tree to database");
+                        LoadedTreeName = dbDialog.TreeName;
+                    }
                     else
                         ShowPopup(true, "Error saving the tree to database");
                     return;
