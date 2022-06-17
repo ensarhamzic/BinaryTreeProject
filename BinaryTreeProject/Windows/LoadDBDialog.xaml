@@ -37,7 +37,7 @@
                         </StackPanel>
                     </Button.Content>
                 </Button>
-                <Button IsCancel="True" MinWidth="60" BorderBrush="Red" Background="Transparent" Padding="7 3">
+                <Button Click="CloseButton_Click" MinWidth="60" BorderBrush="Red" Background="Transparent" Padding="7 3">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Cancel" FontWeight="Bold" Foreground="Red" VerticalAlignment="Center" />

@@ -249,9 +249,7 @@
   <ItemGroup>
     <Resource Include="Icons\info.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\Debug\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Icons\icon.png" />
   </ItemGroup>

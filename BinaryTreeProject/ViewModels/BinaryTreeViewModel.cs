@@ -36,6 +36,7 @@ namespace BinaryTreeProject.ViewModels
         private string minNode; // minimum node value in the binary tree
         private int zoomLevel; // zoom level of the canvas
         private Timer timer; // timer for the popup
+        private string loadedTreeName; // name of last loaded tree
         public static BinaryTreeViewModel SavedBTVM; // saved binary tree view model
 
         // collection of nodes (used for binding, to draw nodes on the canvas)
@@ -144,6 +145,12 @@ namespace BinaryTreeProject.ViewModels
             get { return zoomLevel; }
             set { zoomLevel = value; }
         }
+
+        public string LoadedTreeName
+        {
+            get { return loadedTreeName; }
+            set { loadedTreeName = value; OnPropertyChanged("LoadedTreeName"); }
+        }
         // commands
         public ICommand AddOrUpdateNodeCommand { get; private set; }
         public ICommand AddButtonClickCommand { get; private set; }
@@ -181,6 +188,7 @@ namespace BinaryTreeProject.ViewModels
             PopupVisible = false;
             MessagePopupVisible = false;
             PopupMessage = "";
+            LoadedTreeName = "";
             IsError = false;
             CanvasWidth = 300;
             CanvasHeight = 300;
@@ -235,26 +243,30 @@ namespace BinaryTreeProject.ViewModels
             {
                 SaveFileDialog sfd = new SaveFileDialog();
                 sfd.Filter = "Text files (*.txt)|*.txt";
-                sfd.ShowDialog();
-                if (sfd.FileName != "")
-                    using (FileStream fs = new FileStream(sfd.FileName, FileMode.Create, FileAccess.Write))
-                    {
-                        using (StreamWriter sw = new StreamWriter(fs))
+                if(!string.IsNullOrEmpty(LoadedTreeName))
+                    sfd.FileName = $"{LoadedTreeName}.txt";
+                if (sfd.ShowDialog() == true)
+                {
+                    if (sfd.FileName != "")
+                        using (FileStream fs = new FileStream(sfd.FileName, FileMode.Create, FileAccess.Write))
                         {
-                            List<int?> preorder = new List<int?>();
-                            BinaryTree.Preorder(BinaryTree.Root, preorder);
-                            string text = "";
-                            foreach (int? node in preorder)
+                            using (StreamWriter sw = new StreamWriter(fs))
                             {
-                                if (node == null)
-                                    text += "null ";
-                                else
-                                    text += node.ToString() + " ";
+                                List<int?> preorder = new List<int?>();
+                                BinaryTree.Preorder(BinaryTree.Root, preorder);
+                                string text = "";
+                                foreach (int? node in preorder)
+                                {
+                                    if (node == null)
+                                        text += "null ";
+                                    else
+                                        text += node.ToString() + " ";
+                                }
+                                sw.WriteLine(text);
                             }
-                            sw.WriteLine(text);
                         }
-                    }
-                ShowPopup(false, "Successfully saved the tree to file");
+                    ShowPopup(false, "Successfully saved the tree to file");
+                }
             }
             catch
             {
@@ -265,16 +277,24 @@ namespace BinaryTreeProject.ViewModels
         // Saves Binary Tree to database
         public void SaveTreeToDB()
         {
-            List<Node> preorder = new List<Node>();
-            BinaryTree.Preorder(BinaryTree.Root, preorder);
-            var dbdialog = new DBDialog();
-            if (dbdialog.ShowDialog() == true)
+            while (true)
             {
-                bool isSaved = Database.SaveTree(dbdialog.TreeName, preorder);
-                if (isSaved)
-                    ShowPopup(false, "Successfully saved the tree to database");
+                var dbDialog = new DBDialog(LoadedTreeName);
+                bool? dialogResult = dbDialog.ShowDialog();
+                if (dialogResult != true) return;
+                if (dbDialog.TreeName.Length <= 20 && dbDialog.TreeName.Length > 0)
+                {
+                    List<Node> preorder = new List<Node>();
+                    BinaryTree.Preorder(BinaryTree.Root, preorder);
+                    bool isSaved = Database.SaveTree(dbDialog.TreeName, preorder);
+                    if (isSaved)
+                        ShowPopup(false, "Successfully saved the tree to database");
+                    else
+                        ShowPopup(true, "Error saving the tree to database");
+                    return;
+                }
                 else
-                    ShowPopup(true, "Error saving the tree to database");
+                    ShowPopup(true, "Tree name must be between 1 and 20 characters long");
             }
         }
 
@@ -285,33 +305,37 @@ namespace BinaryTreeProject.ViewModels
             {
                 OpenFileDialog ofd = new OpenFileDialog();
                 ofd.Filter = "Text files (*.txt)|*.txt";
-                ofd.ShowDialog();
-                if (ofd.FileName != "")
-                    using (FileStream fs = new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read))
-                    {
-                        using (StreamReader sr = new StreamReader(fs))
+                if (ofd.ShowDialog() == true)
+                {
+                    if (ofd.FileName != "")
+                        using (FileStream fs = new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read))
                         {
-                            string text = sr.ReadLine();
-                            string[] preorderString = text.Split(' ');
-                            List<int?> preorder = new List<int?>();
-                            foreach (var s in preorderString)
+                            using (StreamReader sr = new StreamReader(fs))
                             {
-                                if (s == "null" || s == "")
-                                    preorder.Add(null);
-                                else
-                                    preorder.Add(int.Parse(s));
+                                string text = sr.ReadLine();
+                                string[] preorderString = text.Split(' ');
+                                List<int?> preorder = new List<int?>();
+                                foreach (var s in preorderString)
+                                {
+                                    if (s == "null" || s == "")
+                                        preorder.Add(null);
+                                    else
+                                        preorder.Add(int.Parse(s));
+                                }
+                                BinaryTree = new BinaryTree();
+                                BinaryTree.Root = BinaryTree.BuildTreeFromPreorder(preorder, true);
+                                UpdateUI();
+                                UndoStack = new Stack<List<int?>>();
+                                RedoStack = new Stack<List<int?>>();
+                                selectedNodeId = null;
+                                selectedNullNodeId = null;
+                                InputVisible = false;
                             }
-                            BinaryTree = new BinaryTree();
-                            BinaryTree.Root = BinaryTree.BuildTreeFromPreorder(preorder, true);
-                            UpdateUI();
-                            UndoStack = new Stack<List<int?>>();
-                            RedoStack = new Stack<List<int?>>();
-                            selectedNodeId = null;
-                            selectedNullNodeId = null;
-                            InputVisible = false;
                         }
-                    }
-                ShowPopup(false, "Successfully loaded tree from file");
+                    LoadedTreeName = ofd.SafeFileName.Substring(0, ofd.SafeFileName.Length - 4);
+                    ShowPopup(false, "Successfully loaded tree from file");
+                }
+
             }
             catch
             {
@@ -322,31 +346,45 @@ namespace BinaryTreeProject.ViewModels
         // Loads Binary Tree from database
         public void LoadTreeFromDB()
         {
-            var loadDbDialog = new LoadDBDialog();
-            List<Node> foundNodes = new List<Node>();
-            DataTable dt;
-            if (loadDbDialog.ShowDialog() == true)
+            while (true)
             {
-                dt = loadDbDialog.NodesTable;
-                for (int i = 0; i < dt.Rows.Count; i++)
+                var loadDbDialog = new LoadDBDialog();
+                bool? dialogResult = loadDbDialog.ShowDialog();
+                if (dialogResult != true) return;
+                if (loadDbDialog.TreeName.Length <= 20 && loadDbDialog.TreeName.Length > 0)
                 {
-                    Node temp = new Node
+                    List<Node> foundNodes = new List<Node>();
+                    DataTable dt;
+                    dt = Database.LoadTree(loadDbDialog.TreeName);
+                    if (dt == null)
+                        ShowPopup(true, "Tree does not exist");
+                    else
                     {
-                        ID = Convert.ToInt32(dt.Rows[i]["id"]),
-                        Value = Convert.ToInt32(dt.Rows[i]["value"]),
-                    };
+                        for (int i = 0; i < dt.Rows.Count; i++)
+                        {
+                            Node temp = new Node
+                            {
+                                ID = Convert.ToInt32(dt.Rows[i]["id"]),
+                                Value = Convert.ToInt32(dt.Rows[i]["value"]),
+                            };
 
-                    foundNodes.Add(temp);
+                            foundNodes.Add(temp);
+                        }
+
+                        BinaryTree.BuildTreeFromDatabase(foundNodes, dt);
+                        UpdateUI();
+                        UndoStack = new Stack<List<int?>>();
+                        RedoStack = new Stack<List<int?>>();
+                        selectedNodeId = null;
+                        selectedNullNodeId = null;
+                        InputVisible = false;
+                        LoadedTreeName = loadDbDialog.TreeName;
+                        ShowPopup(false, "Successfully loaded tree from database");
+                        return;
+                    }
                 }
-
-                BinaryTree.BuildTreeFromDatabase(foundNodes, dt);
-                UpdateUI();
-                UndoStack = new Stack<List<int?>>();
-                RedoStack = new Stack<List<int?>>();
-                selectedNodeId = null;
-                selectedNullNodeId = null;
-                InputVisible = false;
-                ShowPopup(false, "Successfully loaded tree from database");
+                else
+                    ShowPopup(true, "Tree name length must be between 1 and 20 characters");
             }
         }
 
@@ -590,7 +628,7 @@ namespace BinaryTreeProject.ViewModels
             }
             UpdateUI();
         }
-        
+
         // Updates UI so it representes the current state of the tree
         public void UpdateUI()
         {
@@ -652,7 +690,7 @@ namespace BinaryTreeProject.ViewModels
             BinaryTree.Preorder(BinaryTree.Root, savedTree);
             s.Push(savedTree);
         }
-        
+
         // Loads previous state of binary tree when loading view
         private void LoadSavedData()
         {
@@ -663,6 +701,7 @@ namespace BinaryTreeProject.ViewModels
             SelectedNodeId = SavedBTVM.SelectedNodeId;
             UndoStack = SavedBTVM.UndoStack;
             RedoStack = SavedBTVM.RedoStack;
+            LoadedTreeName = SavedBTVM.LoadedTreeName;
             UpdateUI();
         }
     }

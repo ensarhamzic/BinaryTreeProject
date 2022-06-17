@@ -14,24 +14,17 @@ namespace BinaryTreeProject.Windows
             get { return TreeNameTB.Text; }
             set { TreeNameTB.Text = value; }
         }
-        public DBDialog()
+        public DBDialog(string treeName = null)
         {
             InitializeComponent();
             (FindName("TreeNameTB") as TextBox).Focus();
+            TreeName = treeName;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (TreeName.Length <= 20 && TreeName.Length > 0)
-            {
-                this.DialogResult = true;
-                this.Close();
-            }
-            else
-            {
-                MaxTB.Foreground = Brushes.Red;
-                MessageBox.Show("Tree name length must be between 1 and 20 characters", "Error");
-            }
+            DialogResult = true;
+            Close();
         }
     }
 }
