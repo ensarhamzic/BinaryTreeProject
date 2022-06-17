@@ -1,9 +1,11 @@
 ﻿using BinaryTreeProject.ViewModels;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace BinaryTreeProject.Views
 {
@@ -42,8 +44,15 @@ namespace BinaryTreeProject.Views
 
         private void MoreInfoClick(object sender, RoutedEventArgs e)
         {
-            string path = $"{Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).FullName)}\\Resources\\Huffman_Info.pdf";
+            string path = @"..\..\Resources\Huffman_Info.pdf";
             Process.Start(path);
+        }
+
+        private void ViewLoaded(object sender, RoutedEventArgs e)
+        {
+            var win = Window.GetWindow(this);
+            win.Title = "Huffman coding";
+            win.Icon = new BitmapImage(new Uri(@"../../Icons/h.png", UriKind.RelativeOrAbsolute));
         }
     }
 }

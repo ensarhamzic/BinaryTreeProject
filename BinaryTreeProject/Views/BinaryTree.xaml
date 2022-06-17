@@ -7,7 +7,7 @@
              xmlns:vm="clr-namespace:BinaryTreeProject.ViewModels"
              xmlns:converters="clr-namespace:BinaryTreeProject.ViewModels.ValueConverters"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" Loaded="ViewLoaded">
     <UserControl.Resources>
         <vm:BinaryTreeViewModel x:Key="vm" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />

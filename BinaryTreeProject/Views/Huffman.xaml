@@ -7,7 +7,8 @@
              xmlns:vm="clr-namespace:BinaryTreeProject.ViewModels"
              xmlns:converters="clr-namespace:BinaryTreeProject.ViewModels.ValueConverters"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" PreviewKeyDown="KeyDownHandler">
+             d:DesignHeight="450" d:DesignWidth="800" PreviewKeyDown="KeyDownHandler"
+             Loaded="ViewLoaded">
     <UserControl.Resources>
         <vm:HuffmanViewModel x:Key="vm"/>
         <converters:NodeToStringConverter x:Key="NodeToString" />

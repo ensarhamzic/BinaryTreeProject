@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace BinaryTreeProject.Views
 {
@@ -111,8 +112,15 @@ namespace BinaryTreeProject.Views
 
         private void MoreInfoClick(object sender, RoutedEventArgs e)
         {
-            string path = $"{Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).FullName)}\\Resources\\BinaryTree_Info.pdf";
+            string path = @"..\..\Resources\BinaryTree_Info.pdf";
             Process.Start(path);
+        }
+
+        private void ViewLoaded(object sender, RoutedEventArgs e)
+        {
+            var win = Window.GetWindow(this);
+            win.Title = "Binary Tree";
+            win.Icon = new BitmapImage(new Uri(@"../../Icons/icon.png", UriKind.RelativeOrAbsolute));
         }
     }
 }
