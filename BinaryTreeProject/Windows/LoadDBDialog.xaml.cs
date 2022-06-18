@@ -1,5 +1,4 @@
-﻿using System.Data;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace BinaryTreeProject.Windows
