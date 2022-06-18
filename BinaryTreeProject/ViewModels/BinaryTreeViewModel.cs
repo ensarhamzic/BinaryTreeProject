@@ -585,16 +585,14 @@ namespace BinaryTreeProject.ViewModels
                 nullNode.Position = new Position(CanvasWidth / 2 - CircleDiameter / 2, VerticalNodeOffset + CircleDiameter / 2);
                 NullNodes.Add(nullNode);
             }
-
         }
 
         public void NodeClick(int nodeId)
         {
-            if (selectedNodeId == nodeId)
-                selectedNodeId = null;
+            if (SelectedNodeId == nodeId)
+                SelectedNodeId = null;
             else
                 SelectedNodeId = nodeId;
-            UpdateUI();
         }
 
         public void NullNodeClick(int nullNodeId)

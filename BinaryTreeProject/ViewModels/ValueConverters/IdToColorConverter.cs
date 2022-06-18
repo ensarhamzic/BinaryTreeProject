@@ -5,9 +5,8 @@ using System.Windows.Media;
 
 namespace BinaryTreeProject.ViewModels.ValueConverters
 {
-    internal class IdToColorConverter : IMultiValueConverter
+    public class IdToColorConverter : IMultiValueConverter
     {
-
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             int? id = values[0] as int?;
@@ -20,8 +19,6 @@ namespace BinaryTreeProject.ViewModels.ValueConverters
             
             return new SolidColorBrush(clr);
         }
-
-
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotSupportedException();

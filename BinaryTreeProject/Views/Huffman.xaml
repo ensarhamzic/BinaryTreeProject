@@ -7,7 +7,7 @@
              xmlns:vm="clr-namespace:BinaryTreeProject.ViewModels"
              xmlns:converters="clr-namespace:BinaryTreeProject.ViewModels.ValueConverters"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" PreviewKeyDown="KeyDownHandler"
+             d:DesignHeight="450" d:DesignWidth="800"
              Loaded="ViewLoaded">
     <UserControl.Resources>
         <vm:HuffmanViewModel x:Key="vm"/>
@@ -35,7 +35,7 @@
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
                     Orientation="Horizontal">
                             <TextBlock Text="Enter text:" FontWeight="Bold" VerticalAlignment="Center"/>
-                            <TextBox Width="100" Margin="10 0 0 0" FontSize="18" FontWeight="Bold"
+                            <TextBox Width="200" Margin="10 0 0 0" FontSize="18" FontWeight="Bold"
                              Text="{Binding EnteredText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <Button Style="{StaticResource ToolbarButton}"
@@ -131,17 +131,18 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid Tag="{Binding ID}"
+                            <Grid Tag="{Binding ID}" x:Name="NodeGrid"
                                   >
                                 <Ellipse
                                     Width="{Binding DataContext.CircleDiameter, ElementName=MainGrid}"
                                     Height="{Binding DataContext.CircleDiameter, ElementName=MainGrid}"
-                                    Stroke="Black" StrokeThickness="3"
+                                    StrokeThickness="3" Stroke="Black"
                                     >
                                     <Ellipse.Fill>
                                         <MultiBinding Converter="{StaticResource NodeToColor}">
                                             <Binding Path="Character" />
-                                            <Binding Path="Value" />
+                                            <Binding Path="Tag" ElementName="NodeGrid" />
+                                            <Binding Path="DataContext.CurrentNodeIds" ElementName="MainGrid" />
                                         </MultiBinding>
                                     </Ellipse.Fill>
                                 </Ellipse>

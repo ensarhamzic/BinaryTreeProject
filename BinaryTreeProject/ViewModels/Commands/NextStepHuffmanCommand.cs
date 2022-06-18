@@ -32,7 +32,7 @@ namespace BinaryTreeProject.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            huffmanVM.NextStep();
+            huffmanVM.NextStep(false);
         }
     }
 }

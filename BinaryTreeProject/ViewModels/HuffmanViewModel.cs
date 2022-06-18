@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace BinaryTreeProject.ViewModels
@@ -13,8 +15,10 @@ namespace BinaryTreeProject.ViewModels
         private Huffman huffman; // instance of huffman algorithm
         private string enteredText; // text entered by user
         private bool isStarted; // is huffman algorithm started
+        private bool isRunning; // is huffman algorithm step animation running
         private List<char> characters; // list of unique characters in algorithm
         private Stack<List<HuffmanTree>> previousStates; // previous states of the algorithm
+        private List<int> currentNodeIds; // Ids of nodes that are currently being changed in algorithm (used to color them differently)
         public static HuffmanViewModel SavedHVM; // saved huffman view model
         
         private bool tableVisible; // is algorithm end table visible
@@ -31,6 +35,12 @@ namespace BinaryTreeProject.ViewModels
             get { return isStarted; }
             set { isStarted = value; OnPropertyChanged("IsStarted"); }
         }
+
+        public bool IsRunning
+        {
+            get { return isRunning; }
+            set { isRunning = value; OnPropertyChanged("IsRunning"); }
+        }
         public Stack<List<HuffmanTree>> PreviousStates
         {
             get { return previousStates; }
@@ -45,6 +55,11 @@ namespace BinaryTreeProject.ViewModels
         {
             get { return enteredText; }
             set { enteredText = value; OnPropertyChanged("EnteredText"); }
+        }
+        public List<int> CurrentNodeIds
+        {
+            get { return currentNodeIds; }
+            set { currentNodeIds = value; OnPropertyChanged("CurrentNodeIds"); }
         }
 
         public bool TableVisible
@@ -79,10 +94,12 @@ namespace BinaryTreeProject.ViewModels
             CanvasHeight = 0;
             VerticalNodeOffset = CircleDiameter * 0.5;
             HorizontalNodeOffset = CircleDiameter * 1.3;
-            isStarted = false;
+            IsStarted = false;
+            IsRunning = false;
             TableVisible = false;
             TablePosition = new Position();
             Characters = new List<char>();
+            CurrentNodeIds = new List<int>();
             PreviousStates = new Stack<List<HuffmanTree>>();
             // commands
             StartCommand = new StartHuffmanCommand(this);
@@ -96,6 +113,7 @@ namespace BinaryTreeProject.ViewModels
         // Starts Huffman algorithm
         public void StartHuffman()
         {
+            if (IsRunning) return;
             Characters.Clear();
             IsStarted = true;
             PreviousStates.Clear();
@@ -116,11 +134,40 @@ namespace BinaryTreeProject.ViewModels
         }
 
         // Calculates trees states of next step of algorithm and updates UI
-        public void NextStep()
+        public async void NextStep(bool isSkipped = true)
         {
+            if (IsRunning) return;
+            IsRunning = true;
             SaveCurrentState();
+            CurrentNodeIds.Clear();
             HuffmanTree first = Huffman.Trees[0];
             HuffmanTree second = Huffman.Trees[1];
+            
+            if(!isSkipped)
+            {
+                CurrentNodeIds.Add((int)first.Root.ID);
+                CurrentNodeIds.Add((int)second.Root.ID);
+                UpdateUI();
+                await Task.Delay(1000).ContinueWith(_ =>
+                {
+                    var mergedTree = CalculateNextState(first, second);
+                    CurrentNodeIds.Clear();
+                    CurrentNodeIds.Add((int)mergedTree.Root.ID);
+                });
+                UpdateUI();
+                await Task.Delay(1000).ContinueWith(_ =>
+                {
+                    CurrentNodeIds.Clear();
+                });
+            } else
+                CalculateNextState(first, second);
+            
+            IsRunning = false;
+            UpdateUI();
+        }
+
+        private HuffmanTree CalculateNextState(HuffmanTree first, HuffmanTree second)
+        {
             HuffmanTree mergedTree = new HuffmanTree(new HuffmanNode(null,
                 (int)first.Root.Value + (int)second.Root.Value));
             // makes new merged tree root as parent of first and second root (merging the trees)
@@ -130,8 +177,9 @@ namespace BinaryTreeProject.ViewModels
             second.Root.ParentNode = mergedTree.Root;
             Huffman.Trees.RemoveRange(0, 2);
             Huffman.Trees.Add(mergedTree);
-            UpdateUI();
+            return mergedTree;
         }
+        
 
         // Saves current state of the algorithm to be able to go back to it
         private void SaveCurrentState()
@@ -164,6 +212,7 @@ namespace BinaryTreeProject.ViewModels
         // Goes back one step in the algorithm
         public void PreviousStep()
         {
+            if (IsRunning) return;
             Huffman.Trees = PreviousStates.Pop();
             UpdateUI();
         }
@@ -171,6 +220,7 @@ namespace BinaryTreeProject.ViewModels
         // Ends the algorithm
         public void SkipToEnd()
         {
+            if (IsRunning) return;
             while (Huffman.Trees.Count > 1)
                 NextStep();
         }
@@ -178,6 +228,7 @@ namespace BinaryTreeProject.ViewModels
         // Goes back to the start of the algorithm
         public void BackToStart()
         {
+            if (IsRunning) return;
             while (PreviousStates.Count > 0)
                 PreviousStep();
         }
