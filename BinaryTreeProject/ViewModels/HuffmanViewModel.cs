@@ -16,6 +16,10 @@ namespace BinaryTreeProject.ViewModels
         private string enteredText; // text entered by user
         private bool isStarted; // is huffman algorithm started
         private bool isRunning; // is huffman algorithm step animation running
+        private int speedLevel; // speed level of animation user choose
+        private int speed; // speed of animation in miliseconds
+        private int currentStepNumber; // current step number of algorithm
+        private string stepsNumber; // number of steps of algorithm
         private List<char> characters; // list of unique characters in algorithm
         private Stack<List<HuffmanTree>> previousStates; // previous states of the algorithm
         private List<int> currentNodeIds; // Ids of nodes that are currently being changed in algorithm (used to color them differently)
@@ -35,11 +39,30 @@ namespace BinaryTreeProject.ViewModels
             get { return isStarted; }
             set { isStarted = value; OnPropertyChanged("IsStarted"); }
         }
-
         public bool IsRunning
         {
             get { return isRunning; }
             set { isRunning = value; OnPropertyChanged("IsRunning"); }
+        }
+        public int SpeedLevel
+        {
+            get { return speedLevel; }
+            set { speedLevel = value; OnPropertyChanged("SpeedLevel"); }
+        }
+        public int Speed
+        {
+            get { return speed; }
+            set { speed = value; OnPropertyChanged("Speed"); }
+        }
+        public int CurrentStepNumber
+        {
+            get { return currentStepNumber; }
+            set { currentStepNumber = value; OnPropertyChanged("CurrentStepNumber"); }
+        }
+        public string StepsNumber
+        {
+            get { return stepsNumber; }
+            set { stepsNumber = value; OnPropertyChanged("StepsNumber"); }
         }
         public Stack<List<HuffmanTree>> PreviousStates
         {
@@ -94,6 +117,10 @@ namespace BinaryTreeProject.ViewModels
             CanvasHeight = 0;
             VerticalNodeOffset = CircleDiameter * 0.5;
             HorizontalNodeOffset = CircleDiameter * 1.3;
+            SpeedLevel = 3;
+            SpeedChanged();
+            CurrentStepNumber = 0;
+            StepsNumber = "X";
             IsStarted = false;
             IsRunning = false;
             TableVisible = false;
@@ -148,14 +175,14 @@ namespace BinaryTreeProject.ViewModels
                 CurrentNodeIds.Add((int)first.Root.ID);
                 CurrentNodeIds.Add((int)second.Root.ID);
                 UpdateUI();
-                await Task.Delay(1000).ContinueWith(_ =>
+                await Task.Delay(Speed).ContinueWith(_ =>
                 {
                     var mergedTree = CalculateNextState(first, second);
                     CurrentNodeIds.Clear();
                     CurrentNodeIds.Add((int)mergedTree.Root.ID);
                 });
                 UpdateUI();
-                await Task.Delay(1000).ContinueWith(_ =>
+                await Task.Delay(Speed).ContinueWith(_ =>
                 {
                     CurrentNodeIds.Clear();
                 });
@@ -231,6 +258,31 @@ namespace BinaryTreeProject.ViewModels
             if (IsRunning) return;
             while (PreviousStates.Count > 0)
                 PreviousStep();
+        }
+
+        public void SpeedChanged()
+        {
+            switch (SpeedLevel)
+            {
+                case 1:
+                    Speed = 3000;
+                    break;
+                case 2:
+                    Speed = 2000;
+                    break;
+                case 3:
+                    Speed = 1000;
+                    break;
+                case 4:
+                    Speed = 500;
+                    break;
+                case 5:
+                    Speed = 250;
+                    break;
+                default:
+                    Speed = 1000;
+                    break;
+            }
         }
 
         // Calculates node positons on the canvas
@@ -410,6 +462,7 @@ namespace BinaryTreeProject.ViewModels
             CalculateCanvasSize();
             UpdateLineCodes();
             UpdateCharacterCodes();
+            UpdateStepsCounter();
         }
         // Loads previous state of algorithm when loading view
         private void LoadSavedData()
@@ -420,7 +473,15 @@ namespace BinaryTreeProject.ViewModels
             IsStarted = SavedHVM.IsStarted;
             PreviousStates = SavedHVM.PreviousStates;
             Characters = SavedHVM.Characters;
+            SpeedLevel = SavedHVM.SpeedLevel;
+            SpeedChanged();
             UpdateUI();
+        }
+
+        private void UpdateStepsCounter()
+        {
+            StepsNumber = (Characters.Count - 1).ToString();
+            CurrentStepNumber = int.Parse(StepsNumber) - Huffman.Trees.Count + 1;
         }
     }
 }

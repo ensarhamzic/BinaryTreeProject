@@ -45,5 +45,11 @@ namespace BinaryTreeProject.Views
             win.Title = "Huffman coding";
             win.Icon = new BitmapImage(new Uri(@"../../Icons/h.png", UriKind.RelativeOrAbsolute));
         }
+
+        private void SpeedChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (hVM == null) return;
+            hVM.SpeedChanged();
+        }
     }
 }

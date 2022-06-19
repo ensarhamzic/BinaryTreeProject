@@ -20,6 +20,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0" BorderBrush="Black" BorderThickness="0 0 0 3" Background="{StaticResource HeaderColor}">
@@ -216,5 +217,33 @@
 
             </Canvas>
         </ScrollViewer>
+
+        <Border Grid.Row="2" Background="{StaticResource FooterColor}" BorderBrush="Black" BorderThickness="0 3 0 0">
+            <Grid x:Name="BottomSP">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Column="0" Margin="20 0 0 0">
+                    <TextBlock Padding="5" FontSize="15" FontWeight="Bold">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}Step {0}/{1}">
+                                <Binding Path="CurrentStepNumber" />
+                                <Binding Path="StepsNumber" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" Margin="0 0 20 0">
+                    <TextBlock Padding="5" Margin="20 0 0 0" FontSize="15" FontWeight="Bold" Text="Speed:" />
+                    <Slider Width="100" Minimum="1"  Maximum="5" TickFrequency="1" TickPlacement="BottomRight"
+                        VerticalAlignment="Center" Value="{Binding SpeedLevel, Mode=TwoWay,
+                        UpdateSourceTrigger=PropertyChanged}"
+                        ValueChanged="SpeedChanged" Foreground="Black" />
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>
