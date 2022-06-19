@@ -25,7 +25,8 @@ namespace BinaryTreeProject.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            if (string.IsNullOrEmpty(huffmanVM.EnteredText))
+            if (string.IsNullOrEmpty(huffmanVM.EnteredText)
+                || IsSameCharacterRepeated(huffmanVM.EnteredText) )
                 return false;
             return true;
         }
@@ -33,6 +34,15 @@ namespace BinaryTreeProject.ViewModels.Commands
         public void Execute(object parameter)
         {
             huffmanVM.StartHuffman();
+        }
+
+        private bool IsSameCharacterRepeated(string s)
+        {
+            char first = s[0];
+            for (int i = 1; i < s.Length; i++)
+                if (s[i] != first)
+                    return false;
+            return true;
         }
     }
 }
