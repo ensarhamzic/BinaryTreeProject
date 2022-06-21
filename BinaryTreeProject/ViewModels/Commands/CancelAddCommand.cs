@@ -30,10 +30,7 @@ namespace BinaryTreeProject.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            binaryTreeViewModel.SelectedNullNodeId = null;
-            binaryTreeViewModel.SelectedChangeNodeId = null;
-            binaryTreeViewModel.InputVisible = false;
-            binaryTreeViewModel.PopupVisible = false;
+            binaryTreeViewModel.CancelAdd();
         }
     }
 }

@@ -8,6 +8,7 @@ namespace BinaryTreeProject.ViewModels.ValueConverters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            // converting character to string (used in datagrid, when Huffman's algorithm shows all characters)
             char character = (char)(value as char?);
             if(Char.IsWhiteSpace(character))
                 return "space";

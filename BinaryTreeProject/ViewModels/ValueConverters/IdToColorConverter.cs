@@ -9,6 +9,7 @@ namespace BinaryTreeProject.ViewModels.ValueConverters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+            // Color selected node in binary tree
             int? id = values[0] as int?;
             int? selectedId = values[1] as int?;
             Color clr;

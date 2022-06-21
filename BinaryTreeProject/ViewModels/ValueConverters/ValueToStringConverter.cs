@@ -8,6 +8,7 @@ namespace BinaryTreeProject.ViewModels.ValueConverters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            // if number is long, shows the .. after first 3 digits
             int nodeValue = (int)value;
             string valueString;
             if (nodeValue < 1000 && nodeValue > -1000)

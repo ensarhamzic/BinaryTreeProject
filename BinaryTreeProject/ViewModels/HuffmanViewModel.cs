@@ -193,6 +193,7 @@ namespace BinaryTreeProject.ViewModels
             UpdateUI();
         }
 
+        // Merges two minimum root values trees, and returns merged tree
         private HuffmanTree CalculateNextState(HuffmanTree first, HuffmanTree second)
         {
             HuffmanTree mergedTree = new HuffmanTree(new HuffmanNode(null,
@@ -207,7 +208,6 @@ namespace BinaryTreeProject.ViewModels
             return mergedTree;
         }
         
-
         // Saves current state of the algorithm to be able to go back to it
         private void SaveCurrentState()
         {
@@ -260,6 +260,7 @@ namespace BinaryTreeProject.ViewModels
                 PreviousStep();
         }
 
+        // Handles changes in speed level slider
         public void SpeedChanged()
         {
             switch (SpeedLevel)
@@ -388,6 +389,7 @@ namespace BinaryTreeProject.ViewModels
             CanvasHeight = maxHeight + VerticalNodeOffset;
         }
 
+        // Calculates positions of 0 and 1 codes on lines
         private void UpdateLineCodes()
         {
             LineCodes.Clear();
@@ -406,7 +408,8 @@ namespace BinaryTreeProject.ViewModels
             }
         }
 
-        private void UpdateCharacterCodes()
+        // Calculates codes of all characters in text
+        private void CalculateCharacterCodes()
         {
             CharacterCodes.Clear();
             if (Huffman.Trees.Count != 1)
@@ -461,7 +464,7 @@ namespace BinaryTreeProject.ViewModels
             UpdateLinePositions();
             CalculateCanvasSize();
             UpdateLineCodes();
-            UpdateCharacterCodes();
+            CalculateCharacterCodes();
             UpdateStepsCounter();
         }
         // Loads previous state of algorithm when loading view
@@ -478,6 +481,7 @@ namespace BinaryTreeProject.ViewModels
             UpdateUI();
         }
 
+        // Calculates number of steps of the algorithm
         private void UpdateStepsCounter()
         {
             StepsNumber = (Characters.Count - 1).ToString();

@@ -12,47 +12,27 @@ namespace BinaryTreeProject.ViewModels
         public double CanvasWidth
         {
             get { return canvasWidth; }
-            set
-            {
-                canvasWidth = value;
-                OnPropertyChanged("CanvasWidth");
-            }
+            set { canvasWidth = value; OnPropertyChanged("CanvasWidth"); }
         }
         public double CanvasHeight
         {
             get { return canvasHeight; }
-            set
-            {
-                canvasHeight = value;
-                OnPropertyChanged("CanvasHeight");
-            }
+            set { canvasHeight = value; OnPropertyChanged("CanvasHeight"); }
         }
         public double VerticalNodeOffset
         {
             get { return verticalNodeOffset; }
-            set
-            {
-                verticalNodeOffset = value;
-                OnPropertyChanged("verticalNodeOffset");
-            }
+            set { verticalNodeOffset = value; OnPropertyChanged("verticalNodeOffset"); }
         }
         public double HorizontalNodeOffset
         {
             get { return horizontalNodeOffset; }
-            set
-            {
-                horizontalNodeOffset = value;
-                OnPropertyChanged("horizontalNodeOffset");
-            }
+            set { horizontalNodeOffset = value; OnPropertyChanged("horizontalNodeOffset"); }
         }
         public int CircleDiameter
         {
             get { return circleDiameter; }
-            set
-            {
-                circleDiameter = value;
-                OnPropertyChanged("CircleDiameter");
-            }
+            set { circleDiameter = value; OnPropertyChanged("CircleDiameter"); }
         }
         
         public event PropertyChangedEventHandler PropertyChanged;

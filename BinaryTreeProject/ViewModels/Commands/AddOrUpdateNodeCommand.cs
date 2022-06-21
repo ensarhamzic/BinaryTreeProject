@@ -27,7 +27,7 @@ namespace BinaryTreeProject.ViewModels.Commands
         public bool CanExecute(object parameter)
         {
             string value = parameter as string;
-            bool isValid = int.TryParse(value, out _);
+            bool isValid = int.TryParse(value, out _); // is entered text number
             return (isValid && (binaryTreeVM.SelectedNullNodeId != null)) || (isValid && binaryTreeVM.NullNodes.Count == 0)
                 || (isValid && binaryTreeVM.SelectedChangeNodeId != null);
         }
@@ -43,6 +43,7 @@ namespace BinaryTreeProject.ViewModels.Commands
             char side;
             Node parentNode;
             Node selectedNullNode = binaryTreeVM.NullNodes[(int)binaryTreeVM.SelectedNullNodeId - 1];
+            // determine node side
             if (selectedNullNode.LeftNode == null
                 && selectedNullNode.RightNode == null)
             {

@@ -27,7 +27,7 @@ namespace BinaryTreeProject.Models
 
         }
 
-        // add node to the tree
+        // Add node to the tree depending on passed node and side
         public void AddNode(Node parentNode, int value, char side)
         {
             Node newNode = new Node(value, ++nodeId);
@@ -47,7 +47,7 @@ namespace BinaryTreeProject.Models
             }
         }
 
-        // TODO:  Improve deleting (setting node to NULL does not work)
+        // Deletes node from the tree
         public void DeleteNode(Node nodeToDelete)
         {
             if (nodeToDelete == Root)

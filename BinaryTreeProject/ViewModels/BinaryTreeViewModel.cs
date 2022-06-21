@@ -21,6 +21,7 @@ namespace BinaryTreeProject.ViewModels
         private bool messagePopupVisible; // is message popup visible
         private string popupMessage; // message to display in popup
         private bool isError; // is message popup an error or success
+
         private int? selectedNodeId; // id of existing node selected
         private int? selectedNullNodeId; // id of null (non-existing) node selected
         private int? selectedChangeNodeId; // id of node to change its value
@@ -468,6 +469,7 @@ namespace BinaryTreeProject.ViewModels
             CanvasHeight = (depth + 1) * CircleDiameter + (depth + 1) * VerticalNodeOffset;
         }
 
+        // Calculates positions of lines connecting nodes
         private void UpdateLinePositions(Node node)
         {
             if (node == null)
@@ -478,18 +480,6 @@ namespace BinaryTreeProject.ViewModels
             {
                 var line = new LinePosition();
                 double startX, startY;
-                //double startX = node.ParentNode.Position.X + CircleDiameter / 2;
-                //double startY = node.ParentNode.Position.Y + CircleDiameter;
-                /*if(node.Position.X < node.ParentNode.Position.X)
-                {
-                    startX = (CircleDiameter / 2) * Math.Sin(225) + node.ParentNode.Position.X + CircleDiameter * 0.75;
-                    startY = (CircleDiameter / 2) * Math.Cos(225) + node.ParentNode.Position.Y + CircleDiameter * 0.75;
-                } else
-                {
-                    startX = (CircleDiameter / 2) * Math.Sin(315) + node.ParentNode.Position.X + CircleDiameter * 0.25;
-                    startY = (CircleDiameter / 2) * Math.Cos(315) + node.ParentNode.Position.Y + CircleDiameter * 0.625;
-                }    */
-
                 if (node.Position.X < node.ParentNode.Position.X)
                 {
                     startX = (CircleDiameter / 2) * Math.Abs(Math.Sin(135)) + node.ParentNode.Position.X + CircleDiameter * 0.25;
@@ -535,6 +525,7 @@ namespace BinaryTreeProject.ViewModels
             CalculateVerticalPositions(node.RightNode);
         }
 
+        // Handles click on Add Button
         public void AddButtonClick()
         {
             if (InputVisible)
@@ -587,6 +578,7 @@ namespace BinaryTreeProject.ViewModels
             }
         }
 
+        // Handles click on node
         public void NodeClick(int nodeId)
         {
             if (SelectedNodeId == nodeId)
@@ -595,6 +587,7 @@ namespace BinaryTreeProject.ViewModels
                 SelectedNodeId = nodeId;
         }
 
+        // Handles click on node where new node can be added
         public void NullNodeClick(int nullNodeId)
         {
             if (SelectedNullNodeId == nullNodeId) return;
@@ -605,6 +598,16 @@ namespace BinaryTreeProject.ViewModels
             SelectedChangeNodeId = null;
         }
 
+        // Handles cancelling mode of adding new nodes
+        public void CancelAdd()
+        {
+            SelectedNullNodeId = null;
+            SelectedChangeNodeId = null;
+            InputVisible = false;
+            PopupVisible = false;
+        }
+
+        // Handles changes in zoom slider
         public void ZoomChanged()
         {
             switch (ZoomLevel)
@@ -678,6 +681,8 @@ namespace BinaryTreeProject.ViewModels
             timer.AutoReset = false;
             timer.Start();
         }
+
+        // Closing message popup
         public void ClosePopup()
         {
             MessagePopupVisible = false;

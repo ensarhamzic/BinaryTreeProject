@@ -29,7 +29,7 @@
                     Orientation="Horizontal" Background="White"
                     >
                     <TextBlock Padding="5" Text="Value:" FontWeight="Bold" VerticalAlignment="Center"/>
-                    <TextBox Width="40" Margin="10" FontSize="14" FontWeight="Bold"
+                    <TextBox Width="70" Margin="10" FontSize="14" FontWeight="Bold"
                              Text="{Binding NewNodeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              KeyDown="NewNodeTB_KeyDown" x:Name="NewNodeTB" />
                     <Button  Cursor="Hand" Padding="5" Margin="5" BorderBrush="Transparent"

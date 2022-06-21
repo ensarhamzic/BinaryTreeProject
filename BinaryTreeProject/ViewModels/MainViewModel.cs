@@ -2,6 +2,7 @@
 
 namespace BinaryTreeProject.ViewModels
 {
+    // Manages currently selected view model, which is used to display the corresponding view
     public class MainViewModel : INotifyPropertyChanged
     {
         private BaseViewModel selectedViewModel = new BinaryTreeViewModel();

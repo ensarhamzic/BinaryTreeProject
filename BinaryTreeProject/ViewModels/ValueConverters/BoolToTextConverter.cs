@@ -8,8 +8,9 @@ namespace BinaryTreeProject.ViewModels.ValueConverters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool isVisible = (bool)value;
-            if (isVisible)
+            // if adding is active, show Cancel, otherwise, show Add
+            bool isActive = (bool)value;
+            if (isActive)
             {
                 return "Cancel";
             }
