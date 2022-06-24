@@ -20,7 +20,7 @@ namespace BinaryTreeProject
 
         public Database()
         {
-            connectionString = @"server=localhost;userid=admin;password=root;database=binarytree"; // Promeniti parametre
+            connectionString = @"server=localhost;userid=admin;password=root;database=binarytree"; // Change parameters
             connection = new MySqlConnection(connectionString);
             command = new MySqlCommand();
         }
