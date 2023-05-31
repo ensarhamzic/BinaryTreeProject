@@ -3,7 +3,7 @@
 This is a Windows application that helps students learn about the binary tree data structure and the Huffman Coding algorithm.
 
 Technologies:
-- .NET
+- .NET (MVVM arhitecture)
 
 ## Example: Binary tree
 ![Binary tree example](https://github.com/ensarhamzic/BinaryTreeProject/blob/master/readme-assets/binarytree.gif)
